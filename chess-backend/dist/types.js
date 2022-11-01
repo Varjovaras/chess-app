@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Color = exports.Piece = void 0;
+exports.SquareColor = exports.Piece = void 0;
 var Piece;
 (function (Piece) {
     Piece["pawn"] = "PAWN";
@@ -11,8 +11,8 @@ var Piece;
     Piece["king"] = "KING";
     Piece["empty"] = "EMPTY";
 })(Piece = exports.Piece || (exports.Piece = {}));
-var Color;
-(function (Color) {
-    Color["black"] = "BLACK";
-    Color["white"] = "WHITE";
-})(Color = exports.Color || (exports.Color = {}));
+var SquareColor;
+(function (SquareColor) {
+    SquareColor["black"] = "BLACK";
+    SquareColor["white"] = "WHITE";
+})(SquareColor = exports.SquareColor || (exports.SquareColor = {}));

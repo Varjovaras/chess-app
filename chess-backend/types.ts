@@ -8,13 +8,15 @@ export enum Piece {
 	empty = 'EMPTY',
 }
 
-export enum Color {
+export enum SquareColor {
 	black = 'BLACK',
 	white = 'WHITE',
 }
 
 export type Square = {
+	rank: number;
+	file: string;
 	square: string;
-	color: Color;
+	color: SquareColor;
 	piece: Piece;
 };

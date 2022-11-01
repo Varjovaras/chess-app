@@ -1,67 +1,55 @@
-import { Color, Piece, Square } from './types';
+import { Piece, Square, SquareColor } from './types';
 
 class Chess {
 	board: Square[] = new Array(64);
 	constructor() {
-		let firstLetter = 'a';
-		let firstSquare = Color.black;
-		let secondSquare = Color.white;
-		let rowIterator = 1;
+		let files: string[] = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+		let currentFile = 0;
+		let firstSquare = SquareColor.black;
+		let secondSquare = SquareColor.white;
 
-		for (let i = 0; i < this.board.length; i++) {
-			if (i === 8) {
-				firstLetter = 'b';
-				firstSquare = Color.white;
-				secondSquare = Color.black;
-				rowIterator = 1;
-			} else if (i === 16) {
-				firstLetter = 'c';
-				firstSquare = Color.black;
-				secondSquare = Color.white;
-				rowIterator = 1;
-			} else if (i === 24) {
-				firstLetter = 'd';
-				firstSquare = Color.white;
-				secondSquare = Color.black;
-				rowIterator = 1;
-			} else if (i === 32) {
-				firstLetter = 'e';
-				firstSquare = Color.black;
-				secondSquare = Color.white;
-				rowIterator = 1;
-			} else if (i === 40) {
-				firstLetter = 'f';
-				firstSquare = Color.white;
-				secondSquare = Color.black;
-				rowIterator = 1;
-			} else if (i === 48) {
-				firstLetter = 'g';
-				firstSquare = Color.black;
-				secondSquare = Color.white;
-				rowIterator = 1;
-			} else if (i === 56) {
-				firstLetter = 'h';
-				firstSquare = Color.white;
-				secondSquare = Color.black;
-				rowIterator = 1;
+		for (let i = 0, rank = 1; i < this.board.length; i++, rank++) {
+			if (rank === 9) {
+				let temp: SquareColor = firstSquare;
+				firstSquare = secondSquare;
+				secondSquare = temp;
+				rank = 1;
+				currentFile++;
 			}
+
 			if (i % 2 === 0) {
 				this.board[i] = {
+					file: files[currentFile],
+					rank: rank,
 					color: firstSquare,
-					square: `${firstLetter}${rowIterator}`,
+					square: `${files[currentFile]}${rank}`,
 					piece: Piece.empty,
 				};
 			} else {
 				this.board[i] = {
+					file: files[currentFile],
+					rank: rank,
 					color: secondSquare,
-					square: `${firstLetter}${rowIterator}`,
+					square: `${files[currentFile]}${rank}`,
 					piece: Piece.empty,
 				};
 			}
-			rowIterator++;
 		}
 	}
+
+	printBoard() {
+		let rows = ['', '', '', '', '', '', '', ''];
+
+		for (const i of this.board) {
+			rows[i.rank - 1] += i.file + i.rank + ' ';
+		}
+
+		rows.reverse();
+		return rows;
+	}
+
+	startingPosition() {}
 }
 
 const chess = new Chess();
-console.log(chess);
+console.log(chess.printBoard());

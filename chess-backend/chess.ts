@@ -1,29 +1,24 @@
-enum SquareColor {
+enum Color {
 	black = 'BLACK',
 	white = 'WHITE',
+	none = 'NONE',
 }
 
 type Square = {
 	rank: number;
 	file: string;
 	square: string;
-	color: SquareColor;
-	pieceName: PieceName;
+	color: Color;
+	piece: Piece;
 	id: number;
 };
 
-enum file {
-	a = 1,
-	b,
-	c,
-	d,
-	e,
-	f,
-	g,
-	h,
+interface Piece {
+	name: Pieces;
+	color: Color;
 }
 
-enum PieceName {
+enum Pieces {
 	pawn = 'PAWN',
 	knight = 'KNIGHT',
 	bishop = 'BISHOP',
@@ -42,8 +37,8 @@ class Chess {
 
 	constructor() {
 		let files: string[] = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-		let firstSquare = SquareColor.black;
-		let secondSquare = SquareColor.white;
+		let firstSquare = Color.black;
+		let secondSquare = Color.white;
 		let rank = 1;
 
 		for (
@@ -54,7 +49,7 @@ class Chess {
 			if (currentFile === 8) {
 				currentFile = 0;
 				rank++;
-				let temp: SquareColor = firstSquare;
+				let temp: Color = firstSquare;
 				firstSquare = secondSquare;
 				secondSquare = temp;
 			}
@@ -65,7 +60,7 @@ class Chess {
 					rank: rank,
 					color: firstSquare,
 					square: `${files[currentFile]}${rank}`,
-					pieceName: PieceName.empty,
+					piece: { name: Pieces.empty, color: Color.none },
 					id: i,
 				};
 			} else {
@@ -74,23 +69,31 @@ class Chess {
 					rank: rank,
 					color: secondSquare,
 					square: `${files[currentFile]}${rank}`,
-					pieceName: PieceName.empty,
+					piece: { name: Pieces.empty, color: Color.none },
 					id: i,
 				};
 			}
 		}
 	}
 
-	printBoard() {
+	printBoardWhite() {
 		let rows = ['', '', '', '', '', '', '', ''];
 
 		for (const i of this._board) {
 			console.log(i);
 			rows[i.rank - 1] += i.file + i.rank + ' ';
 		}
-		rows.reverse();
-		console.log(this._board);
-		return rows;
+		return rows.reverse();
+	}
+
+	printBoardBlack() {
+		let rows = ['', '', '', '', '', '', '', ''];
+
+		for (const i of this._board) {
+			rows[i.rank - 1] = i.file + i.rank + ' ' + rows[i.rank - 1];
+		}
+
+		return rows.reverse();
 	}
 
 	startingPosition() {
@@ -106,10 +109,10 @@ class Chess {
 		 */
 	}
 
-	putPiece(square: string, piece: PieceName) {
+	putPiece(square: string, piece: Pieces) {
 		let sq = this._board.find((s: Square) => s.square === square);
 		if (sq) {
-			sq.pieceName = piece;
+			sq.piece.name = piece;
 			console.log(`${piece} put on ${square}`);
 		} else {
 			console.log('No square found');
@@ -123,10 +126,10 @@ class Chess {
 	}
 }
 
-class Pieces {}
+// class Pieces {}
 
 const chess = new Chess();
 // console.log(chess._board);
-console.log(chess.printBoard());
+console.log(chess.printBoardBlack());
 // console.log(chess.startingPosition());
-// chess.putPiece('a1', PieceName.queen);
+chess.putPiece('a1', Pieces.queen);

@@ -4,3 +4,4 @@ chess-backend/dist
 chess-backend/dist/chess.js
 chess-backend/dist/Pieces.js
 chess-backend/dist/types.js
+.fleet

@@ -13,23 +13,23 @@ enum ChessPieces {
 }
 
 class Square {
-	rank: number;
 	file: string;
+	rank: number;
 	square: string;
 	color: Color;
 	piece: Piece | null;
 	id: number;
 
 	constructor(
-		rank: number,
 		file: string,
+		rank: number,
 		square: string,
 		color: Color,
 		id: number,
 		piece: Piece | null
 	) {
-		this.rank = rank;
 		this.file = file;
+		this.rank = rank;
 		this.square = square;
 		this.color = color;
 		this.piece = piece;
@@ -68,8 +68,9 @@ class Chess {
 
 			if (i % 2 === 0) {
 				this._board[i] = new Square(
-					rank,
 					files[currentFile],
+					rank,
+
 					`${files[currentFile]}${rank}`,
 					firstSquare,
 					i,
@@ -77,8 +78,8 @@ class Chess {
 				);
 			} else {
 				this._board[i] = new Square(
-					rank,
 					files[currentFile],
+					rank,
 					`${files[currentFile]}${rank}`,
 					secondSquare,
 					i,

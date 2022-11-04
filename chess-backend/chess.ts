@@ -217,9 +217,6 @@ class Piece {
 class Pawn extends Piece {
     name = ChessPieces.pawn;
 
-    static getName() {
-        return this.name;
-    }
 
     move() {
         return null;

@@ -4,23 +4,28 @@ enum Color {
     none = 'NONE', //for no piece squares
 }
 
-interface square {
+enum ChessPieces {
+    pawn = 'PAWN',
+    knight = 'KNIGHT',
+    bishop = 'BISHOP',
+    rook = 'ROOK',
+    queen = 'QUEEN',
+    king = 'KING',
+    empty = 'EMPTY',
+}
+
+interface Square {
     rank: number;
     file: string;
     square: string;
     color: Color;
-    piece: piece;
+    piece: Piece;
     id: number;
 };
 
-interface piece {
-    name: Pieces;
-    color: Color;
-}
-
 
 class Chess {
-    private _board: square[] = new Array(64);
+    private _board: Square[] = new Array(64);
 
     static DEFAULT_POSITION =
         'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -50,7 +55,9 @@ class Chess {
                     rank: rank,
                     color: firstSquare,
                     square: `${files[currentFile]}${rank}`,
-                    piece: {name: Pieces.empty, color: Color.none},
+                    piece: new Piece(
+//                         rank, files[currentFile]
+                    ),
                     id: i,
                 };
             } else {
@@ -59,14 +66,16 @@ class Chess {
                     rank: rank,
                     color: secondSquare,
                     square: `${files[currentFile]}${rank}`,
-                    piece: {name: Pieces.empty, color: Color.none},
+                    piece: new Piece(
+//                         rank, files[currentFile]
+                    ),
                     id: i,
                 };
             }
         }
     }
 
-    get(){
+    get() {
         return this._board;
     }
 
@@ -76,9 +85,8 @@ class Chess {
 
         for (const i of this._board) {
             if (i.piece.name !== "EMPTY") {
-                rows[i.rank - 1] +=  i.piece.name[0] + '  ';
-            }
-            else {
+                rows[i.rank - 1] += i.piece.name[0] + '  ';
+            } else {
                 rows[i.rank - 1] += i.file + i.rank + ' ';
             }
         }
@@ -90,7 +98,7 @@ class Chess {
 
         for (const i of this._board) {
             if (i.piece.name !== "EMPTY") {
-                rows[i.rank - 1] =" "  + i.piece.name[0] + " " + rows[i.rank - 1];
+                rows[i.rank - 1] = " " + i.piece.name[0] + " " + rows[i.rank - 1];
             } else {
                 rows[i.rank - 1] = i.file + i.rank + ' ' + rows[i.rank - 1];
             }
@@ -106,22 +114,72 @@ class Chess {
         return pieces;
     }
 
-    movePiece(square: square): piece | null {
-        /**
-         *
-         */
+    getSquare(name: string): Square | null {
+        let sq = this._board.find((s: Square) => s.square === name);
+        if (sq) return sq;
+        else return null;
+    }
+
+    /**
+     * siirrä piece, ehkä kaappaa
+     *tyhjennä ruutu
+     */
+    movePiece(startSquare: string, endSquare: string): Piece | null {
+        if (startSquare === endSquare) {
+            console.log("Same starting and ending square");
+            return null;
+        }
+        let startSq = this.getSquare(startSquare);
+        let endSq = this.getSquare(endSquare);
+        switch (startSq?.piece.name) {
+            case ChessPieces.pawn:
+                console.log("1");
+                break;
+            case ChessPieces.knight:
+                console.log("2");
+                break;
+            case ChessPieces.bishop:
+                console.log("3");
+                break;
+            case ChessPieces.rook:
+                console.log("4");
+                break;
+            case ChessPieces.queen:
+                console.log("5");
+                break;
+            case ChessPieces.king:
+                console.log("6");
+                break;
+            default:
+                console.log("trolled");
+                return new Piece();
+        }
         return null;
     }
 
-    putPiece(square: string, piece: Pieces) {
-        let sq = this._board.find((s: square) => s.square === square);
+    //capturePiece()
+
+
+    capturePiece(): void {
+        /**
+         *
+         *
+         */
+    }
+
+
+//initialization or promoting
+    putPiece(square: string, piece: Piece) {
+        let sq = this.getSquare(square);
         if (sq) {
-            sq.piece.name = piece;
-            console.log(`${piece} put on ${square}`);
+            sq.piece = piece;
+            console.log(sq.piece);
+            console.log(`${piece.name} put on ${square}`);
         } else {
             console.log('No square found');
         }
     }
+
 
     fen(fen: string) {
         let tokens = fen.split(/\s+/);
@@ -130,52 +188,98 @@ class Chess {
     }
 }
 
-enum Pieces {
-    pawn = 'PAWN',
-    knight = 'KNIGHT',
-    bishop = 'BISHOP',
-    rook = 'ROOK',
-    queen = 'QUEEN',
-    king = 'KING',
-    empty = 'EMPTY',
-}
 
 class Piece {
-    position: string = "2";
+    name: string;
+//     file: string;
+//     rank: number;
+//     square: string;
 
+    constructor(
+//         rank: number, file: string
+    ) {
+        this.name = ChessPieces.empty;
+//         this.square = file + rank;
+//         this.file = file;
+//         this.rank = rank;
+    }
+
+    getName() {
+        return this.name;
+    }
+
+    move(): Square | null { //boolean ???
+
+        return null;
+    }
 }
 
 class Pawn extends Piece {
+    name = ChessPieces.pawn;
 
+    static getName() {
+        return this.name;
+    }
+
+    move() {
+        return null;
+    }
 }
 
 class Knight extends Piece {
+    name = ChessPieces.knight;
 
+    move() {
+        return null;
+
+    }
 }
 
 class Bishop extends Piece {
+    name = ChessPieces.bishop;
 
+    move() {
+        return null;
+
+    }
 }
 
 class Rook extends Piece {
+    name = ChessPieces.rook;
 
+    move() {
+        return null;
+
+    }
 }
 
 class Queen extends Piece {
+    name = ChessPieces.queen;
 
+    move() {
+        return null;
+
+    }
 }
 
 class King extends Piece {
+    name = ChessPieces.king;
 
+    move() {
+        return null;
+
+    }
 }
+
 
 const chess = new Chess();
 // console.log(chess._board);
-chess.putPiece('f7', Pieces.queen);
-chess.putPiece('e4', Pieces.pawn);
+// chess.putPiece('f7', new Queen());
+chess.putPiece('e4', new King());
+chess.movePiece("e4", "f7");
 
-console.log(chess.printBoardWhite());
-console.log(chess.printBoardBlack());
+// console.log(chess.printBoardWhite());
+// console.log(chess.printBoardBlack());
 
-console.log(chess.get())
+// console.log(chess.get())
 // console.log(chess.startingPosition());

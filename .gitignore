@@ -1,6 +1,7 @@
 node_modules
 chess-frontend/node_modules
 chess-backend/dist
+chess-backend/kilobytegambit.ts
 chess-backend/dist/chess.js
 chess-backend/dist/Pieces.js
 chess-backend/dist/types.js

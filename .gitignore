@@ -1,8 +1,9 @@
 node_modules
-chess-frontend/node_modules
-chess-backend/dist
-chess-backend/kilobytegambit.ts
-chess-backend/dist/chess.js
-chess-backend/dist/Pieces.js
-chess-backend/dist/types.js
+frontend/node_modules
+chess/dist
+chess/kilobytegambit.ts
+chess/dist/chess.js
+chess/dist/Pieces.js
+chess/dist/types.js
 .fleet
+chess/dist

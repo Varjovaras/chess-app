@@ -416,14 +416,21 @@ class Pawn extends Piece {
 		if (Math.abs(startSq.rank - endSq.rank) === 1 && endSq.piece === null) {
 			return true;
 		} else if (
-			Math.abs(endSq.rank - startSq.rank) === 2 &&
+			endSq.rank - startSq.rank === 2 &&
 			endSq.piece === null &&
 			chess.getSquare(`${startSq.file}${startSq.rank + 1}`)?.piece === null
 		) {
-			console.log('Moved and sniped');
+			console.log('Moved and sniped white pawn');
+			return true;
+		} else if (
+			startSq.rank - endSq.rank === 2 &&
+			endSq.piece === null &&
+			chess.getSquare(`${startSq.file}${startSq.rank - 1}`)?.piece === null
+		) {
+			console.log('Moved and sniped black pawn');
 			return true;
 		} else {
-			console.log('Error moving the pawn');
+			console.log('Error moving the pawn from starting square');
 			return false;
 		}
 	}
@@ -601,7 +608,8 @@ const chess = new Chess();
 
 // console.log(chess.printBoardWhite());
 chess.fen(Chess.STARTING_POSITION);
-chess.movePiece('e7', 'e6');
+chess.movePiece('e2', 'e4');
+chess.movePiece('e7', 'e5');
 chess.movePiece('e6', 'e5');
 chess.movePiece('e5', 'e4');
 chess.movePiece('e4', 'e3');

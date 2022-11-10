@@ -175,24 +175,22 @@ class Chess {
 		let sq = this.getSquare(square);
 		if (sq) {
 			sq.piece = piece;
-			// console.log(sq.piece);
 			console.log(`${piece.getName} put on ${square}`);
 		} else {
 			console.log('No square found');
 		}
 	}
 
-	fen(fen: string): string[] {
-		//  'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+	fen(fen: string): void {
 		let tokens = fen.split(/\s+/);
-		console.log(tokens);
 		let pieces = tokens[0].split('/');
-		console.log(pieces);
 		for (let i = 0; i < 8; i++) {
-			let arr = pieces[i];
-			if (arr !== '8') {
+			let str = pieces[i];
+			if (str.length !== 8) {
+				//todo non-starting position
+			} else if (str !== '8') {
 				for (let j = i * 8, k = 0; j < i * 8 + 8; j++, k++) {
-					let piece = Chess.fenPieces(arr[k]);
+					let piece = Chess.fenPieces(str[k]);
 					let sq = this.getSquareById(j)?.square;
 					if (sq && piece !== null) {
 						this.putPiece(sq, piece);
@@ -200,9 +198,6 @@ class Chess {
 				}
 			}
 		}
-		console.log(this.printBoardWhite());
-
-		return pieces;
 	}
 
 	static fenPieces(s: string): Piece | null {
@@ -227,10 +222,8 @@ class Chess {
 				return new Queen(Color.white);
 			case 'Q':
 				return new Queen(Color.black);
-				break;
 			case 'k':
 				return new King(Color.white);
-
 			case 'K':
 				return new King(Color.black);
 			default:
@@ -238,9 +231,8 @@ class Chess {
 		}
 	}
 
-	startingPosition() {
-		//         let tokens = Chess.fen(Chess.DEFAULT_POSITION);
-		//         return tokens;
+	startingPosition(): void {
+		this.fen(Chess.STARTING_POSITION);
 	}
 }
 
@@ -295,13 +287,11 @@ class Pawn extends Piece {
 		if (this.color === Color.white) {
 			return Pawn.moveWhite(startSq, endSq, piece);
 		} else if (this.color === Color.black) {
-			// 			return Pawn.moveBlack(startSq, endSq, piece);
+			return Pawn.moveBlack(startSq, endSq, piece);
 		} else {
 			console.log('Piece not found');
 			return false;
 		}
-
-		return false;
 	}
 
 	static moveWhite(
@@ -348,6 +338,50 @@ class Pawn extends Piece {
 		return false;
 	}
 
+	static moveBlack(
+		startSq: Square,
+		endSq: Square,
+		pieceToPromote?: string
+	): boolean | Piece {
+		if (startSq.rank === 1) {
+			console.log('How is black pawn on rank 8???');
+			return false;
+		} else if (endSq.rank > startSq.rank) {
+			console.log("Pawns can't go backwards!");
+			return false;
+		}
+
+		//Moving diagonally logic
+		else if (startSq.file !== endSq.file) {
+			return Pawn.capture(startSq, endSq, pieceToPromote);
+		}
+
+		//startSquare logic
+		else if (startSq.rank === 7) {
+			return Pawn.startingSquareMove(startSq, endSq);
+		}
+
+		//lastrow promote and possibly capture
+		else if (
+			startSq.rank === 2 &&
+			endSq.rank === 1 &&
+			pieceToPromote &&
+			endSq.piece === null
+		) {
+			{
+				return Pawn.promotion(pieceToPromote, Color.white);
+			}
+		}
+
+		//move one square forwards
+		else if (startSq.rank - endSq.rank === 1 && endSq.piece === null) {
+			return true;
+		}
+
+		//no valid moves
+		return false;
+	}
+
 	static capture(
 		startSq: Square,
 		endSq: Square,
@@ -370,7 +404,7 @@ class Pawn extends Piece {
 			Math.abs(startSq.rank - endSq.rank) === 1 &&
 			Piece.compareFiles(startSq.file, endSq.file)
 		) {
-			console.log('Captured a piece with pawn');
+			console.log('Captured a piece with pawn on ' + endSq.square);
 			return true;
 		} else {
 			console.log('Error capturing with pawn');
@@ -565,11 +599,15 @@ const chess = new Chess();
 // chess.putPiece('e8', new King(Color.black));
 // chess.putPiece('d8', new King(Color.black));
 
-// chess.movePiece('e7', 'd8');
-
 // console.log(chess.printBoardWhite());
 chess.fen(Chess.STARTING_POSITION);
-// console.log(chess.printBoardBlack());
+chess.movePiece('e7', 'e6');
+chess.movePiece('e6', 'e5');
+chess.movePiece('e5', 'e4');
+chess.movePiece('e4', 'e3');
+chess.movePiece('e3', 'd2');
+
+console.log(chess.printBoardWhite());
 
 // console.log(chess.get())
 // console.log(chess.startingPosition());

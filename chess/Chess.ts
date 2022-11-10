@@ -271,7 +271,7 @@ class Piece {
 }
 
 class Pawn extends Piece {
-	readonly color: Color;
+	override readonly color: Color;
 
 	constructor(color: Color) {
 		super();
@@ -283,7 +283,11 @@ class Pawn extends Piece {
 		}
 	}
 
-	move(startSq: Square, endSq: Square, piece?: string): boolean | Piece {
+	override move(
+		startSq: Square,
+		endSq: Square,
+		piece?: string
+	): boolean | Piece {
 		if (this.color === Color.white) {
 			return Pawn.moveWhite(startSq, endSq, piece);
 		} else if (this.color === Color.black) {
@@ -463,7 +467,7 @@ class Pawn extends Piece {
 }
 
 class Knight extends Piece {
-	readonly color: Color;
+	override readonly color: Color;
 
 	constructor(color: Color) {
 		super();
@@ -475,23 +479,13 @@ class Knight extends Piece {
 		}
 	}
 
-	move(startSq: Square, endSq: Square): boolean {
+	override move(startSq: Square, endSq: Square): boolean {
 		return true;
-	}
-
-	static moveWhite(): boolean {
-		console.log('Move white');
-		return false;
-	}
-
-	static moveBlack(): boolean {
-		console.log('Move black');
-		return false;
 	}
 }
 
 class Bishop extends Piece {
-	readonly color: Color;
+	override readonly color: Color;
 
 	constructor(color: Color) {
 		super();
@@ -502,23 +496,13 @@ class Bishop extends Piece {
 			this.name = ChessPieces.BISHOP_BLACK;
 		}
 	}
-	move(startSq: Square, endSq: Square): boolean {
-		return true;
-	}
-
-	static moveWhite(): boolean {
-		console.log('Move white');
-		return false;
-	}
-
-	static moveBlack(): boolean {
-		console.log('Move black');
+	override move(startSq: Square, endSq: Square): boolean {
 		return false;
 	}
 }
 
 class Rook extends Piece {
-	readonly color: Color;
+	override readonly color: Color;
 
 	constructor(color: Color) {
 		super();
@@ -530,7 +514,7 @@ class Rook extends Piece {
 		}
 	}
 
-	move(startSq: Square, endSq: Square): boolean {
+	override move(startSq: Square, endSq: Square): boolean {
 		return true;
 	}
 
@@ -546,7 +530,7 @@ class Rook extends Piece {
 }
 
 class Queen extends Piece {
-	readonly color: Color;
+	override readonly color: Color;
 
 	constructor(color: Color) {
 		super();
@@ -558,7 +542,7 @@ class Queen extends Piece {
 		}
 	}
 
-	move(startSq: Square, endSq: Square): boolean {
+	override move(startSq: Square, endSq: Square): boolean {
 		return true;
 	}
 
@@ -574,7 +558,7 @@ class Queen extends Piece {
 }
 
 class King extends Piece {
-	readonly color: Color;
+	override readonly color: Color;
 
 	constructor(color: Color) {
 		super();
@@ -585,7 +569,7 @@ class King extends Piece {
 			this.name = ChessPieces.KING_BLACK;
 		}
 	}
-	move(startSq: Square, endSq: Square): boolean {
+	override move(startSq: Square, endSq: Square): boolean {
 		return true;
 	}
 

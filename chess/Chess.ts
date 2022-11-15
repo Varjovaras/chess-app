@@ -3,7 +3,7 @@ enum Color {
 	white = 'WHITE',
 }
 
-interface Moves {
+interface Move {
 	startSquare: Square;
 	endSquare: Square;
 	startSquarePiece: Piece;
@@ -60,7 +60,7 @@ class Square {
 
 class Chess {
 	private _board: Square[];
-	private _moves: Moves[];
+	private _moves: Move[];
 
 	private _pieces: Piece[];
 	private _turnNumber: number;
@@ -69,7 +69,7 @@ class Chess {
 	static STARTING_POSITION =
 		'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
-	constructor(moves?: Moves[], pieces?: Piece[]) {
+	constructor(moves?: Move[], pieces?: Piece[]) {
 		this._board = new Array(64);
 		this._moves = moves ? moves : [];
 
@@ -120,7 +120,7 @@ class Chess {
 		return this._moves;
 	}
 
-	set setMoves(moves: Moves[]) {
+	set setMoves(moves: Move[]) {
 		this._moves = moves;
 	}
 
@@ -128,8 +128,15 @@ class Chess {
 		return this._turnNumber;
 	}
 
-	set setTurnNumber(t: number) {
+	incrementMoveNumber() {
 		this._turnNumber++;
+	}
+
+	latestMove(): Move | null {
+		if (this._moves.length > 0) {
+			return this._moves[this._moves.length - 1];
+		}
+		return null;
 	}
 
 	printBoardWhite() {
@@ -225,7 +232,7 @@ class Chess {
 				startSquarePiece: startSq.piece,
 			});
 		}
-		this.setTurnNumber = this._turnNumber;
+		this.incrementMoveNumber();
 	}
 
 	algebraicNotation(): string[] {
@@ -483,8 +490,16 @@ class Pawn extends Piece {
 	): boolean | Piece {
 		let secondToLastRank = startSq.piece?.getColor === Color.white ? 7 : 2;
 		let promotionRank = startSq.piece?.getColor === Color.white ? 8 : 1;
+		let EpStartSqRank = startSq.piece?.getColor === Color.white ? 5 : 4;
+		let EpEndSqRank = startSq.piece?.getColor === Color.white ? 6 : 3;
 
-		if (endSq.piece === null) {
+		if (
+			startSq.rank === EpStartSqRank &&
+			endSq.rank === EpEndSqRank &&
+			Piece.compareFiles(startSq.file, endSq.file)
+		) {
+			return this.enPassant(EpStartSqRank);
+		} else if (endSq.piece === null) {
 			console.log("Pawns can't go diagonally without capturing a piece");
 			return false;
 		} else if (
@@ -492,8 +507,8 @@ class Pawn extends Piece {
 			endSq.rank === promotionRank &&
 			Piece.compareFiles(startSq.file, endSq.file)
 		) {
-			if (pieceToPromote) {
-				return Pawn.promotion(pieceToPromote, Color.white);
+			if (pieceToPromote && startSq.piece?.getColor) {
+				return Pawn.promotion(pieceToPromote, startSq.piece.getColor);
 			} else {
 				console.log('No piece to promote to');
 				return false;
@@ -559,7 +574,20 @@ class Pawn extends Piece {
 		}
 	}
 
-	static enPassant() {}
+	static enPassant(EpStartSqRank: number): boolean {
+		console.log('first');
+		let latestMove = chess.latestMove();
+		if (
+			(EpStartSqRank === 5 &&
+				latestMove?.startSquare.rank === 7 &&
+				latestMove.endSquare.rank === 5) ||
+			(EpStartSqRank === 4 &&
+				latestMove?.startSquare.rank === 2 &&
+				latestMove.endSquare.rank === 4)
+		) {
+			return true;
+		} else return false;
+	}
 }
 
 class Knight extends Piece {
@@ -691,16 +719,24 @@ const chess = new Chess();
 // console.log(chess.printBoardWhite());
 chess.fen(Chess.STARTING_POSITION);
 chess.movePiece('e2', 'e4');
-chess.movePiece('f1', 'e5');
 chess.movePiece('d7', 'd5');
-chess.movePiece('d5', 'e4');
-chess.movePiece('e4', 'e3');
-chess.movePiece('e3', 'd2');
-chess.movePiece('d2', 'e1', 'QUEEN');
+chess.movePiece('e4', 'e5');
+chess.movePiece('d5', 'd4');
+chess.movePiece('c2', 'c4');
+chess.movePiece('e5', 'e6');
+chess.movePiece('f7', 'e6');
+chess.movePiece('a2', 'a4');
+chess.movePiece('d4', 'c3');
+chess.movePiece('a4', 'a5');
+chess.movePiece('c3', 'b2');
+chess.movePiece('a4', 'a5');
+chess.movePiece('b2', 'a1', 'QUEEN');
 
-console.log(chess.printBoardWhite());
-console.log(chess.getMoves);
+// console.log(chess.printBoardWhite());
+// console.log(chess.getMoves);
 console.log(chess.getTurnNumber);
 console.log(chess.algebraicNotation());
+// console.log(chess.latestMove());
+console.log(chess.printBoardWhite());
 // console.log(chess.get())
 // console.log(chess.startingPosition());

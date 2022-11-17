@@ -387,7 +387,7 @@ class Piece {
 		}
 		return false;
 	}
-
+	//for bishop and queen
 	static diagonalPiecesOnTheWay(
 		startSq: Square,
 		endSq: Square,
@@ -418,6 +418,47 @@ class Piece {
 			}
 		}
 		console.log('No diagonal pieces on the way');
+		return true;
+	}
+
+	//for rook and queen
+	static horizontalMove(startSq: Square, endSq: Square): boolean {
+		console.log('horizontal move by ' + startSq.piece);
+		let index = startSq.file < endSq.file ? 1 : -1;
+		let startSqIndex = startSq.id + index;
+		let horizontalDiff = Math.abs(endSq.id - startSq.id);
+
+		if (horizontalDiff === 1 && endSq.piece === null) return true;
+		for (let i = 0; i < horizontalDiff; i++, startSqIndex += index) {
+			let sq = chess.getSquareById(startSqIndex);
+			if (sq === startSq) continue;
+			else if (sq === endSq) break;
+			else if (!sq) return false;
+			else if (sq.piece !== null) {
+				console.log('Piece on the way');
+				return false;
+			}
+		}
+		return true;
+	}
+	//for rook and queen
+	static verticalMove(startSq: Square, endSq: Square): boolean {
+		console.log('vertical move by ' + startSq.piece);
+		let index = startSq.id < endSq.id ? 8 : -8;
+		let startSqIndex = startSq.id + index;
+		let verticalDiff = Math.abs(endSq.rank - startSq.rank);
+		if (verticalDiff === 1 && endSq.piece === null) return true;
+		for (let i = 0; i < verticalDiff; i++, startSqIndex += index) {
+			let sq = chess.getSquareById(startSqIndex);
+			console.log(sq?.getSquareName);
+			if (sq === startSq) continue;
+			if (!sq) return false;
+			else if (sq === endSq) break;
+			else if (sq.piece !== null) {
+				console.log('Piece on the way');
+				return false;
+			}
+		}
 		return true;
 	}
 }
@@ -740,6 +781,8 @@ class Bishop extends Piece {
 			console.log('Bishop cannot move to a different color square');
 			return false;
 		}
+
+		//capture logic
 		if (startSq.piece && endSq.piece !== null) {
 			if (Piece.capturable(startSq, endSq)) {
 				return Piece.isDiagonal(startSq, endSq);
@@ -748,6 +791,7 @@ class Bishop extends Piece {
 				return false;
 			}
 		}
+
 		return Piece.isDiagonal(startSq, endSq);
 	}
 }
@@ -766,18 +810,26 @@ class Rook extends Piece {
 	}
 
 	override move(startSq: Square, endSq: Square): boolean {
-		return true;
+		let isHorizontal = startSq.rank === endSq.rank ? true : false;
+
+		//capture logic
+		if (startSq.piece && endSq.piece !== null) {
+			if (Piece.capturable(startSq, endSq)) {
+				return isHorizontal
+					? Piece.horizontalMove(startSq, endSq)
+					: Piece.verticalMove(startSq, endSq);
+			} else {
+				console.log('Rook capture failed');
+				return false;
+			}
+		}
+
+		return isHorizontal
+			? Piece.horizontalMove(startSq, endSq)
+			: Piece.verticalMove(startSq, endSq);
 	}
 
-	static moveWhite(): boolean {
-		console.log('Move white');
-		return false;
-	}
-
-	static moveBlack(): boolean {
-		console.log('Move black');
-		return false;
-	}
+	//sivuttain
 }
 
 class Queen extends Piece {
@@ -795,16 +847,6 @@ class Queen extends Piece {
 
 	override move(startSq: Square, endSq: Square): boolean {
 		return true;
-	}
-
-	static moveWhite(): boolean {
-		console.log('Move white');
-		return false;
-	}
-
-	static moveBlack(): boolean {
-		console.log('Move black');
-		return false;
 	}
 }
 
@@ -838,12 +880,9 @@ class King extends Piece {
 
 const chess = new Chess();
 
-// chess.putPiece('e7', new Pawn(Color.white));
-// chess.putPiece('e8', new King(Color.black));
-// chess.putPiece('d8', new King(Color.black));
-
 // console.log(chess.printBoardWhite());
-chess.fen(Chess.STARTING_POSITION);
+// chess.fen(Chess.STARTING_POSITION);
+// console.log(chess.printBoardWhite());
 
 // // enpassant test
 // chess.movePiece('e2', 'e4');
@@ -863,27 +902,38 @@ chess.fen(Chess.STARTING_POSITION);
 // chess.movePiece('e5', 'f3');
 // chess.movePiece('f3', 'd2');
 
-// bishop test
-chess.movePiece('e2', 'e4');
-chess.movePiece('e7', 'e5');
-chess.movePiece('f1', 'c4');
-chess.movePiece('a7', 'a5');
-chess.movePiece('d2', 'd3');
-chess.movePiece('a5', 'a4');
-chess.movePiece('a5', 'a4');
-chess.movePiece('c4', 'd5');
-chess.movePiece('h7', 'h6');
-chess.movePiece('d5', 'e4');
-
+// // bishop test
+// chess.movePiece('e2', 'e4');
+// chess.movePiece('e7', 'e5');
+// chess.movePiece('f1', 'c4');
+// chess.movePiece('a7', 'a5');
+// chess.movePiece('d2', 'd3');
 // chess.movePiece('a5', 'a4');
+// chess.movePiece('a5', 'a4');
+// chess.movePiece('c4', 'd5');
+// chess.movePiece('h7', 'h6');
+// chess.movePiece('d5', 'c6');
+// chess.movePiece('h6', 'h5');
+// chess.movePiece('c6', 'a4');
 
-// chess.movePiece('e3', 'd2');
+chess.putPiece('a1', new Rook(Color.white));
+chess.putPiece('d8', new Rook(Color.black));
 
-// console.log(chess.printBoardWhite())
-// console.log(chess.getMoves);
+chess.movePiece('a1', 'h1');
+chess.movePiece('d8', 'd1');
+chess.movePiece('h1', 'b1');
+// chess.movePiece('d1', 'd7');
+
+// chess.movePiece('d7', 'd1');
+
+// chess.movePiece('a1', 'a2');
+
+console.log(chess.printBoardWhite());
 // console.log(chess.getTurnNumber);
 console.log(chess.algebraicNotation());
+
 // console.log(chess.latestMove());
-console.log(chess.printBoardWhite());
-// console.log(chess.get())
+// console.log(chess.printBoardWhite());
+// console.log(chess.getBoard);
 // console.log(chess.startingPosition());
+// console.log(chess.printBoardWhite());

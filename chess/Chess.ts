@@ -13,8 +13,8 @@ interface Move {
 enum ChessPieces {
 	PAWN_WHITE = 'pawn',
 	PAWN_BLACK = 'PAWN',
-	KNIGHT_WHITE = 'knight',
-	KNIGHT_BLACK = 'KNIGHT',
+	KNIGHT_WHITE = 'night',
+	KNIGHT_BLACK = 'NIGHT',
 	BISHOP_WHITE = 'bishop',
 	BISHOP_BLACK = 'BISHOP',
 	ROOK_WHITE = 'rook',
@@ -74,7 +74,7 @@ class Chess {
 		this._moves = moves ? moves : [];
 
 		this._pieces = pieces ? pieces : [];
-		this._turnNumber = 1;
+		this._turnNumber = 0;
 
 		let firstSquare = Color.black;
 		let secondSquare = Color.white;
@@ -132,6 +132,10 @@ class Chess {
 		this._turnNumber++;
 	}
 
+	checkTurn(): Color {
+		return this.getTurnNumber % 2 === 0 ? Color.white : Color.black;
+	}
+
 	latestMove(): Move | null {
 		if (this._moves.length > 0) {
 			return this._moves[this._moves.length - 1];
@@ -183,10 +187,13 @@ class Chess {
 			console.log("Didn't move the piece");
 			return;
 		}
-
 		let startSq = this.getSquare(startSquare);
 		let endSq = this.getSquare(endSquare);
 		let isLegalMoveOrPiece: boolean | Piece;
+		if (startSq?.piece?.getColor !== chess.checkTurn()) {
+			console.log('Wrong players turn');
+			return;
+		}
 
 		if (startSq !== null && startSq.piece !== null && endSq !== null) {
 			//check if pawn is about to promote
@@ -203,25 +210,24 @@ class Chess {
 				isLegalMoveOrPiece = startSq.piece.move(startSq, endSq);
 			}
 
-			//is only an object if promoting a pawn
+			//is only an object if promoting a pawn, if not object this runs
 			if (typeof isLegalMoveOrPiece !== 'object' && isLegalMoveOrPiece) {
 				endSq.piece = startSq.piece;
 				this.addMove(startSq, endSq);
 				startSq.piece = null;
 				return;
 			}
-			//promote
+			//promotion logic
 			else if (isLegalMoveOrPiece) {
 				endSq.piece = isLegalMoveOrPiece;
 				this.addMove(startSq, endSq);
 				startSq.piece = null;
-			} else {
-				console.log('Inputted invalid move or a piece is on the way');
+				return;
 			}
-		} else
-			console.log(
-				'Starting square is invalid, no piece to be found or ending square is invalid.'
-			);
+		}
+		console.log(
+			'Starting square is invalid, no piece to be found or ending square is invalid, inputted invalid move or a piece is on the way'
+		);
 	}
 
 	addMove(startSq: Square, endSq: Square): void {
@@ -358,12 +364,61 @@ class Piece {
 		return this.color;
 	}
 
-	static compareFiles(startSqFile: string, endSqFile: string): boolean {
-		return (
-			Math.abs(
-				Chess.findFileIndex(startSqFile) - Chess.findFileIndex(endSqFile)
-			) === 1
+	static capturable(startSq: Square, endSq: Square): boolean {
+		if (startSq.piece?.color === endSq.piece?.color && endSq.piece !== null) {
+			console.log('Cannot capture own piece or capture on an empty square');
+			return false;
+		}
+		console.log('capturable');
+		return true;
+	}
+
+	//for bishop and queen
+	static isDiagonal(startSq: Square, endSq: Square): boolean {
+		let fileDiff = Math.abs(
+			Chess.findFileIndex(startSq.file) - Chess.findFileIndex(endSq.file)
 		);
+		let rankDiff = Math.abs(startSq.rank - endSq.rank);
+		if (fileDiff === rankDiff && fileDiff === 1) {
+			return true;
+		}
+		if (fileDiff === rankDiff) {
+			return Piece.diagonalPiecesOnTheWay(startSq, endSq, rankDiff);
+		}
+		return false;
+	}
+
+	static diagonalPiecesOnTheWay(
+		startSq: Square,
+		endSq: Square,
+		rankDiff: number
+	): boolean {
+		let index: number = 0;
+		let startFileIndex = Chess.findFileIndex(startSq.file);
+		let endFileIndex = Chess.findFileIndex(endSq.file);
+
+		//find index of the next square to test
+		if (startSq.rank < endSq.rank && startFileIndex > endFileIndex) {
+			index = 7;
+		} else if (startSq.rank < endSq.rank && startFileIndex < endFileIndex) {
+			index = 9;
+		} else if (startSq.rank > endSq.rank && startFileIndex > endFileIndex) {
+			index = -9;
+		} else index = -7;
+
+		let startSqIndex = startSq.id + index;
+
+		for (let i = 0; i < rankDiff; i++, startSqIndex += index) {
+			let sq = chess.getSquareById(startSqIndex);
+			if (sq === endSq) break;
+			else if (!sq) return false;
+			else if (sq.piece !== null) {
+				console.log('Piece on the way');
+				return false;
+			}
+		}
+		console.log('No diagonal pieces on the way');
+		return true;
 	}
 }
 
@@ -432,6 +487,7 @@ class Pawn extends Piece {
 
 		//move one square forwards
 		else if (endSq.rank - startSq.rank === 1 && endSq.piece === null) {
+			console.log('Moved pawn one square forward');
 			return true;
 		}
 
@@ -476,6 +532,7 @@ class Pawn extends Piece {
 
 		//move one square forwards
 		else if (startSq.rank - endSq.rank === 1 && endSq.piece === null) {
+			console.log('Moved pawn one square forward');
 			return true;
 		}
 
@@ -492,41 +549,51 @@ class Pawn extends Piece {
 		let promotionRank = startSq.piece?.getColor === Color.white ? 8 : 1;
 		let EpStartSqRank = startSq.piece?.getColor === Color.white ? 5 : 4;
 		let EpEndSqRank = startSq.piece?.getColor === Color.white ? 6 : 3;
+		let color: Color | null =
+			startSq.piece?.getColor === Color.white ? Color.black : null;
 
-		if (
-			startSq.rank === EpStartSqRank &&
-			endSq.rank === EpEndSqRank &&
-			Piece.compareFiles(startSq.file, endSq.file)
-		) {
-			return this.enPassant(EpStartSqRank);
-		} else if (endSq.piece === null) {
-			console.log("Pawns can't go diagonally without capturing a piece");
-			return false;
-		} else if (
-			startSq.rank === secondToLastRank &&
-			endSq.rank === promotionRank &&
-			Piece.compareFiles(startSq.file, endSq.file)
-		) {
-			if (pieceToPromote && startSq.piece?.getColor) {
-				return Pawn.promotion(pieceToPromote, startSq.piece.getColor);
-			} else {
-				console.log('No piece to promote to');
+		//check if it's your own piece
+		if (Piece.capturable(startSq, endSq)) {
+			//check if it's en passant
+			if (
+				startSq.rank === EpStartSqRank &&
+				endSq.rank === EpEndSqRank &&
+				Pawn.compareFiles(startSq.file, endSq.file)
+			) {
+				return this.enPassant(EpStartSqRank);
+			}
+			//check if it's a promotion
+			//enpassant is checked before this cause endSq.piece is null on enpassant
+			else if (endSq.piece === null) {
+				console.log("Pawns can't go diagonally without capturing a piece");
 				return false;
 			}
-		} else if (
-			Math.abs(startSq.rank - endSq.rank) === 1 &&
-			Piece.compareFiles(startSq.file, endSq.file)
-		) {
-			console.log('Captured a piece with pawn on ' + endSq.squareName);
-			return true;
-		} else {
-			console.log('Error capturing with pawn');
-			return false;
+			//check if it's a promotion
+			else if (
+				startSq.rank === secondToLastRank &&
+				endSq.rank === promotionRank &&
+				Pawn.compareFiles(startSq.file, endSq.file) &&
+				pieceToPromote &&
+				color
+			) {
+				return Pawn.promotion(pieceToPromote, color);
+			}
+			//normal capture logic
+			else if (
+				Math.abs(startSq.rank - endSq.rank) === 1 &&
+				Pawn.compareFiles(startSq.file, endSq.file)
+			) {
+				console.log('Captured a piece with pawn on ' + endSq.squareName);
+				return true;
+			}
 		}
+		console.log('Error capturing with pawn');
+		return false;
 	}
 
 	static startingSquareMove(startSq: Square, endSq: Square): boolean {
 		if (Math.abs(startSq.rank - endSq.rank) === 1 && endSq.piece === null) {
+			console.log('Moved pawn one square forward');
 			return true;
 		} else if (
 			endSq.rank - startSq.rank === 2 &&
@@ -575,7 +642,6 @@ class Pawn extends Piece {
 	}
 
 	static enPassant(EpStartSqRank: number): boolean {
-		console.log('first');
 		let latestMove = chess.latestMove();
 		if (
 			(EpStartSqRank === 5 &&
@@ -585,8 +651,21 @@ class Pawn extends Piece {
 				latestMove?.startSquare.rank === 2 &&
 				latestMove.endSquare.rank === 4)
 		) {
+			console.log('En passant successful');
+			latestMove.endSquare.piece = null;
 			return true;
-		} else return false;
+		} else {
+			console.log('En passant unsuccessful');
+			return false;
+		}
+	}
+
+	static compareFiles(startSqFile: string, endSqFile: string): boolean {
+		return (
+			Math.abs(
+				Chess.findFileIndex(startSqFile) - Chess.findFileIndex(endSqFile)
+			) === 1
+		);
 	}
 }
 
@@ -598,13 +677,48 @@ class Knight extends Piece {
 		this.color = color;
 		if (color === Color.white) {
 			this.name = ChessPieces.KNIGHT_WHITE;
-		} else {
-			this.name = ChessPieces.KNIGHT_BLACK;
-		}
+		} else this.name = ChessPieces.KNIGHT_BLACK;
 	}
 
 	override move(startSq: Square, endSq: Square): boolean {
-		return true;
+		if (startSq.color === endSq.color) {
+			console.log('Knight cannot move to same color square');
+			return false;
+		} else if (
+			startSq.piece &&
+			Knight.compareFilesAndRanks(startSq, endSq) &&
+			endSq.piece === null
+		) {
+			return true;
+		} else if (
+			startSq.piece &&
+			Knight.compareFilesAndRanks(startSq, endSq) &&
+			endSq.piece !== null
+		) {
+			return Knight.capture(startSq, endSq);
+		} else return false;
+	}
+
+	static capture(startSq: Square, endSq: Square): boolean {
+		if (Piece.capturable(startSq, endSq)) {
+			return true;
+		} else {
+			console.log('knight capture failed');
+			return false;
+		}
+	}
+
+	static compareFilesAndRanks(startSq: Square, endSq: Square): boolean {
+		return (
+			(Math.abs(
+				Chess.findFileIndex(startSq.file) - Chess.findFileIndex(endSq.file)
+			) === 1 &&
+				Math.abs(startSq.rank - endSq.rank) === 2) ||
+			(Math.abs(
+				Chess.findFileIndex(startSq.file) - Chess.findFileIndex(endSq.file)
+			) === 2 &&
+				Math.abs(startSq.rank - endSq.rank) === 1)
+		);
 	}
 }
 
@@ -622,7 +736,19 @@ class Bishop extends Piece {
 	}
 
 	override move(startSq: Square, endSq: Square): boolean {
-		return false;
+		if (startSq.color !== endSq.color) {
+			console.log('Bishop cannot move to a different color square');
+			return false;
+		}
+		if (startSq.piece && endSq.piece !== null) {
+			if (Piece.capturable(startSq, endSq)) {
+				return Piece.isDiagonal(startSq, endSq);
+			} else {
+				console.log('bishop capture failed');
+				return false;
+			}
+		}
+		return Piece.isDiagonal(startSq, endSq);
 	}
 }
 
@@ -718,23 +844,44 @@ const chess = new Chess();
 
 // console.log(chess.printBoardWhite());
 chess.fen(Chess.STARTING_POSITION);
-chess.movePiece('e2', 'e4');
-chess.movePiece('d7', 'd5');
-chess.movePiece('e4', 'e5');
-chess.movePiece('d5', 'd4');
-chess.movePiece('c2', 'c4');
-chess.movePiece('e5', 'e6');
-chess.movePiece('f7', 'e6');
-chess.movePiece('a2', 'a4');
-chess.movePiece('d4', 'c3');
-chess.movePiece('a4', 'a5');
-chess.movePiece('c3', 'b2');
-chess.movePiece('a4', 'a5');
-chess.movePiece('b2', 'a1', 'QUEEN');
 
-// console.log(chess.printBoardWhite());
+// // enpassant test
+// chess.movePiece('e2', 'e4');
+// chess.movePiece('d7', 'd5');
+// chess.movePiece('e4', 'd5');
+// chess.movePiece('g8', 'f6');
+// chess.movePiece('g1', 'e2');
+// chess.movePiece('c7', 'c5');
+// chess.movePiece('d5', 'c6');
+
+// // knights test
+// chess.movePiece('b1', 'c3');
+// chess.movePiece('b8', 'c6');
+// chess.movePiece('c3', 'd5');
+// chess.movePiece('c6', 'e5');
+// chess.movePiece('d5', 'f6');
+// chess.movePiece('e5', 'f3');
+// chess.movePiece('f3', 'd2');
+
+// bishop test
+chess.movePiece('e2', 'e4');
+chess.movePiece('e7', 'e5');
+chess.movePiece('f1', 'c4');
+chess.movePiece('a7', 'a5');
+chess.movePiece('d2', 'd3');
+chess.movePiece('a5', 'a4');
+chess.movePiece('a5', 'a4');
+chess.movePiece('c4', 'd5');
+chess.movePiece('h7', 'h6');
+chess.movePiece('d5', 'e4');
+
+// chess.movePiece('a5', 'a4');
+
+// chess.movePiece('e3', 'd2');
+
+// console.log(chess.printBoardWhite())
 // console.log(chess.getMoves);
-console.log(chess.getTurnNumber);
+// console.log(chess.getTurnNumber);
 console.log(chess.algebraicNotation());
 // console.log(chess.latestMove());
 console.log(chess.printBoardWhite());

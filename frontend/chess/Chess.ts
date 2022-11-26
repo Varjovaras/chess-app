@@ -424,23 +424,31 @@ export default class Chess {
 
 class Game {
 	chess: Chess;
+	gameOver: number;
 
 	constructor(chess: Chess) {
 		this.chess = chess;
+		this.gameOver = 1;
 	}
 
 	async playTerminal() {
 		chess.startingPosition();
-		let gameOver: number = 1;
-		while (!this.chess.isGameOver(gameOver)) {
+		while (!this.chess.isGameOver(this.gameOver)) {
 			await this.terminalMoves();
 		}
-		console.log('Checkmate');
+		console.log('Game over!');
 	}
+
 	terminalMoves(): Promise<void> {
 		console.log(chess.printBoardWhite());
 		const rl = readline.createInterface(process.stdin, process.stdout);
 		rl.question(`Input move for ${chess.whoseTurn()}:\n`, (input) => {
+			if (input === '') {
+				this.gameOver = 0;
+				rl.close();
+				return new Promise((resolve) => rl.on('close', resolve));
+			}
+
 			console.log(`Trying ${input}`);
 			let split = input.toLowerCase().split(' ');
 			try {
@@ -1155,7 +1163,6 @@ chess.movePiece('e4', 'd5');
 
 console.log(chess.getPieces);
 const game = new Game(chess);
-// game.playTerminal();
 
 // chess.fen(Chess.STARTING_POSITION);
 // console.log(chess.printBoardWhite());
@@ -1230,6 +1237,8 @@ console.log(chess.latestMove());
 console.log(chess.printBoardWhite());
 console.log(chess.getBoard);
 chess.startingPosition();
+
+//get
 console.log(
 	chess.getSquare(
 		`${String.fromCharCode(chess.getSquare('e2')!.file.charCodeAt(0) + 1)}${
@@ -1239,8 +1248,9 @@ console.log(
 );
 
 console.log(chess.getSquare('a2')!.piece?.possibleMoves());
-
 // console.log(chess.printBoardWhite());
 
 // console.log(chess.printBoardWhite());
+
+game.playTerminal();
 console.timeEnd('c');

@@ -206,8 +206,7 @@ export default class Chess {
 	movePiece(startSquare: string, endSquare: string, pieceName?: string): void {
 		if (startSquare === endSquare) {
 			console.log('Same starting and ending square');
-			console.log("Didn't move the piece");
-			throw new Error();
+			throw new Error("Didn't move the piece");
 		}
 		let startSq = this.getSquare(startSquare);
 		let endSq = this.getSquare(endSquare);
@@ -846,13 +845,97 @@ class Pawn extends Piece {
 	}
 
 	static whiteMoves(sq: Square): SingleMove[] {
-		if (sq) {
+		let moves: SingleMove[] = [];
+		let startSq = sq.getSquareName;
+		if (sq.rank === 1) {
+			throw new Error('How is the white pawn on the first rank?');
 		}
-		return [];
+		if (sq.rank === 2) {
+			moves.push(
+				{
+					startSq: startSq,
+					endSq: chess.getSquare(`${sq.file}${sq.rank + 1}`)!.getSquareName,
+				},
+				{
+					startSq: startSq,
+					endSq: chess.getSquare(`${sq.file}${sq.rank + 2}`)!.getSquareName,
+				}
+			);
+		}
+		if (sq.file === 'a') {
+			moves.push({
+				startSq: startSq,
+				endSq: chess.getSquare(`${'b'}${sq.rank + 1}`)!.getSquareName,
+			});
+		} else if (sq.file === 'h') {
+			moves.push({
+				startSq: startSq,
+				endSq: chess.getSquare(`${'g'}${sq.rank + 1}`)!.getSquareName,
+			});
+		} else {
+			moves.push(
+				{
+					startSq: startSq,
+					endSq: chess.getSquare(
+						`${String.fromCharCode(sq.file.charCodeAt(0) + 1)}${sq.rank + 1}`
+					)!.getSquareName,
+				},
+				{
+					startSq: startSq,
+					endSq: chess.getSquare(
+						`${String.fromCharCode(sq.file.charCodeAt(0) - 1)}${sq.rank + 1}`
+					)!.getSquareName,
+				}
+			);
+		}
+		return moves;
 	}
 
 	static blackMoves(sq: Square): SingleMove[] {
-		return [];
+		let moves: SingleMove[] = [];
+		let startSq = sq.getSquareName;
+		if (sq.rank === 8) {
+			throw new Error('How is the black pawn on the 8th rank?');
+		}
+		if (sq.rank === 7) {
+			moves.push(
+				{
+					startSq: startSq,
+					endSq: chess.getSquare(`${sq.file}${sq.rank - 1}`)!.getSquareName,
+				},
+				{
+					startSq: startSq,
+					endSq: chess.getSquare(`${sq.file}${sq.rank - 2}`)!.getSquareName,
+				}
+			);
+		}
+		if (sq.file === 'a') {
+			moves.push({
+				startSq: startSq,
+				endSq: chess.getSquare(`${'b'}${sq.rank - 1}`)!.getSquareName,
+			});
+		} else if (sq.file === 'h') {
+			moves.push({
+				startSq: startSq,
+				endSq: chess.getSquare(`${'g'}${sq.rank - 1}`)!.getSquareName,
+			});
+		} else {
+			moves.push(
+				{
+					startSq: startSq,
+					endSq: chess.getSquare(
+						`${String.fromCharCode(sq.file.charCodeAt(0) + 1)}${sq.rank + 1}`
+					)!.getSquareName,
+				},
+				{
+					startSq: startSq,
+					endSq: chess.getSquare(
+						`${String.fromCharCode(sq.file.charCodeAt(0) - 1)}${sq.rank + 1}`
+					)!.getSquareName,
+				}
+			);
+		}
+		return moves;
 	}
 }
 
@@ -1157,6 +1240,16 @@ console.log(chess.latestMove());
 console.log(chess.printBoardWhite());
 console.log(chess.getBoard);
 chess.startingPosition();
+console.log(
+	chess.getSquare(
+		`${String.fromCharCode(chess.getSquare('e2')!.file.charCodeAt(0) + 1)}${
+			chess.getSquare('e2')!.rank + 1
+		}`
+	)
+);
+
+console.log(chess.getSquare('a2')!.piece?.possibleMoves());
+
 // console.log(chess.printBoardWhite());
 
 // console.log(chess.printBoardWhite());

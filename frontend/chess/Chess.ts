@@ -1146,10 +1146,8 @@ class King extends Piece {
 }
 
 const chess = new Chess();
-//@ts-ignore
-chess.putPieceOnBoard('e2', new Pawn(chess.getSquare('e2'), Color.white));
-//@ts-ignore
-chess.putPieceOnBoard('d7', new Pawn('d7', Color.black));
+chess.putPieceOnBoard('e2', new Pawn(chess.getSquare('e2')!, Color.white));
+chess.putPieceOnBoard('d7', new Pawn(chess.getSquare('d7')!, Color.black));
 console.log(chess.printBoardWhite());
 chess.movePiece('e2', 'e4');
 chess.movePiece('d7', 'd5');
@@ -1199,24 +1197,18 @@ chess.movePiece('c6', 'a4');
 
 // //rook test
 chess.emptyBoard();
-//@ts-ignore
-chess.putPieceOnBoard('a1', new Rook(chess.getSquare('a1'), Color.white));
-//@ts-ignore
-chess.putPieceOnBoard('d8', new Rook(chess.getSquare('a1'), Color.black));
+chess.putPieceOnBoard('a1', new Rook(chess.getSquare('a1')!, Color.white));
+chess.putPieceOnBoard('d8', new Rook(chess.getSquare('a1')!, Color.black));
 chess.movePiece('a1', 'h1');
 chess.movePiece('d8', 'd1');
 chess.movePiece('h1', 'd1');
 
 // //queen testing
 chess.emptyBoard();
-//@ts-ignore
-chess.putPieceOnBoard('a1', new Queen(chess.getSquare('a1'), Color.white));
-//@ts-ignore
-chess.putPieceOnBoard('a1', new Queen(chess.getSquare('a1'), Color.white));
-//@ts-ignore
-chess.putPieceOnBoard('a7', new Queen(chess.getSquare('a7'), Color.black));
-//@ts-ignore
-chess.putPieceOnBoard('d8', new Queen(chess.getSquare('d8'), Color.black));
+chess.putPieceOnBoard('a1', new Queen(chess.getSquare('a1')!, Color.white));
+chess.putPieceOnBoard('a1', new Queen(chess.getSquare('a1')!, Color.white));
+chess.putPieceOnBoard('a7', new Queen(chess.getSquare('a7')!, Color.black));
+chess.putPieceOnBoard('d8', new Queen(chess.getSquare('d8')!, Color.black));
 chess.movePiece('a1', 'h1');
 chess.movePiece('d8', 'd1');
 chess.movePiece('h1', 'f3');
@@ -1224,10 +1216,8 @@ chess.movePiece('d1', 'f3');
 
 // //king testing
 chess.emptyBoard();
-//@ts-ignore
-chess.putPieceOnBoard('e1', new King(chess.getSquare('e1'), Color.white));
-//@ts-ignore
-chess.putPieceOnBoard('e8', new King(chess.getSquare('e8'), Color.black));
+chess.putPieceOnBoard('e1', new King(chess.getSquare('e1')!, Color.white));
+chess.putPieceOnBoard('e8', new King(chess.getSquare('e8')!, Color.black));
 chess.movePiece('e1', 'e2');
 chess.movePiece('e8', 'd7');
 chess.movePiece('e2', 'f3');

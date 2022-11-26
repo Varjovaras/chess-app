@@ -1,20 +1,29 @@
+console.time('c');
+import readline from 'readline';
+console.time('Chess');
+
 enum Color {
 	black = 'BLACK',
 	white = 'WHITE',
 }
 
 interface Move {
-	startSquare: Square;
-	endSquare: Square;
+	startSq: Square;
+	endSq: Square;
 	startSquarePiece: Piece;
 	promotion?: Piece | null;
+}
+
+interface SingleMove {
+	startSq: string;
+	endSq: string;
 }
 
 enum ChessPieces {
 	PAWN_WHITE = 'pawn',
 	PAWN_BLACK = 'PAWN',
-	KNIGHT_WHITE = 'night',
-	KNIGHT_BLACK = 'NIGHT',
+	KNIGHT_WHITE = 'night', //first letter n for printing purposes
+	KNIGHT_BLACK = 'NIGHT', //first letter n for printing purposes
 	BISHOP_WHITE = 'bishop',
 	BISHOP_BLACK = 'BISHOP',
 	ROOK_WHITE = 'rook',
@@ -58,18 +67,23 @@ class Square {
 	}
 }
 
-class Chess {
+interface PieceSquare {
+	square: string;
+	piece: Piece;
+}
+
+export default class Chess {
 	private _board: Square[];
 	private _moves: Move[];
 
-	private _pieces: Piece[];
+	private _pieces: PieceSquare[];
 	private _turnNumber: number;
 
 	static files: string[] = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 	static STARTING_POSITION =
 		'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
-	constructor(moves?: Move[], pieces?: Piece[]) {
+	constructor(moves?: Move[], pieces?: PieceSquare[]) {
 		this._board = new Array(64);
 		this._moves = moves ? moves : [];
 
@@ -124,10 +138,6 @@ class Chess {
 		return this._pieces;
 	}
 
-	set setPieces(newPiece: Piece) {
-		this._pieces.push(newPiece);
-	}
-
 	get getTurnNumber() {
 		return this._turnNumber;
 	}
@@ -145,6 +155,14 @@ class Chess {
 			return this._moves[this._moves.length - 1];
 		}
 		return null;
+	}
+
+	whoseTurn(): string {
+		return this.checkTurn() === Color.white ? 'White' : 'Black';
+	}
+
+	isGameOver(n: number): boolean {
+		return n === 0 ? true : false;
 	}
 
 	printBoardWhite() {
@@ -189,7 +207,7 @@ class Chess {
 		if (startSquare === endSquare) {
 			console.log('Same starting and ending square');
 			console.log("Didn't move the piece");
-			return;
+			throw new Error();
 		}
 		let startSq = this.getSquare(startSquare);
 		let endSq = this.getSquare(endSquare);
@@ -198,7 +216,7 @@ class Chess {
 		let isLegalMoveOrPiece: boolean | Piece;
 		if (startSq?.piece?.getColor !== this.checkTurn()) {
 			console.log('Wrong players turn');
-			return;
+			throw new Error();
 		}
 
 		if (startSq !== null && startSq.piece !== null && endSq !== null) {
@@ -218,8 +236,8 @@ class Chess {
 
 			//is only an object if promoting a pawn, if not object this runs
 			if (typeof isLegalMoveOrPiece !== 'object' && isLegalMoveOrPiece) {
-				endSq.piece = startSq.piece;
 				this.addMove(startSq, endSq);
+				endSq.piece = startSq.piece;
 				startSq.piece = null;
 				return;
 			}
@@ -234,17 +252,71 @@ class Chess {
 		console.log(
 			'Starting square is invalid, no piece to be found or ending square is invalid, inputted invalid move or a piece is on the way'
 		);
+		throw new Error();
 	}
 
 	addMove(startSq: Square, endSq: Square): void {
+		this.handleMove(startSq, endSq);
+		this.handlePieces(startSq, endSq);
+		this.incrementMoveNumber();
+	}
+
+	handleMove(startSq: Square, endSq: Square): void {
 		if (startSq.piece) {
 			this._moves.push({
-				startSquare: startSq,
-				endSquare: endSq,
+				startSq: startSq,
+				endSq: endSq,
 				startSquarePiece: startSq.piece,
 			});
 		}
-		this.incrementMoveNumber();
+	}
+
+	handlePieces(startSq: Square, endSq: Square): void {
+		if (endSq.piece) {
+			console.log('Removing piece from the end square');
+			this._pieces = this._pieces.filter(
+				(p: PieceSquare) => p.square !== endSq.getSquareName
+			);
+		}
+		if (startSq.piece) {
+			console.log('Removing piece from the starting square');
+			this._pieces = this._pieces.filter(
+				(p: PieceSquare) => p.square !== startSq.getSquareName
+			);
+			console.log('Adding piece to the end square');
+			this._pieces.push({
+				square: endSq.getSquareName,
+				piece: startSq.piece,
+			});
+		}
+	}
+
+	//initialization or promoting
+	putPieceOnBoard(square: string, piece: Piece): void {
+		let sq = this.getSquare(square);
+		if (sq && !this.isSquareOccupied(sq)) {
+			this.removePiece(square);
+		}
+		if (sq) {
+			sq.piece = piece;
+			this.addPiece(piece, square);
+			console.log(`${piece.getName} put on ${square}`);
+		} else {
+			console.log('No square found');
+			throw new Error();
+		}
+	}
+
+	addPiece(piece: Piece, square: string): void {
+		this._pieces.push({ square: square, piece: piece });
+	}
+
+	removePiece(square: string): void {
+		this._pieces = this._pieces.filter((p: PieceSquare) => p.square !== square);
+	}
+
+	isSquareOccupied(sq: Square): boolean {
+		return sq.piece === null;
 	}
 
 	algebraicNotation(): string[] {
@@ -253,19 +325,17 @@ class Chess {
 
 		for (const move of this.getMoves) {
 			let startSqPiece =
-				move.startSquare.piece &&
-				move.startSquare.piece.getFirstLetter().toLowerCase() !== 'p'
-					? move.startSquare.piece.getFirstLetter()
+				move.startSq.piece &&
+				move.startSq.piece.getFirstLetter().toLowerCase() !== 'p'
+					? move.startSq.piece.getFirstLetter()
 					: '';
 
-			let piece = move.endSquare.piece
-				? move.endSquare.piece.getFirstLetter()
-				: '';
+			let piece = move.endSq.piece ? move.endSq.piece.getFirstLetter() : '';
 
 			s =
 				s +
-				`${startSqPiece}${move.startSquare.getSquareName} ${
-					move.endSquare.getSquareName
+				`${startSqPiece}${move.startSq.getSquareName} ${
+					move.endSq.getSquareName
 				}${piece.toUpperCase()}`;
 
 			returnArray = returnArray.concat(s);
@@ -275,65 +345,73 @@ class Chess {
 		return returnArray;
 	}
 
-	//initialization or promoting
-	putPiece(square: string, piece: Piece) {
-		let sq = this.getSquare(square);
-		if (sq) {
-			sq.piece = piece;
-			console.log(`${piece.getName} put on ${square}`);
-		} else {
-			console.log('No square found');
-		}
-	}
-
 	fen(fen: string): void {
 		let tokens = fen.split(/\s+/);
 		let pieces = tokens[0].split('/');
+		//initialize game
+		this._moves = [];
+		this._pieces = [];
+		this._turnNumber = 0;
+		this._board.forEach((s) => {
+			s.piece = null;
+		});
 		for (let i = 0; i < 8; i++) {
 			let str = pieces[i];
 			if (str.length !== 8) {
 				//todo non-starting position
 			} else if (str !== '8') {
 				for (let j = i * 8, k = 0; j < i * 8 + 8; j++, k++) {
-					let piece = Chess.fenPieces(str[k]);
-					let sq = this.getSquareById(j)?.squareName;
-					if (sq && piece !== null) {
-						this.putPiece(sq, piece);
+					let sq = this.getSquareById(j);
+					if (sq) {
+						let piece = Chess.fenPieces(str[k], sq);
+
+						if (piece !== null) {
+							this.putPieceOnBoard(sq.getSquareName, piece);
+						}
 					}
 				}
 			}
 		}
 	}
 
-	static fenPieces(s: string): Piece | null {
+	static fenPieces(s: string, sq: Square): Piece | null {
 		switch (s) {
 			case 'p':
-				return new Pawn(Color.white);
+				return new Pawn(sq, Color.white);
 			case 'P':
-				return new Pawn(Color.black);
+				return new Pawn(sq, Color.black);
 			case 'n':
-				return new Knight(Color.white);
+				return new Knight(sq, Color.white);
 			case 'N':
-				return new Knight(Color.black);
+				return new Knight(sq, Color.black);
 			case 'b':
-				return new Bishop(Color.white);
+				return new Bishop(sq, Color.white);
 			case 'B':
-				return new Bishop(Color.black);
+				return new Bishop(sq, Color.black);
 			case 'r':
-				return new Rook(Color.white);
+				return new Rook(sq, Color.white);
 			case 'R':
-				return new Rook(Color.black);
+				return new Rook(sq, Color.black);
 			case 'q':
-				return new Queen(Color.white);
+				return new Queen(sq, Color.white);
 			case 'Q':
-				return new Queen(Color.black);
+				return new Queen(sq, Color.black);
 			case 'k':
-				return new King(Color.white);
+				return new King(sq, Color.white);
 			case 'K':
-				return new King(Color.black);
+				return new King(sq, Color.black);
 			default:
 				return null;
 		}
+	}
+
+	emptyBoard(): void {
+		this._board.forEach((s) => {
+			s.piece = null;
+		});
+		this._moves = [];
+		this._pieces = [];
+		this._turnNumber = 0;
 	}
 
 	startingPosition(): void {
@@ -346,22 +424,48 @@ class Chess {
 }
 
 class Game {
-	static playTerminal() {
-		let chess = new Chess();
+	chess: Chess;
+
+	constructor(chess: Chess) {
+		this.chess = chess;
+	}
+
+	async playTerminal() {
 		chess.startingPosition();
-		let moves = chess.algebraicNotation();
-		for (const move of moves) {
-			console.log(move);
+		let gameOver: number = 1;
+		while (!this.chess.isGameOver(gameOver)) {
+			await this.terminalMoves();
 		}
+		console.log('Checkmate');
+	}
+	terminalMoves(): Promise<void> {
+		console.log(chess.printBoardWhite());
+		const rl = readline.createInterface(process.stdin, process.stdout);
+		rl.question(`Input move for ${chess.whoseTurn()}:\n`, (input) => {
+			console.log(`Trying ${input}`);
+			let split = input.toLowerCase().split(' ');
+			try {
+				chess.movePiece(split[0], split[1]);
+				rl.close();
+				return new Promise((resolve) => rl.on('close', resolve));
+			} catch {
+				console.log('Invalid move, try again');
+				rl.close();
+				return new Promise((resolve) => rl.on('close', resolve));
+			}
+		});
+		return new Promise((resolve) => rl.on('close', resolve));
 	}
 }
 
 class Piece {
 	protected name: string;
 	protected color: Color | undefined;
+	protected square: Square;
 
-	constructor(color?: Color) {
+	constructor(square: Square, color?: Color) {
 		this.name = '';
+		this.square = square;
 		this.color = color;
 	}
 
@@ -381,6 +485,10 @@ class Piece {
 		return this.color;
 	}
 
+	get getSquare() {
+		return this.square;
+	}
+
 	static capturable(startSq: Square, endSq: Square): boolean {
 		if (startSq.piece?.color === endSq.piece?.color && endSq.piece !== null) {
 			console.log('Cannot capture own piece or capture on an empty square');
@@ -388,6 +496,11 @@ class Piece {
 		}
 		console.log('capturable');
 		return true;
+	}
+
+	possibleMoves(): SingleMove[] {
+		console.log('Piece without type has no possible moves');
+		return [];
 	}
 
 	//for bishop and queen
@@ -480,8 +593,8 @@ class Piece {
 class Pawn extends Piece {
 	override readonly color: Color;
 
-	constructor(color: Color) {
-		super();
+	constructor(square: Square, color: Color) {
+		super(square);
 		this.color = color;
 		if (color === Color.white) {
 			this.name = ChessPieces.PAWN_WHITE;
@@ -532,7 +645,7 @@ class Pawn extends Piece {
 		else if (startSq.rank === 7 && endSq.rank === 8 && endSq.piece === null) {
 			{
 				if (pieceToPromote) {
-					return Pawn.promotion(pieceToPromote, Color.white);
+					return Pawn.promotion(endSq, pieceToPromote, Color.white);
 				} else {
 					console.log('No piece to promote to');
 					return false;
@@ -577,7 +690,7 @@ class Pawn extends Piece {
 		else if (startSq.rank === 2 && endSq.rank === 1 && endSq.piece === null) {
 			{
 				if (pieceToPromote) {
-					return Pawn.promotion(pieceToPromote, Color.white);
+					return Pawn.promotion(endSq, pieceToPromote, Color.black);
 				} else {
 					console.log('No piece to promote to');
 					return false;
@@ -631,7 +744,7 @@ class Pawn extends Piece {
 				pieceToPromote &&
 				color
 			) {
-				return Pawn.promotion(pieceToPromote, color);
+				return Pawn.promotion(endSq, pieceToPromote, color);
 			}
 			//normal capture logic
 			else if (
@@ -670,23 +783,23 @@ class Pawn extends Piece {
 		}
 	}
 
-	static promotion(piece: string, color: Color): Piece {
+	static promotion(endSq: Square, piece: string, color: Color): Piece {
 		switch (piece) {
 			case 'PAWN':
 				console.log('Promote to pawn');
-				return new Pawn(color);
+				return new Pawn(endSq, color);
 			case 'KNIGHT':
 				console.log('Promote to knight');
-				return new Knight(color);
+				return new Knight(endSq, color);
 			case 'BISHOP':
 				console.log('Promote to bishop');
-				return new Bishop(color);
+				return new Bishop(endSq, color);
 			case 'ROOK':
 				console.log('Promote to rook');
-				return new Rook(color);
+				return new Rook(endSq, color);
 			case 'QUEEN':
 				console.log('Promote to queen');
-				return new Queen(color);
+				return new Queen(endSq, color);
 			case 'KING':
 				console.log("Can't promote to king!");
 				throw new Error();
@@ -700,14 +813,14 @@ class Pawn extends Piece {
 		let latestMove = chess.latestMove();
 		if (
 			(EpStartSqRank === 5 &&
-				latestMove?.startSquare.rank === 7 &&
-				latestMove.endSquare.rank === 5) ||
+				latestMove?.startSq.rank === 7 &&
+				latestMove.endSq.rank === 5) ||
 			(EpStartSqRank === 4 &&
-				latestMove?.startSquare.rank === 2 &&
-				latestMove.endSquare.rank === 4)
+				latestMove?.startSq.rank === 2 &&
+				latestMove.endSq.rank === 4)
 		) {
 			console.log('En passant successful');
-			latestMove.endSquare.piece = null;
+			latestMove.endSq.piece = null;
 			return true;
 		} else {
 			console.log('En passant unsuccessful');
@@ -722,13 +835,32 @@ class Pawn extends Piece {
 			) === 1
 		);
 	}
+
+	override possibleMoves(): SingleMove[] {
+		let startSq = this.getSquare;
+		if (this.getColor === Color.white) {
+			return Pawn.whiteMoves(startSq);
+		} else if (this.getColor === Color.black) {
+			return Pawn.blackMoves(startSq);
+		} else throw new Error("Pawn doesn't have a color");
+	}
+
+	static whiteMoves(sq: Square): SingleMove[] {
+		if (sq) {
+		}
+		return [];
+	}
+
+	static blackMoves(sq: Square): SingleMove[] {
+		return [];
+	}
 }
 
 class Knight extends Piece {
 	override readonly color: Color;
 
-	constructor(color: Color) {
-		super();
+	constructor(square: Square, color: Color) {
+		super(square);
 		this.color = color;
 		if (color === Color.white) {
 			this.name = ChessPieces.KNIGHT_WHITE;
@@ -780,8 +912,8 @@ class Knight extends Piece {
 class Bishop extends Piece {
 	override readonly color: Color;
 
-	constructor(color: Color) {
-		super();
+	constructor(square: Square, color: Color) {
+		super(square);
 		this.color = color;
 		if (color === Color.white) {
 			this.name = ChessPieces.BISHOP_WHITE;
@@ -813,8 +945,8 @@ class Bishop extends Piece {
 class Rook extends Piece {
 	override readonly color: Color;
 
-	constructor(color: Color) {
-		super();
+	constructor(square: Square, color: Color) {
+		super(square);
 		this.color = color;
 		if (color === Color.white) {
 			this.name = ChessPieces.ROOK_WHITE;
@@ -849,8 +981,8 @@ class Rook extends Piece {
 class Queen extends Piece {
 	override readonly color: Color;
 
-	constructor(color: Color) {
-		super();
+	constructor(square: Square, color: Color) {
+		super(square);
 		this.color = color;
 		if (color === Color.white) {
 			this.name = ChessPieces.QUEEN_WHITE;
@@ -889,8 +1021,8 @@ class Queen extends Piece {
 class King extends Piece {
 	override readonly color: Color;
 
-	constructor(color: Color) {
-		super();
+	constructor(square: Square, color: Color) {
+		super(square);
 		this.color = color;
 		if (color === Color.white) {
 			this.name = ChessPieces.KING_WHITE;
@@ -930,75 +1062,102 @@ class King extends Piece {
 	}
 }
 
-// const chess = new Chess();
+const chess = new Chess();
+//@ts-ignore
+chess.putPieceOnBoard('e2', new Pawn(chess.getSquare('e2'), Color.white));
+//@ts-ignore
+chess.putPieceOnBoard('d7', new Pawn('d7', Color.black));
+console.log(chess.printBoardWhite());
+chess.movePiece('e2', 'e4');
+chess.movePiece('d7', 'd5');
+chess.movePiece('e4', 'd5');
+
+console.log(chess.getPieces);
+const game = new Game(chess);
+// game.playTerminal();
+
 // chess.fen(Chess.STARTING_POSITION);
+// console.log(chess.printBoardWhite());
 
 // // enpassant test
-// chess.movePiece('e2', 'e4');
-// chess.movePiece('d7', 'd5');
-// chess.movePiece('e4', 'd5');
-// chess.movePiece('g8', 'f6');
-// chess.movePiece('g1', 'e2');
-// chess.movePiece('c7', 'c5');
-// chess.movePiece('d5', 'c6');
+chess.fen(Chess.STARTING_POSITION);
+chess.movePiece('e2', 'e4');
+chess.movePiece('d7', 'd5');
+chess.movePiece('e4', 'd5');
+chess.movePiece('g8', 'f6');
+chess.movePiece('g1', 'e2');
+chess.movePiece('c7', 'c5');
+chess.movePiece('d5', 'c6');
 
 // // knights test
-// chess.movePiece('b1', 'c3');
-// chess.movePiece('b8', 'c6');
-// chess.movePiece('c3', 'd5');
-// chess.movePiece('c6', 'e5');
-// chess.movePiece('d5', 'f6');
-// chess.movePiece('e5', 'f3');
-// chess.movePiece('f3', 'd2');
+chess.fen(Chess.STARTING_POSITION);
+chess.movePiece('b1', 'c3');
+chess.movePiece('b8', 'c6');
+chess.movePiece('c3', 'd5');
+chess.movePiece('c6', 'e5');
+chess.movePiece('d5', 'b6');
+chess.movePiece('e5', 'f3');
+chess.movePiece('g2', 'f3');
+chess.movePiece('g8', 'h6');
 
 // // bishop test
-// chess.movePiece('e2', 'e4');
-// chess.movePiece('e7', 'e5');
-// chess.movePiece('f1', 'c4');
-// chess.movePiece('a7', 'a5');
-// chess.movePiece('d2', 'd3');
-// chess.movePiece('a5', 'a4');
-// chess.movePiece('a5', 'a4');
-// chess.movePiece('c4', 'd5');
-// chess.movePiece('h7', 'h6');
-// chess.movePiece('d5', 'c6');
-// chess.movePiece('h6', 'h5');
-// chess.movePiece('c6', 'a4');
+chess.fen(Chess.STARTING_POSITION);
+chess.movePiece('e2', 'e4');
+chess.movePiece('e7', 'e5');
+chess.movePiece('f1', 'c4');
+chess.movePiece('a7', 'a5');
+chess.movePiece('d2', 'd3');
+chess.movePiece('a5', 'a4');
+chess.movePiece('c4', 'd5');
+chess.movePiece('h7', 'h6');
+chess.movePiece('d5', 'c6');
+chess.movePiece('h6', 'h5');
+chess.movePiece('c6', 'a4');
 
 // //rook test
-// chess.putPiece('a1', new Rook(Color.white));
-// chess.putPiece('d8', new Rook(Color.black));
-// chess.movePiece('a1', 'h1');
-// chess.movePiece('d8', 'd1');
-// chess.movePiece('h1', 'b1');
+chess.emptyBoard();
+//@ts-ignore
+chess.putPieceOnBoard('a1', new Rook(chess.getSquare('a1'), Color.white));
+//@ts-ignore
+chess.putPieceOnBoard('d8', new Rook(chess.getSquare('a1'), Color.black));
+chess.movePiece('a1', 'h1');
+chess.movePiece('d8', 'd1');
+chess.movePiece('h1', 'd1');
 
 // //queen testing
-// chess.putPiece('a1', new Queen(Color.white));
-// chess.putPiece('a1', new Queen(Color.white));
-// chess.putPiece('a7', new Queen(Color.black));
-// chess.putPiece('d8', new Queen(Color.black));
-// chess.movePiece('a1', 'h1');
-// chess.movePiece('d8', 'd1');
-// chess.movePiece('h1', 'f3');
-// chess.movePiece('d1', 'f3');
+chess.emptyBoard();
+//@ts-ignore
+chess.putPieceOnBoard('a1', new Queen(chess.getSquare('a1'), Color.white));
+//@ts-ignore
+chess.putPieceOnBoard('a1', new Queen(chess.getSquare('a1'), Color.white));
+//@ts-ignore
+chess.putPieceOnBoard('a7', new Queen(chess.getSquare('a7'), Color.black));
+//@ts-ignore
+chess.putPieceOnBoard('d8', new Queen(chess.getSquare('d8'), Color.black));
+chess.movePiece('a1', 'h1');
+chess.movePiece('d8', 'd1');
+chess.movePiece('h1', 'f3');
+chess.movePiece('d1', 'f3');
 
 // //king testing
-// chess.putPiece('e1', new King(Color.white));
-// chess.putPiece('e8', new King(Color.black));
-// chess.movePiece('e1', 'e2');
-// chess.movePiece('e8', 'd7');
-// chess.movePiece('e2', 'e4');
-// chess.movePiece('e2', 'f3');
-// chess.movePiece('d7', 'e7');
+chess.emptyBoard();
+//@ts-ignore
+chess.putPieceOnBoard('e1', new King(chess.getSquare('e1'), Color.white));
+//@ts-ignore
+chess.putPieceOnBoard('e8', new King(chess.getSquare('e8'), Color.black));
+chess.movePiece('e1', 'e2');
+chess.movePiece('e8', 'd7');
+chess.movePiece('e2', 'f3');
+chess.movePiece('d7', 'e7');
 
-// console.log(chess.algebraicNotation());
+console.log(chess.algebraicNotation());
+console.log(chess.printBoardWhite());
+
+console.log(chess.latestMove());
+console.log(chess.printBoardWhite());
+console.log(chess.getBoard);
+chess.startingPosition();
 // console.log(chess.printBoardWhite());
 
-// console.log(chess.latestMove());
 // console.log(chess.printBoardWhite());
-// console.log(chess.getBoard);
-// console.log(chess.startingPosition());
-// console.log(chess.printBoardWhite());
-
-const chess = new Chess();
-Game.playTerminal();
+console.timeEnd('c');

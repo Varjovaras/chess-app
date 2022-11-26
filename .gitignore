@@ -6,3 +6,4 @@ chess/dist/Pieces.js
 chess/dist/types.js
 .fleet
 chess/dist
+frontend/chess/dist/

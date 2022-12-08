@@ -542,9 +542,9 @@ class Game {
 class Piece {
 	protected name: string;
 	protected color: Color | undefined;
-	protected square: Square;
+	protected square?: Square;
 
-	constructor(square: Square, color?: Color) {
+	constructor(square?: Square, color?: Color) {
 		this.name = '';
 		this.square = square;
 		this.color = color;
@@ -592,7 +592,7 @@ class Piece {
 		return true;
 	}
 
-	possibleMoves(): SingleMove[] {
+	possibleMoves(board: Board): SingleMove[] {
 		console.log('Piece without type has no possible moves');
 		return [];
 	}
@@ -957,16 +957,18 @@ class Pawn extends Piece {
 		);
 	}
 
-	// override possibleMoves(board: Board): SingleMove[] {
-	// 	let startSq = this.getSquare;
-	// 	if (this.getColor === Color.white) {
-	// 		return Pawn.whiteMoves(startSq, board);
-	// 	} else if (this.getColor === Color.black) {
-	// 		return Pawn.blackMoves(startSq, board);
-	// 	} else throw new Error("Pawn doesn't have a color");
-	// }
+	override possibleMoves(board: Board): SingleMove[] {
+		let startSq = this.getSquare;
+		if (startSq) {
+			if (this.getColor === Color.white) {
+				return Pawn.possibleWhiteMoves(startSq, board);
+			} else if (this.getColor === Color.black) {
+				return Pawn.possibleBlackMoves(startSq, board);
+			} else throw new Error("Pawn doesn't have a color");
+		} else throw new Error('Pawn doesnt have a square');
+	}
 
-	static whiteMoves(sq: Square, board: Board): SingleMove[] {
+	static possibleWhiteMoves(sq: Square, board: Board): SingleMove[] {
 		let moves: SingleMove[] = [];
 		let startSq = sq.getSquareName;
 		if (sq.getRank === 1) {
@@ -1019,7 +1021,7 @@ class Pawn extends Piece {
 		return moves;
 	}
 
-	static blackMoves(sq: Square, board: Board): SingleMove[] {
+	static possibleBlackMoves(sq: Square, board: Board): SingleMove[] {
 		let moves: SingleMove[] = [];
 		let startSq = sq.getSquareName;
 		if (sq.getRank === 8) {
@@ -1054,8 +1056,8 @@ class Pawn extends Piece {
 				{
 					startSq: startSq,
 					endSq: board.getSquare(
-						`${String.fromCharCode(sq.getFile.charCodeAt(0) + 1)}${
-							sq.getRank + 1
+						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${
+							sq.getRank - 1
 						}`
 					)!.getSquareName,
 				},
@@ -1063,7 +1065,7 @@ class Pawn extends Piece {
 					startSq: startSq,
 					endSq: board.getSquare(
 						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${
-							sq.getRank + 1
+							sq.getRank - 1
 						}`
 					)!.getSquareName,
 				}
@@ -1125,6 +1127,119 @@ class Knight extends Piece {
 			) === 2 &&
 				Math.abs(startSq.getRank - endSq.getRank) === 1)
 		);
+	}
+
+	override possibleMoves(board: Board): SingleMove[] {
+		let moves: SingleMove[] = [];
+		let startSq = this.square;
+		if (startSq) {
+			let rank = startSq.getRank;
+			let file = startSq.getFile;
+			let startSqName = startSq.getSquareName;
+			let possibleMoves: SingleMove[] = [
+				//one up two right
+				{
+					startSq: startSqName,
+					endSq: board.getSquare(
+						`${String.fromCharCode(file.charCodeAt(0) + 2)}${rank + 1}`
+					)!.getSquareName,
+				},
+
+				//one down two right
+				{
+					startSq: startSqName,
+					endSq: board.getSquare(
+						`${String.fromCharCode(file.charCodeAt(0) + 2)}${rank - 1}`
+					)!.getSquareName,
+				},
+
+				//two up one right
+				{
+					startSq: startSqName,
+					endSq: board.getSquare(
+						`${String.fromCharCode(file.charCodeAt(0) + 1)}${rank + 2}`
+					)!.getSquareName,
+				},
+
+				// //two down one right
+				{
+					startSq: startSqName,
+					endSq: board.getSquare(
+						`${String.fromCharCode(startSq.getFile.charCodeAt(0) + 1)}${
+							rank - 2
+						}`
+					)!.getSquareName,
+				},
+
+				// //two down one left
+				{
+					startSq: startSqName,
+					endSq: board.getSquare(
+						`${String.fromCharCode(startSq.getFile.charCodeAt(0) - 1)}${
+							rank - 2
+						}`
+					)!.getSquareName,
+				},
+
+				// //one down two left
+				{
+					startSq: startSqName,
+					endSq: board.getSquare(
+						`${String.fromCharCode(startSq.getFile.charCodeAt(0) - 2)}${
+							rank - 1
+						}`
+					)!.getSquareName,
+				},
+
+				// //one up two left
+				{
+					startSq: startSqName,
+					endSq: board.getSquare(
+						`${String.fromCharCode(startSq.getFile.charCodeAt(0) - 2)}${
+							rank + 1
+						}`
+					)!.getSquareName,
+				},
+
+				// //two up one left
+				{
+					startSq: startSqName,
+					endSq: board.getSquare(
+						`${String.fromCharCode(startSq.getFile.charCodeAt(0) - 1)}${
+							rank + 2
+						}`
+					)!.getSquareName,
+				},
+			];
+
+			// //not near edges or corners
+			// if (
+			// 	rank > 2 &&
+			// 	rank < 7 &&
+			// 	file !== 'a' &&
+			// 	file !== 'b' &&
+			// 	file !== 'g' &&
+			// 	file !== 'h'
+			// ) {
+			// 	moves.push({
+			// 		startSq: startSqName,
+			// 		endSq: board.getSquare(
+			// 			`${String.fromCharCode(
+			// 				board.getSquare('e2')!.getFile.charCodeAt(0) + 1
+			// 			)}${board.getSquare('e2')!.getRank + 1}`
+			// 		)!.getSquareName,
+			// 	});
+			// }
+			// if (startSq.getFile === 'a' || 'b' || 'g' || 'h') {
+			// 	moves.push({
+			// 		startSq: startSq.getSquareName,
+			// 		endSq: board.getSquare(`${sq.getFile}${sq.getRank - 1}`)!
+			// 			.getSquareName,
+			// 	});
+			// }
+			return possibleMoves;
+		}
+		throw new Error();
 	}
 }
 
@@ -1280,12 +1395,14 @@ class King extends Piece {
 	}
 
 	whiteCheck(): boolean {
-		let up = 8 - this.getSquare.getRank;
-		let left = this.getSquare.getId % 8;
-		let right = 8 - left;
-		// let horizontalDiff = Math.abs(sta.id - startSq.id);
-		console.log('up ' + up + ' ' + left);
-		return false;
+		if (this.getSquare) {
+			let up = 8 - this.getSquare.getRank;
+			let left = this.getSquare.getId % 8;
+			let right = 8 - left;
+			// let horizontalDiff = Math.abs(sta.id - startSq.id);
+			console.log('up ' + up + ' ' + left);
+			return false;
+		} else return false;
 	}
 	blackCheck(): boolean {
 		return false;
@@ -1307,7 +1424,6 @@ chess.movePiece('d7', 'd5');
 chess.movePiece('e4', 'd5');
 
 console.log(chess.getPieces);
-const game = new Game(chess);
 
 chess.fen(Chess.STARTING_POSITION);
 console.log(chess.printBoardWhite());
@@ -1416,7 +1532,9 @@ console.log(
 	)
 );
 
-console.log(chess.getBoard.getSquare('a2')!.getPiece?.possibleMoves());
+console.log(
+	chess.getBoard.getSquare('a2')!.getPiece?.possibleMoves(chess.getBoard)
+);
 console.log(chess.printBoardWhite());
 
 console.log(chess.printBoardWhite());
@@ -1425,6 +1543,13 @@ chess.putPieceOnBoard('d5', king);
 king.whiteCheck();
 chess.movePiece('d5', 'd4');
 console.log(chess.getBoard.getSquare('d4')?.getPiece);
-
+chess.emptyBoard();
+const knight = new Knight(chess.getBoard.getSquare('e5')!, Color.black);
+chess.putPieceOnBoard('e5', knight);
+console.log(knight.possibleMoves(chess.getBoard));
+// const game = new Game(chess);
 // game.playTerminal();
 console.timeEnd('c');
+
+//possible moves
+//checking

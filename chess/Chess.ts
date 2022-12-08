@@ -1,23 +1,22 @@
 console.time('c');
 import readline from 'readline';
-console.time('Chess');
 
 enum Color {
 	black = 'BLACK',
 	white = 'WHITE',
 }
 
-interface Move {
+type Move = {
 	startSq: Square;
 	endSq: Square;
 	startSquarePiece: Piece;
 	promotion?: Piece | null;
-}
+};
 
-interface SingleMove {
+type SingleMove = {
 	startSq: string;
 	endSq: string;
-}
+};
 
 enum ChessPieces {
 	PAWN_WHITE = 'pawn',
@@ -34,13 +33,35 @@ enum ChessPieces {
 	KING_BLACK = 'KING',
 }
 
+class Board {
+	private _board: Square[];
+
+	constructor(board: Square[]) {
+		this._board = board;
+	}
+
+	get getBoard() {
+		return this._board;
+	}
+
+	getSquare(name: string): Square | null {
+		let sq = this._board.find((s: Square) => s.getSquareName === name);
+		return sq ? sq.getSquare : null;
+	}
+
+	getSquareById(id: number): Square | null {
+		let sq = this._board.find((s: Square) => s.getId === id);
+		return sq ? sq.getSquare : null;
+	}
+}
+
 class Square {
-	file: string;
-	rank: number;
-	squareName: string;
-	color: Color;
-	piece: Piece | null;
-	id: number;
+	private _file: string;
+	private _rank: number;
+	private _squareName: string;
+	private _color: Color;
+	private _piece?: Piece | null;
+	private _id: number;
 
 	constructor(
 		file: string,
@@ -48,32 +69,70 @@ class Square {
 		squareName: string,
 		color: Color,
 		id: number,
-		piece: Piece | null
+		piece?: Piece | null
 	) {
-		this.file = file;
-		this.rank = rank;
-		this.squareName = squareName;
-		this.color = color;
-		this.piece = piece;
-		this.id = id;
+		this._file = file;
+		this._rank = rank;
+		this._squareName = squareName;
+		this._color = color;
+		this._piece = piece;
+		this._id = id;
 	}
 
 	get getSquare() {
 		return this;
 	}
 
+	get getFile() {
+		return this._file;
+	}
+
+	get getRank() {
+		return this._rank;
+	}
+
 	get getSquareName() {
-		return this.squareName;
+		return this._squareName;
+	}
+
+	get getId() {
+		return this._id;
+	}
+
+	get getColor() {
+		return this._color;
+	}
+
+	get getPiece() {
+		return this._piece;
+	}
+
+	setPiece(piece: Piece | null) {
+		this._piece = piece;
+	}
+
+	setSquareForPiece(sq: Square) {
+		this._piece?.setSquare(sq);
+	}
+
+	static omitPiece(s: Square) {
+		let sq = s;
+		sq._piece = null;
+		return sq;
+	}
+
+	isSquareOccupied(): boolean {
+		return this._piece === null;
 	}
 }
 
-interface PieceSquare {
+type PieceSquare = {
 	square: string;
 	piece: Piece;
-}
+};
 
 export default class Chess {
-	private _board: Square[];
+	private _board: Board;
 	private _moves: Move[];
 
 	private _pieces: PieceSquare[];
@@ -84,7 +143,7 @@ export default class Chess {
 		'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 	constructor(moves?: Move[], pieces?: PieceSquare[]) {
-		this._board = new Array(64);
+		let tempBoard = new Array(64);
 		this._moves = moves ? moves : [];
 
 		this._pieces = pieces ? pieces : [];
@@ -94,7 +153,7 @@ export default class Chess {
 		let secondSquare = Color.white;
 		let rank = 1;
 
-		for (let i = 0, file = 0; i < this._board.length; i++, file++) {
+		for (let i = 0, file = 0; i < tempBoard.length; i++, file++) {
 			if (file === 8) {
 				file = 0;
 				rank++;
@@ -104,7 +163,7 @@ export default class Chess {
 			}
 
 			if (i % 2 === 0) {
-				this._board[i] = new Square(
+				tempBoard[i] = new Square(
 					Chess.files[file],
 					rank,
 
@@ -114,7 +173,7 @@ export default class Chess {
 					null
 				);
 			} else {
-				this._board[i] = new Square(
+				tempBoard[i] = new Square(
 					Chess.files[file],
 					rank,
 					`${Chess.files[file]}${rank}`,
@@ -124,6 +183,7 @@ export default class Chess {
 				);
 			}
 		}
+		this._board = new Board(tempBoard);
 	}
 
 	get getBoard() {
@@ -161,18 +221,19 @@ export default class Chess {
 		return this.checkTurn() === Color.white ? 'White' : 'Black';
 	}
 
-	isGameOver(n: number): boolean {
-		return n === 0 ? true : false;
+	isGameOver(n: boolean): boolean {
+		return n;
 	}
 
 	printBoardWhite() {
 		let rows = ['', '', '', '', '', '', '', ''];
 
-		for (const i of this._board) {
-			if (i.piece) {
-				rows[i.rank - 1] += i.piece.getFirstLetter() + '  ';
+		for (const i of this._board.getBoard) {
+			let piece = i.getPiece;
+			if (piece) {
+				rows[i.getRank - 1] += piece.getFirstLetter() + '  ';
 			} else {
-				rows[i.rank - 1] += i.file + i.rank + ' ';
+				rows[i.getRank - 1] += i.getFile + i.getRank + ' ';
 			}
 		}
 		return rows.reverse();
@@ -181,26 +242,17 @@ export default class Chess {
 	printBoardBlack() {
 		let rows = ['', '', '', '', '', '', '', ''];
 
-		for (const i of this._board) {
-			if (i.piece) {
-				rows[i.rank - 1] =
-					' ' + i.piece.getFirstLetter() + ' ' + rows[i.rank - 1];
+		for (const i of this._board.getBoard) {
+			let piece = i.getPiece;
+			if (piece) {
+				rows[i.getRank - 1] =
+					' ' + piece.getFirstLetter() + ' ' + rows[i.getRank - 1];
 			} else {
-				rows[i.rank - 1] = i.file + i.rank + ' ' + rows[i.rank - 1];
+				rows[i.getRank - 1] = i.getFile + i.getRank + ' ' + rows[i.getRank - 1];
 			}
 		}
 
 		return rows.reverse();
-	}
-
-	getSquare(name: string): Square | null {
-		let sq = this._board.find((s: Square) => s.squareName === name);
-		return sq ? sq.getSquare : null;
-	}
-
-	getSquareById(id: number): Square | null {
-		let sq = this._board.find((s: Square) => s.id === id);
-		return sq ? sq.getSquare : null;
 	}
 
 	movePiece(startSquare: string, endSquare: string, pieceName?: string): void {
@@ -208,43 +260,48 @@ export default class Chess {
 			console.log('Same starting and ending square');
 			throw new Error("Didn't move the piece");
 		}
-		let startSq = this.getSquare(startSquare);
-		let endSq = this.getSquare(endSquare);
+		let startSq = this._board.getSquare(startSquare);
+		let endSq = this._board.getSquare(endSquare);
 
 		//returns piece if promoting a pawn
 		let isLegalMoveOrPiece: boolean | Piece;
-		if (startSq?.piece?.getColor !== this.checkTurn()) {
+		if (startSq?.getPiece?.getColor !== this.checkTurn()) {
 			console.log('Wrong players turn');
 			throw new Error();
 		}
 
-		if (startSq !== null && startSq.piece !== null && endSq !== null) {
+		if (startSq !== null && startSq.getPiece !== null && endSq !== null) {
 			//check if pawn is about to promote
 			if (
-				(startSq?.rank === 7 &&
-					endSq?.rank === 8 &&
-					startSq.piece?.getName === ChessPieces.PAWN_WHITE) ||
-				(startSq?.rank === 2 &&
-					endSq?.rank === 1 &&
-					startSq.piece?.getName === ChessPieces.PAWN_BLACK)
+				(startSq?.getRank === 7 &&
+					endSq?.getRank === 8 &&
+					startSq.getPiece?.getName === ChessPieces.PAWN_WHITE) ||
+				(startSq?.getRank === 2 &&
+					endSq?.getRank === 1 &&
+					startSq.getPiece?.getName === ChessPieces.PAWN_BLACK)
 			) {
-				isLegalMoveOrPiece = startSq.piece.move(startSq, endSq, pieceName);
+				isLegalMoveOrPiece = startSq.getPiece.move(
+					startSq,
+					endSq,
+					this._board,
+					pieceName
+				);
 			} else {
-				isLegalMoveOrPiece = startSq.piece.move(startSq, endSq);
+				isLegalMoveOrPiece = startSq.getPiece.move(startSq, endSq, this._board);
 			}
 
 			//is only an object if promoting a pawn, if not object this runs
 			if (typeof isLegalMoveOrPiece !== 'object' && isLegalMoveOrPiece) {
 				this.addMove(startSq, endSq);
-				endSq.piece = startSq.piece;
-				startSq.piece = null;
+
 				return;
 			}
 			//promotion logic
 			else if (isLegalMoveOrPiece) {
-				endSq.piece = isLegalMoveOrPiece;
+				endSq.setPiece(isLegalMoveOrPiece);
+				endSq.setSquareForPiece(endSq);
 				this.addMove(startSq, endSq);
-				startSq.piece = null;
+				startSq.setPiece(null);
 				return;
 			}
 		}
@@ -261,43 +318,50 @@ export default class Chess {
 	}
 
 	handleMove(startSq: Square, endSq: Square): void {
-		if (startSq.piece) {
+		if (startSq.getPiece) {
 			this._moves.push({
 				startSq: startSq,
 				endSq: endSq,
-				startSquarePiece: startSq.piece,
+				startSquarePiece: startSq.getPiece,
 			});
 		}
 	}
 
 	handlePieces(startSq: Square, endSq: Square): void {
-		if (endSq.piece) {
+		let startPiece = startSq.getPiece;
+		let endPiece = endSq.getPiece;
+
+		if (endPiece) {
 			console.log('Removing piece from the end square');
 			this._pieces = this._pieces.filter(
 				(p: PieceSquare) => p.square !== endSq.getSquareName
 			);
 		}
-		if (startSq.piece) {
+		if (startSq.getPiece) {
 			console.log('Removing piece from the starting square');
 			this._pieces = this._pieces.filter(
 				(p: PieceSquare) => p.square !== startSq.getSquareName
 			);
 			console.log('Adding piece to the end square');
+			endSq.setPiece(startSq.getPiece);
+			let endSquareToPiece = endSq;
+			endSq.setSquareForPiece(endSquareToPiece);
+			startSq.setPiece(null);
 			this._pieces.push({
 				square: endSq.getSquareName,
-				piece: startSq.piece,
+				piece: endSq.getPiece!,
 			});
 		}
 	}
 
 	//initialization or promoting
 	putPieceOnBoard(square: string, piece: Piece): void {
-		let sq = this.getSquare(square);
-		if (sq && !this.isSquareOccupied(sq)) {
+		let sq = this._board.getSquare(square);
+		if (sq && !this.getBoard.getSquare(sq.getSquareName)!.isSquareOccupied()) {
 			this.removePiece(square);
 		}
 		if (sq) {
-			sq.piece = piece;
+			sq.setPiece(piece);
 			this.addPiece(piece, square);
 			console.log(`${piece.getName} put on ${square}`);
 		} else {
@@ -314,22 +378,20 @@ export default class Chess {
 		this._pieces = this._pieces.filter((p: PieceSquare) => p.square !== square);
 	}
 
-	isSquareOccupied(sq: Square): boolean {
-		return sq.piece === null;
-	}
-
 	algebraicNotation(): string[] {
 		let returnArray: string[] = [];
 		let s: string = '';
 
 		for (const move of this.getMoves) {
 			let startSqPiece =
-				move.startSq.piece &&
-				move.startSq.piece.getFirstLetter().toLowerCase() !== 'p'
-					? move.startSq.piece.getFirstLetter()
+				move.startSq.getPiece &&
+				move.startSq.getPiece.getFirstLetter().toLowerCase() !== 'p'
+					? move.startSq.getPiece.getFirstLetter()
 					: '';
 
-			let piece = move.endSq.piece ? move.endSq.piece.getFirstLetter() : '';
+			let piece = move.endSq.getPiece
+				? move.endSq.getPiece.getFirstLetter()
+				: '';
 
 			s =
 				s +
@@ -347,32 +409,44 @@ export default class Chess {
 	fen(fen: string): void {
 		let tokens = fen.split(/\s+/);
 		let pieces = tokens[0].split('/');
-		//initialize game
+
+		//initialize
 		this._moves = [];
 		this._pieces = [];
 		this._turnNumber = 0;
-		this._board.forEach((s) => {
-			s.piece = null;
+		this._board.getBoard.forEach((s) => {
+			s.setPiece(null);
 		});
+		this.analyzeFen(pieces);
+	}
+
+	analyzeFen(pieces: string[]) {
 		for (let i = 0; i < 8; i++) {
 			let str = pieces[i];
 			if (str.length !== 8) {
 				//todo non-starting position
 			} else if (str !== '8') {
-				for (let j = i * 8, k = 0; j < i * 8 + 8; j++, k++) {
-					let sq = this.getSquareById(j);
-					if (sq) {
-						let piece = Chess.fenPieces(str[k], sq);
-
-						if (piece !== null) {
-							this.putPieceOnBoard(sq.getSquareName, piece);
-						}
-					}
-				}
+				//if str is 8 its an empty row
+				this.fenHelper(i, str);
 			}
 		}
 	}
 
+	fenHelper(i: number, str: string) {
+		//i is row
+		//j is row times 8
+		//k iterates files
+		for (let j = i * 8, k = 0; j < i * 8 + 8; j++, k++) {
+			let sq = this._board.getSquareById(j);
+			if (sq) {
+				let piece = Chess.fenPieces(str[k], sq);
+
+				if (piece !== null) {
+					this.putPieceOnBoard(sq.getSquareName, piece);
+				}
+			}
+		}
+	}
 	static fenPieces(s: string, sq: Square): Piece | null {
 		switch (s) {
 			case 'p':
@@ -405,8 +479,8 @@ export default class Chess {
 	}
 
 	emptyBoard(): void {
-		this._board.forEach((s) => {
-			s.piece = null;
+		this._board.getBoard.forEach((s) => {
+			s.setPiece(null);
 		});
 		this._moves = [];
 		this._pieces = [];
@@ -424,16 +498,16 @@ export default class Chess {
 
 class Game {
 	chess: Chess;
-	gameOver: number;
+	gameOver: boolean;
 
 	constructor(chess: Chess) {
 		this.chess = chess;
-		this.gameOver = 1;
+		this.gameOver = false;
 	}
 
 	async playTerminal() {
 		chess.startingPosition();
-		while (!this.chess.isGameOver(this.gameOver)) {
+		while (!this.gameOver) {
 			await this.terminalMoves();
 		}
 		console.log('Game over!');
@@ -444,7 +518,7 @@ class Game {
 		const rl = readline.createInterface(process.stdin, process.stdout);
 		rl.question(`Input move for ${chess.whoseTurn()}:\n`, (input) => {
 			if (input === '') {
-				this.gameOver = 0;
+				this.gameOver = true;
 				rl.close();
 				return new Promise((resolve) => rl.on('close', resolve));
 			}
@@ -476,14 +550,6 @@ class Piece {
 		this.color = color;
 	}
 
-	move(startSq: Square, endSq: Square, piece?: string): boolean | Piece {
-		return false;
-	}
-
-	getFirstLetter() {
-		return this.name[0];
-	}
-
 	get getName() {
 		return this.name;
 	}
@@ -496,8 +562,29 @@ class Piece {
 		return this.square;
 	}
 
+	move(
+		startSq: Square,
+		endSq: Square,
+		board: Board,
+		piece?: string
+	): boolean | Piece {
+		return false;
+	}
+
+	getFirstLetter() {
+		return this.name[0];
+	}
+
+	setSquare(sq: Square) {
+		console.log(`${this.getName} set on ${sq}`);
+		this.square = sq;
+	}
+
 	static capturable(startSq: Square, endSq: Square): boolean {
-		if (startSq.piece?.color === endSq.piece?.color && endSq.piece !== null) {
+		if (
+			startSq.getPiece?.color === endSq.getPiece?.color &&
+			endSq.getPiece !== null
+		) {
 			console.log('Cannot capture own piece or capture on an empty square');
 			return false;
 		}
@@ -511,16 +598,16 @@ class Piece {
 	}
 
 	//for bishop and queen
-	static isDiagonal(startSq: Square, endSq: Square): boolean {
+	static isDiagonal(startSq: Square, endSq: Square, board: Board): boolean {
 		let fileDiff = Math.abs(
-			Chess.findFileIndex(startSq.file) - Chess.findFileIndex(endSq.file)
+			Chess.findFileIndex(startSq.getFile) - Chess.findFileIndex(endSq.getFile)
 		);
-		let rankDiff = Math.abs(startSq.rank - endSq.rank);
+		let rankDiff = Math.abs(startSq.getRank - endSq.getRank);
 		if (fileDiff === rankDiff && fileDiff === 1) {
 			return true;
 		}
 		if (fileDiff === rankDiff) {
-			return Piece.diagonalPiecesOnTheWay(startSq, endSq, rankDiff);
+			return Piece.diagonalPiecesOnTheWay(startSq, endSq, rankDiff, board);
 		}
 		return false;
 	}
@@ -528,27 +615,34 @@ class Piece {
 	static diagonalPiecesOnTheWay(
 		startSq: Square,
 		endSq: Square,
-		rankDiff: number
+		rankDiff: number,
+		board: Board
 	): boolean {
-		let index: number = 0;
-		let startFileIndex = Chess.findFileIndex(startSq.file);
-		let endFileIndex = Chess.findFileIndex(endSq.file);
+		let index = 0;
+		let startFileIndex = Chess.findFileIndex(startSq.getFile);
+		let endFileIndex = Chess.findFileIndex(endSq.getFile);
 		//find index of the next square to test
-		if (startSq.rank < endSq.rank && startFileIndex > endFileIndex) {
+		if (startSq.getRank < endSq.getRank && startFileIndex > endFileIndex) {
 			index = 7;
-		} else if (startSq.rank < endSq.rank && startFileIndex < endFileIndex) {
+		} else if (
+			startSq.getRank < endSq.getRank &&
+			startFileIndex < endFileIndex
+		) {
 			index = 9;
-		} else if (startSq.rank > endSq.rank && startFileIndex > endFileIndex) {
+		} else if (
+			startSq.getRank > endSq.getRank &&
+			startFileIndex > endFileIndex
+		) {
 			index = -9;
 		} else index = -7;
 
-		let startSqIndex = startSq.id + index;
+		let startSqIndex = startSq.getId + index;
 
 		for (let i = 0; i < rankDiff; i++, startSqIndex += index) {
-			let sq = chess.getSquareById(startSqIndex);
+			let sq = board.getSquareById(startSqIndex);
 			if (sq === endSq) break;
 			else if (!sq) return false;
-			else if (sq.piece !== null) {
+			else if (sq.getPiece !== null) {
 				console.log('Piece on the way');
 				return false;
 			}
@@ -558,18 +652,18 @@ class Piece {
 	}
 
 	//for rook and queen
-	static horizontalMove(startSq: Square, endSq: Square): boolean {
-		console.log('horizontal move by ' + startSq.piece?.getName);
-		let index = startSq.file < endSq.file ? 1 : -1;
-		let startSqIndex = startSq.id + index;
-		let horizontalDiff = Math.abs(endSq.id - startSq.id);
-		if (horizontalDiff === 1 && endSq.piece === null) return true;
+	static horizontalMove(startSq: Square, endSq: Square, board: Board): boolean {
+		console.log('horizontal move by ' + startSq.getPiece?.getName);
+		let index = startSq.getFile < endSq.getFile ? 1 : -1;
+		let startSqIndex = startSq.getId + index;
+		let horizontalDiff = Math.abs(endSq.getId - startSq.getId);
+		if (horizontalDiff === 1 && endSq.getPiece === null) return true;
 		for (let i = 0; i < horizontalDiff; i++, startSqIndex += index) {
-			let sq = chess.getSquareById(startSqIndex);
+			let sq = board.getSquareById(startSqIndex);
 			if (sq === startSq) continue;
 			else if (sq === endSq) break;
 			else if (!sq) return false;
-			else if (sq.piece !== null) {
+			else if (sq.getPiece !== null) {
 				console.log('Piece on the way');
 				return false;
 			}
@@ -577,18 +671,18 @@ class Piece {
 		return true;
 	}
 	//for rook and queen
-	static verticalMove(startSq: Square, endSq: Square): boolean {
-		console.log('vertical move by ' + startSq.piece?.getName);
-		let index = startSq.id < endSq.id ? 8 : -8;
-		let startSqIndex = startSq.id + index;
-		let verticalDiff = Math.abs(endSq.rank - startSq.rank);
-		if (verticalDiff === 1 && endSq.piece === null) return true;
+	static verticalMove(startSq: Square, endSq: Square, board: Board): boolean {
+		console.log('vertical move by ' + startSq.getPiece?.getName);
+		let index = startSq.getId < endSq.getId ? 8 : -8;
+		let startSqIndex = startSq.getId + index;
+		let verticalDiff = Math.abs(endSq.getRank - startSq.getRank);
+		if (verticalDiff === 1 && endSq.getPiece === null) return true;
 		for (let i = 0; i < verticalDiff; i++, startSqIndex += index) {
-			let sq = chess.getSquareById(startSqIndex);
+			let sq = board.getSquareById(startSqIndex);
 			if (sq === startSq) continue;
 			if (!sq) return false;
 			else if (sq === endSq) break;
-			else if (sq.piece !== null) {
+			else if (sq.getPiece !== null) {
 				console.log('Piece on the way');
 				return false;
 			}
@@ -613,12 +707,13 @@ class Pawn extends Piece {
 	override move(
 		startSq: Square,
 		endSq: Square,
+		board: Board,
 		piece?: string
 	): boolean | Piece {
 		if (this.color === Color.white) {
-			return Pawn.moveWhite(startSq, endSq, piece);
+			return Pawn.moveWhite(startSq, endSq, board, piece);
 		} else if (this.color === Color.black) {
-			return Pawn.moveBlack(startSq, endSq, piece);
+			return Pawn.moveBlack(startSq, endSq, board, piece);
 		} else {
 			console.log('Piece not found');
 			return false;
@@ -628,28 +723,33 @@ class Pawn extends Piece {
 	static moveWhite(
 		startSq: Square,
 		endSq: Square,
+		board: Board,
 		pieceToPromote?: string
 	): boolean | Piece {
-		if (startSq.rank === 8) {
+		if (startSq.getRank === 8) {
 			console.log('How is white pawn on rank 8???');
 			return false;
-		} else if (endSq.rank < startSq.rank) {
+		} else if (endSq.getRank < startSq.getRank) {
 			console.log("Pawns can't go backwards!");
 			return false;
 		}
 
 		//Moving diagonally logic
-		else if (startSq.file !== endSq.file) {
+		else if (startSq.getFile !== endSq.getFile) {
 			return Pawn.capture(startSq, endSq, pieceToPromote);
 		}
 
 		//startSquare logic
-		else if (startSq.rank === 2) {
-			return Pawn.startingSquareMove(startSq, endSq);
+		else if (startSq.getRank === 2) {
+			return Pawn.startingSquareMove(startSq, endSq, board);
 		}
 
 		//lastrow promote and possibly capture
-		else if (startSq.rank === 7 && endSq.rank === 8 && endSq.piece === null) {
+		else if (
+			startSq.getRank === 7 &&
+			endSq.getRank === 8 &&
+			endSq.getPiece === null
+		) {
 			{
 				if (pieceToPromote) {
 					return Pawn.promotion(endSq, pieceToPromote, Color.white);
@@ -661,7 +761,7 @@ class Pawn extends Piece {
 		}
 
 		//move one square forwards
-		else if (endSq.rank - startSq.rank === 1 && endSq.piece === null) {
+		else if (endSq.getRank - startSq.getRank === 1 && endSq.getPiece === null) {
 			console.log('Moved pawn one square forward');
 			return true;
 		}
@@ -673,28 +773,33 @@ class Pawn extends Piece {
 	static moveBlack(
 		startSq: Square,
 		endSq: Square,
+		board: Board,
 		pieceToPromote?: string
 	): boolean | Piece {
-		if (startSq.rank === 1) {
+		if (startSq.getRank === 1) {
 			console.log('How is black pawn on rank 8???');
 			return false;
-		} else if (endSq.rank > startSq.rank) {
+		} else if (endSq.getRank > startSq.getRank) {
 			console.log("Pawns can't go backwards!");
 			return false;
 		}
 
 		//Moving diagonally logic
-		else if (startSq.file !== endSq.file) {
+		else if (startSq.getFile !== endSq.getFile) {
 			return Pawn.capture(startSq, endSq, pieceToPromote);
 		}
 
 		//startSquare logic
-		else if (startSq.rank === 7) {
-			return Pawn.startingSquareMove(startSq, endSq);
+		else if (startSq.getRank === 7) {
+			return Pawn.startingSquareMove(startSq, endSq, board);
 		}
 
 		//lastrow promote and possibly capture
-		else if (startSq.rank === 2 && endSq.rank === 1 && endSq.piece === null) {
+		else if (
+			startSq.getRank === 2 &&
+			endSq.getRank === 1 &&
+			endSq.getPiece === null
+		) {
 			{
 				if (pieceToPromote) {
 					return Pawn.promotion(endSq, pieceToPromote, Color.black);
@@ -706,7 +811,7 @@ class Pawn extends Piece {
 		}
 
 		//move one square forwards
-		else if (startSq.rank - endSq.rank === 1 && endSq.piece === null) {
+		else if (startSq.getRank - endSq.getRank === 1 && endSq.getPiece === null) {
 			console.log('Moved pawn one square forward');
 			return true;
 		}
@@ -720,34 +825,34 @@ class Pawn extends Piece {
 		endSq: Square,
 		pieceToPromote?: string
 	): boolean | Piece {
-		let secondToLastRank = startSq.piece?.getColor === Color.white ? 7 : 2;
-		let promotionRank = startSq.piece?.getColor === Color.white ? 8 : 1;
-		let EpStartSqRank = startSq.piece?.getColor === Color.white ? 5 : 4;
-		let EpEndSqRank = startSq.piece?.getColor === Color.white ? 6 : 3;
+		let secondToLastRank = startSq.getPiece?.getColor === Color.white ? 7 : 2;
+		let promotionRank = startSq.getPiece?.getColor === Color.white ? 8 : 1;
+		let EpStartSqRank = startSq.getPiece?.getColor === Color.white ? 5 : 4;
+		let EpEndSqRank = startSq.getPiece?.getColor === Color.white ? 6 : 3;
 		let color: Color | null =
-			startSq.piece?.getColor === Color.white ? Color.black : null;
+			startSq.getPiece?.getColor === Color.white ? Color.black : null;
 
 		//check if it's your own piece
 		if (Piece.capturable(startSq, endSq)) {
 			//check if it's en passant
 			if (
-				startSq.rank === EpStartSqRank &&
-				endSq.rank === EpEndSqRank &&
-				Pawn.compareFiles(startSq.file, endSq.file)
+				startSq.getRank === EpStartSqRank &&
+				endSq.getRank === EpEndSqRank &&
+				Pawn.compareFiles(startSq.getFile, endSq.getFile)
 			) {
 				return this.enPassant(EpStartSqRank);
 			}
 			//check if it's a promotion
 			//enpassant is checked before this cause endSq.piece is null on enpassant
-			else if (endSq.piece === null) {
+			else if (endSq.getPiece === null) {
 				console.log("Pawns can't go diagonally without capturing a piece");
 				return false;
 			}
 			//check if it's a promotion
 			else if (
-				startSq.rank === secondToLastRank &&
-				endSq.rank === promotionRank &&
-				Pawn.compareFiles(startSq.file, endSq.file) &&
+				startSq.getRank === secondToLastRank &&
+				endSq.getRank === promotionRank &&
+				Pawn.compareFiles(startSq.getFile, endSq.getFile) &&
 				pieceToPromote &&
 				color
 			) {
@@ -755,10 +860,10 @@ class Pawn extends Piece {
 			}
 			//normal capture logic
 			else if (
-				Math.abs(startSq.rank - endSq.rank) === 1 &&
-				Pawn.compareFiles(startSq.file, endSq.file)
+				Math.abs(startSq.getRank - endSq.getRank) === 1 &&
+				Pawn.compareFiles(startSq.getFile, endSq.getFile)
 			) {
-				console.log('Captured a piece with pawn on ' + endSq.squareName);
+				console.log('Captured a piece with pawn on ' + endSq.getSquareName);
 				return true;
 			}
 		}
@@ -766,21 +871,30 @@ class Pawn extends Piece {
 		return false;
 	}
 
-	static startingSquareMove(startSq: Square, endSq: Square): boolean {
-		if (Math.abs(startSq.rank - endSq.rank) === 1 && endSq.piece === null) {
+	static startingSquareMove(
+		startSq: Square,
+		endSq: Square,
+		board: Board
+	): boolean {
+		if (
+			Math.abs(startSq.getRank - endSq.getRank) === 1 &&
+			endSq.getPiece === null
+		) {
 			console.log('Moved pawn one square forward');
 			return true;
 		} else if (
-			endSq.rank - startSq.rank === 2 &&
-			endSq.piece === null &&
-			chess.getSquare(`${startSq.file}${startSq.rank + 1}`)?.piece === null
+			endSq.getRank - startSq.getRank === 2 &&
+			endSq.getPiece === null &&
+			board.getSquare(`${startSq.getFile}${startSq.getRank + 1}`)?.getPiece ===
+				null
 		) {
 			console.log('Moved and sniped white pawn');
 			return true;
 		} else if (
-			startSq.rank - endSq.rank === 2 &&
-			endSq.piece === null &&
-			chess.getSquare(`${startSq.file}${startSq.rank - 1}`)?.piece === null
+			startSq.getRank - endSq.getRank === 2 &&
+			endSq.getPiece === null &&
+			board.getSquare(`${startSq.getFile}${startSq.getRank - 1}`)?.getPiece ===
+				null
 		) {
 			console.log('Moved and sniped black pawn');
 			return true;
@@ -820,14 +934,14 @@ class Pawn extends Piece {
 		let latestMove = chess.latestMove();
 		if (
 			(EpStartSqRank === 5 &&
-				latestMove?.startSq.rank === 7 &&
-				latestMove.endSq.rank === 5) ||
+				latestMove?.startSq.getRank === 7 &&
+				latestMove.endSq.getRank === 5) ||
 			(EpStartSqRank === 4 &&
-				latestMove?.startSq.rank === 2 &&
-				latestMove.endSq.rank === 4)
+				latestMove?.startSq.getRank === 2 &&
+				latestMove.endSq.getRank === 4)
 		) {
 			console.log('En passant successful');
-			latestMove.endSq.piece = null;
+			latestMove.endSq.setPiece(null);
 			return true;
 		} else {
 			console.log('En passant unsuccessful');
@@ -843,55 +957,61 @@ class Pawn extends Piece {
 		);
 	}
 
-	override possibleMoves(): SingleMove[] {
-		let startSq = this.getSquare;
-		if (this.getColor === Color.white) {
-			return Pawn.whiteMoves(startSq);
-		} else if (this.getColor === Color.black) {
-			return Pawn.blackMoves(startSq);
-		} else throw new Error("Pawn doesn't have a color");
-	}
+	// override possibleMoves(board: Board): SingleMove[] {
+	// 	let startSq = this.getSquare;
+	// 	if (this.getColor === Color.white) {
+	// 		return Pawn.whiteMoves(startSq, board);
+	// 	} else if (this.getColor === Color.black) {
+	// 		return Pawn.blackMoves(startSq, board);
+	// 	} else throw new Error("Pawn doesn't have a color");
+	// }
 
-	static whiteMoves(sq: Square): SingleMove[] {
+	static whiteMoves(sq: Square, board: Board): SingleMove[] {
 		let moves: SingleMove[] = [];
 		let startSq = sq.getSquareName;
-		if (sq.rank === 1) {
+		if (sq.getRank === 1) {
 			throw new Error('How is the white pawn on the first rank?');
 		}
-		if (sq.rank === 2) {
+		if (sq.getRank === 2) {
 			moves.push(
 				{
 					startSq: startSq,
-					endSq: chess.getSquare(`${sq.file}${sq.rank + 1}`)!.getSquareName,
+					endSq: board.getSquare(`${sq.getFile}${sq.getRank + 1}`)!
+						.getSquareName,
 				},
 				{
 					startSq: startSq,
-					endSq: chess.getSquare(`${sq.file}${sq.rank + 2}`)!.getSquareName,
+					endSq: board.getSquare(`${sq.getFile}${sq.getRank + 2}`)!
+						.getSquareName,
 				}
 			);
 		}
-		if (sq.file === 'a') {
+		if (sq.getFile === 'a') {
 			moves.push({
 				startSq: startSq,
-				endSq: chess.getSquare(`${'b'}${sq.rank + 1}`)!.getSquareName,
+				endSq: board.getSquare(`${'b'}${sq.getRank + 1}`)!.getSquareName,
 			});
-		} else if (sq.file === 'h') {
+		} else if (sq.getFile === 'h') {
 			moves.push({
 				startSq: startSq,
-				endSq: chess.getSquare(`${'g'}${sq.rank + 1}`)!.getSquareName,
+				endSq: board.getSquare(`${'g'}${sq.getRank + 1}`)!.getSquareName,
 			});
 		} else {
 			moves.push(
 				{
 					startSq: startSq,
-					endSq: chess.getSquare(
-						`${String.fromCharCode(sq.file.charCodeAt(0) + 1)}${sq.rank + 1}`
+					endSq: board.getSquare(
+						`${String.fromCharCode(sq.getFile.charCodeAt(0) + 1)}${
+							sq.getRank + 1
+						}`
 					)!.getSquareName,
 				},
 				{
 					startSq: startSq,
-					endSq: chess.getSquare(
-						`${String.fromCharCode(sq.file.charCodeAt(0) - 1)}${sq.rank + 1}`
+					endSq: board.getSquare(
+						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${
+							sq.getRank + 1
+						}`
 					)!.getSquareName,
 				}
 			);
@@ -899,46 +1019,52 @@ class Pawn extends Piece {
 		return moves;
 	}
 
-	static blackMoves(sq: Square): SingleMove[] {
+	static blackMoves(sq: Square, board: Board): SingleMove[] {
 		let moves: SingleMove[] = [];
 		let startSq = sq.getSquareName;
-		if (sq.rank === 8) {
+		if (sq.getRank === 8) {
 			throw new Error('How is the black pawn on the 8th rank?');
 		}
-		if (sq.rank === 7) {
+		if (sq.getRank === 7) {
 			moves.push(
 				{
 					startSq: startSq,
-					endSq: chess.getSquare(`${sq.file}${sq.rank - 1}`)!.getSquareName,
+					endSq: board.getSquare(`${sq.getFile}${sq.getRank - 1}`)!
+						.getSquareName,
 				},
 				{
 					startSq: startSq,
-					endSq: chess.getSquare(`${sq.file}${sq.rank - 2}`)!.getSquareName,
+					endSq: board.getSquare(`${sq.getFile}${sq.getRank - 2}`)!
+						.getSquareName,
 				}
 			);
 		}
-		if (sq.file === 'a') {
+		if (sq.getFile === 'a') {
 			moves.push({
 				startSq: startSq,
-				endSq: chess.getSquare(`${'b'}${sq.rank - 1}`)!.getSquareName,
+				endSq: board.getSquare(`${'b'}${sq.getRank - 1}`)!.getSquareName,
 			});
-		} else if (sq.file === 'h') {
+		} else if (sq.getFile === 'h') {
 			moves.push({
 				startSq: startSq,
-				endSq: chess.getSquare(`${'g'}${sq.rank - 1}`)!.getSquareName,
+				endSq: board.getSquare(`${'g'}${sq.getRank - 1}`)!.getSquareName,
 			});
 		} else {
 			moves.push(
 				{
 					startSq: startSq,
-					endSq: chess.getSquare(
-						`${String.fromCharCode(sq.file.charCodeAt(0) + 1)}${sq.rank + 1}`
+					endSq: board.getSquare(
+						`${String.fromCharCode(sq.getFile.charCodeAt(0) + 1)}${
+							sq.getRank + 1
+						}`
 					)!.getSquareName,
 				},
 				{
 					startSq: startSq,
-					endSq: chess.getSquare(
-						`${String.fromCharCode(sq.file.charCodeAt(0) - 1)}${sq.rank + 1}`
+					endSq: board.getSquare(
+						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${
+							sq.getRank + 1
+						}`
 					)!.getSquareName,
 				}
 			);
@@ -959,19 +1085,19 @@ class Knight extends Piece {
 	}
 
 	override move(startSq: Square, endSq: Square): boolean {
-		if (startSq.color === endSq.color) {
+		if (startSq.getColor === endSq.getColor) {
 			console.log('Knight cannot move to same color square');
 			return false;
 		} else if (
-			startSq.piece &&
-			Knight.compareFilesAndRanks(startSq, endSq) &&
-			endSq.piece === null
+			startSq.getPiece &&
+			Knight.knightMoves(startSq, endSq) &&
+			endSq.getPiece === null
 		) {
 			return true;
 		} else if (
-			startSq.piece &&
-			Knight.compareFilesAndRanks(startSq, endSq) &&
-			endSq.piece !== null
+			startSq.getPiece &&
+			Knight.knightMoves(startSq, endSq) &&
+			endSq.getPiece !== null
 		) {
 			return Knight.capture(startSq, endSq);
 		} else return false;
@@ -986,16 +1112,18 @@ class Knight extends Piece {
 		}
 	}
 
-	static compareFilesAndRanks(startSq: Square, endSq: Square): boolean {
+	static knightMoves(startSq: Square, endSq: Square): boolean {
 		return (
 			(Math.abs(
-				Chess.findFileIndex(startSq.file) - Chess.findFileIndex(endSq.file)
+				Chess.findFileIndex(startSq.getFile) -
+					Chess.findFileIndex(endSq.getFile)
 			) === 1 &&
-				Math.abs(startSq.rank - endSq.rank) === 2) ||
+				Math.abs(startSq.getRank - endSq.getRank) === 2) ||
 			(Math.abs(
-				Chess.findFileIndex(startSq.file) - Chess.findFileIndex(endSq.file)
+				Chess.findFileIndex(startSq.getFile) -
+					Chess.findFileIndex(endSq.getFile)
 			) === 2 &&
-				Math.abs(startSq.rank - endSq.rank) === 1)
+				Math.abs(startSq.getRank - endSq.getRank) === 1)
 		);
 	}
 }
@@ -1013,23 +1141,22 @@ class Bishop extends Piece {
 		}
 	}
 
-	override move(startSq: Square, endSq: Square): boolean {
-		if (startSq.color !== endSq.color) {
+	override move(startSq: Square, endSq: Square, board: Board): boolean {
+		if (startSq.getColor !== endSq.getColor) {
 			console.log('Bishop cannot move to a different color square');
 			return false;
 		}
 
 		//capture logic
-		if (startSq.piece && endSq.piece !== null) {
+		if (startSq.getPiece && endSq.getPiece !== null) {
 			if (Piece.capturable(startSq, endSq)) {
-				return Piece.isDiagonal(startSq, endSq);
+				return Piece.isDiagonal(startSq, endSq, board);
 			} else {
 				console.log('Capturing with bishop failed');
 				return false;
 			}
 		}
-
-		return Piece.isDiagonal(startSq, endSq);
+		return Piece.isDiagonal(startSq, endSq, board);
 	}
 }
 
@@ -1046,15 +1173,15 @@ class Rook extends Piece {
 		}
 	}
 
-	override move(startSq: Square, endSq: Square): boolean {
-		let isHorizontal = startSq.rank === endSq.rank ? true : false;
+	override move(startSq: Square, endSq: Square, board: Board): boolean {
+		let isHorizontal = startSq.getRank === endSq.getRank ? true : false;
 
 		//capture logic
-		if (startSq.piece && endSq.piece !== null) {
+		if (startSq.getPiece && endSq.getPiece !== null) {
 			if (Piece.capturable(startSq, endSq)) {
 				return isHorizontal
-					? Piece.horizontalMove(startSq, endSq)
-					: Piece.verticalMove(startSq, endSq);
+					? Piece.horizontalMove(startSq, endSq, board)
+					: Piece.verticalMove(startSq, endSq, board);
 			} else {
 				console.log('Capturing with rook failed');
 				return false;
@@ -1062,8 +1189,8 @@ class Rook extends Piece {
 		}
 
 		return isHorizontal
-			? Piece.horizontalMove(startSq, endSq)
-			: Piece.verticalMove(startSq, endSq);
+			? Piece.horizontalMove(startSq, endSq, board)
+			: Piece.verticalMove(startSq, endSq, board);
 	}
 
 	//sivuttain
@@ -1082,29 +1209,29 @@ class Queen extends Piece {
 		}
 	}
 
-	override move(startSq: Square, endSq: Square): boolean {
-		if (startSq.piece && endSq.piece !== null) {
+	override move(startSq: Square, endSq: Square, board: Board): boolean {
+		if (startSq.getPiece && endSq.getPiece !== null) {
 			if (Piece.capturable(startSq, endSq)) {
-				return Queen.queenMoves(startSq, endSq);
+				return Queen.queenMoves(startSq, endSq, board);
 			} else {
 				console.log('Capturing with queen failed');
 				return false;
 			}
 		}
-		return Queen.queenMoves(startSq, endSq);
+		return Queen.queenMoves(startSq, endSq, board);
 	}
 
-	static queenMoves(startSq: Square, endSq: Square): boolean {
+	static queenMoves(startSq: Square, endSq: Square, board: Board): boolean {
 		let fileDiff = Math.abs(
-			Chess.findFileIndex(startSq.file) - Chess.findFileIndex(endSq.file)
+			Chess.findFileIndex(startSq.getFile) - Chess.findFileIndex(endSq.getFile)
 		);
-		let rankDiff = Math.abs(startSq.rank - endSq.rank);
+		let rankDiff = Math.abs(startSq.getRank - endSq.getRank);
 		if (fileDiff === rankDiff && startSq !== endSq) {
-			return Piece.isDiagonal(startSq, endSq);
+			return Piece.isDiagonal(startSq, endSq, board);
 		} else if (fileDiff === 0) {
-			return Piece.verticalMove(startSq, endSq);
+			return Piece.verticalMove(startSq, endSq, board);
 		} else if (rankDiff === 0) {
-			return Piece.horizontalMove(startSq, endSq);
+			return Piece.horizontalMove(startSq, endSq, board);
 		} else return false;
 	}
 }
@@ -1122,40 +1249,58 @@ class King extends Piece {
 		}
 	}
 
-	override move(startSq: Square, endSq: Square): boolean {
-		if (startSq.piece && endSq.piece !== null) {
+	override move(startSq: Square, endSq: Square, board: Board): boolean {
+		if (startSq.getPiece && endSq.getPiece !== null) {
 			if (Piece.capturable(startSq, endSq)) {
-				return King.kingMoves(startSq, endSq);
+				return King.kingMoves(startSq, endSq, board);
 			} else {
 				console.log('Capturing with queen failed');
 				return false;
 			}
 		}
-		return King.kingMoves(startSq, endSq);
+		return King.kingMoves(startSq, endSq, board);
 	}
 
-	static kingMoves(startSq: Square, endSq: Square): boolean {
+	static kingMoves(startSq: Square, endSq: Square, board: Board): boolean {
 		let fileDiff = Math.abs(
-			Chess.findFileIndex(startSq.file) - Chess.findFileIndex(endSq.file)
+			Chess.findFileIndex(startSq.getFile) - Chess.findFileIndex(endSq.getFile)
 		);
-		let rankDiff = Math.abs(startSq.rank - endSq.rank);
+		let rankDiff = Math.abs(startSq.getRank - endSq.getRank);
 
 		if (fileDiff > 1 || rankDiff > 1) {
 			return false;
 		}
 		if (fileDiff === rankDiff && startSq !== endSq) {
-			return Piece.isDiagonal(startSq, endSq);
+			return Piece.isDiagonal(startSq, endSq, board);
 		} else if (fileDiff === 0) {
-			return Piece.verticalMove(startSq, endSq);
+			return Piece.verticalMove(startSq, endSq, board);
 		} else if (rankDiff === 0) {
-			return Piece.horizontalMove(startSq, endSq);
+			return Piece.horizontalMove(startSq, endSq, board);
 		} else return false;
+	}
+
+	whiteCheck(): boolean {
+		let up = 8 - this.getSquare.getRank;
+		let left = this.getSquare.getId % 8;
+		let right = 8 - left;
+		// let horizontalDiff = Math.abs(sta.id - startSq.id);
+		console.log('up ' + up + ' ' + left);
+		return false;
+	}
+	blackCheck(): boolean {
+		return false;
 	}
 }
 
 const chess = new Chess();
-chess.putPieceOnBoard('e2', new Pawn(chess.getSquare('e2')!, Color.white));
-chess.putPieceOnBoard('d7', new Pawn(chess.getSquare('d7')!, Color.black));
+chess.putPieceOnBoard(
+	'e2',
+	new Pawn(chess.getBoard.getSquare('e2')!, Color.white)
+);
+chess.putPieceOnBoard(
+	'd7',
+	new Pawn(chess.getBoard.getSquare('d7')!, Color.black)
+);
 console.log(chess.printBoardWhite());
 chess.movePiece('e2', 'e4');
 chess.movePiece('d7', 'd5');
@@ -1164,10 +1309,10 @@ chess.movePiece('e4', 'd5');
 console.log(chess.getPieces);
 const game = new Game(chess);
 
-// chess.fen(Chess.STARTING_POSITION);
-// console.log(chess.printBoardWhite());
+chess.fen(Chess.STARTING_POSITION);
+console.log(chess.printBoardWhite());
 
-// // enpassant test
+// enpassant test
 chess.fen(Chess.STARTING_POSITION);
 chess.movePiece('e2', 'e4');
 chess.movePiece('d7', 'd5');
@@ -1202,20 +1347,38 @@ chess.movePiece('d5', 'c6');
 chess.movePiece('h6', 'h5');
 chess.movePiece('c6', 'a4');
 
-// //rook test
+// // //rook test
 chess.emptyBoard();
-chess.putPieceOnBoard('a1', new Rook(chess.getSquare('a1')!, Color.white));
-chess.putPieceOnBoard('d8', new Rook(chess.getSquare('a1')!, Color.black));
+chess.putPieceOnBoard(
+	'a1',
+	new Rook(chess.getBoard.getSquare('a1')!, Color.white)
+);
+chess.putPieceOnBoard(
+	'd8',
+	new Rook(chess.getBoard.getSquare('a1')!, Color.black)
+);
 chess.movePiece('a1', 'h1');
 chess.movePiece('d8', 'd1');
 chess.movePiece('h1', 'd1');
 
 // //queen testing
 chess.emptyBoard();
-chess.putPieceOnBoard('a1', new Queen(chess.getSquare('a1')!, Color.white));
-chess.putPieceOnBoard('a1', new Queen(chess.getSquare('a1')!, Color.white));
-chess.putPieceOnBoard('a7', new Queen(chess.getSquare('a7')!, Color.black));
-chess.putPieceOnBoard('d8', new Queen(chess.getSquare('d8')!, Color.black));
+chess.putPieceOnBoard(
+	'a1',
+	new Queen(chess.getBoard.getSquare('a1')!, Color.white)
+);
+chess.putPieceOnBoard(
+	'a1',
+	new Queen(chess.getBoard.getSquare('a1')!, Color.white)
+);
+chess.putPieceOnBoard(
+	'a7',
+	new Queen(chess.getBoard.getSquare('a7')!, Color.black)
+);
+chess.putPieceOnBoard(
+	'd8',
+	new Queen(chess.getBoard.getSquare('d8')!, Color.black)
+);
 chess.movePiece('a1', 'h1');
 chess.movePiece('d8', 'd1');
 chess.movePiece('h1', 'f3');
@@ -1223,8 +1386,14 @@ chess.movePiece('d1', 'f3');
 
 // //king testing
 chess.emptyBoard();
-chess.putPieceOnBoard('e1', new King(chess.getSquare('e1')!, Color.white));
-chess.putPieceOnBoard('e8', new King(chess.getSquare('e8')!, Color.black));
+chess.putPieceOnBoard(
+	'e1',
+	new King(chess.getBoard.getSquare('e1')!, Color.white)
+);
+chess.putPieceOnBoard(
+	'e8',
+	new King(chess.getBoard.getSquare('e8')!, Color.black)
+);
 chess.movePiece('e1', 'e2');
 chess.movePiece('e8', 'd7');
 chess.movePiece('e2', 'f3');
@@ -1240,17 +1409,22 @@ chess.startingPosition();
 
 //get
 console.log(
-	chess.getSquare(
-		`${String.fromCharCode(chess.getSquare('e2')!.file.charCodeAt(0) + 1)}${
-			chess.getSquare('e2')!.rank + 1
-		}`
+	chess.getBoard.getSquare(
+		`${String.fromCharCode(
+			chess.getBoard.getSquare('e2')!.getFile.charCodeAt(0) + 1
+		)}${chess.getBoard.getSquare('e2')!.getRank + 1}`
 	)
 );
 
-console.log(chess.getSquare('a2')!.piece?.possibleMoves());
-// console.log(chess.printBoardWhite());
+console.log(chess.getBoard.getSquare('a2')!.getPiece?.possibleMoves());
+console.log(chess.printBoardWhite());
 
-// console.log(chess.printBoardWhite());
+console.log(chess.printBoardWhite());
+const king = new King(chess.getBoard.getSquare('d5')!, Color.white);
+chess.putPieceOnBoard('d5', king);
+king.whiteCheck();
+chess.movePiece('d5', 'd4');
+console.log(chess.getBoard.getSquare('d4')?.getPiece);
 
-game.playTerminal();
+// game.playTerminal();
 console.timeEnd('c');

@@ -6,9 +6,7 @@
 		"dev": "next dev --turbo",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint",
-		"chess": "cd chess && ts-node chess.ts",
-		"tsc": "cd chess && tsc"
+		"lint": "next lint"
 	},
 	"dependencies": {
 		"@types/node": "18.11.9",

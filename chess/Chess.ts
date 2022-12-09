@@ -1140,12 +1140,9 @@ class Knight extends Piece {
 			let ranks = [1, -1, 2, -2, -2, -1, 1, 2];
 
 			for (let i = 0; i < 8; i++) {
-				let sq = board.getSquare(
-					`${String.fromCharCode(file.charCodeAt(0) + files[i])}${
-						rank + ranks[i]
-					}`
-				);
-				console.log(sq);
+				let nextFile = String.fromCharCode(file.charCodeAt(0) + files[i]);
+				let nextRank = rank + ranks[i];
+				let sq = board.getSquare(`${nextFile}${nextRank}`);
 				if (sq && sq.getSquareName) {
 					let endSq = sq.getSquareName;
 					moves.push({
@@ -1190,6 +1187,40 @@ class Bishop extends Piece {
 			}
 		}
 		return Piece.isDiagonal(startSq, endSq, board);
+	}
+
+	override possibleMoves(board: Board): SingleMove[] {
+		let moves: SingleMove[] = [];
+		let startSq = this.square;
+		if (startSq) {
+			let rank = startSq.getRank;
+			let file = startSq.getFile;
+			let startSqName = startSq.getSquareName;
+			let files = [1, 1, -1, -1];
+			let ranks = [1, -1, 1, -1];
+
+			for (let i = 0; i < 4; i++) {
+				for (let j = 0; j < 7; j++) {
+					let nextFile = String.fromCharCode(
+						file.charCodeAt(0) + files[i] + j * files[i]
+					);
+					let nextRank = rank + ranks[i] + j * ranks[i];
+					let sq = board.getSquare(`${nextFile}${nextRank}`);
+
+					if (!sq) break;
+					if (sq && sq.getSquareName) {
+						let endSq = sq.getSquareName;
+						moves.push({
+							startSq: startSqName,
+							endSq: endSq,
+						});
+					}
+				}
+			}
+
+			return moves;
+		}
+		throw new Error('Error making possible bishop moves');
 	}
 }
 
@@ -1462,9 +1493,9 @@ king.whiteCheck();
 chess.movePiece('d5', 'd4');
 console.log(chess.getBoard.getSquare('d4')?.getPiece);
 chess.emptyBoard();
-const knight = new Knight(chess.getBoard.getSquare('d1')!, Color.black);
-chess.putPieceOnBoard('d1', knight);
-console.log(knight.possibleMoves(chess.getBoard));
+const bishop = new Bishop(chess.getBoard.getSquare('a1')!, Color.black);
+chess.putPieceOnBoard('a1', bishop);
+console.log(bishop.possibleMoves(chess.getBoard));
 // const game = new Game(chess);
 // game.playTerminal();
 console.timeEnd('c');

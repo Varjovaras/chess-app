@@ -22,7 +22,7 @@ enum ChessPieces {
 	PAWN_WHITE = 'pawn',
 	PAWN_BLACK = 'PAWN',
 	KNIGHT_WHITE = 'night', //first letter n for printing purposes
-	KNIGHT_BLACK = 'NIGHT', //first letter n for printing purposes
+	KNIGHT_BLACK = 'NIGHT', //first letter N for printing purposes
 	BISHOP_WHITE = 'bishop',
 	BISHOP_BLACK = 'BISHOP',
 	ROOK_WHITE = 'rook',
@@ -35,6 +35,7 @@ enum ChessPieces {
 
 class Board {
 	private _board: Square[];
+	static files: string[] = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
 	constructor(board: Square[]) {
 		this._board = board;
@@ -52,6 +53,10 @@ class Board {
 	getSquareById(id: number): Square | null {
 		let sq = this._board.find((s: Square) => s.getId === id);
 		return sq ? sq.getSquare : null;
+	}
+
+	static findFileIndex(s: string): number {
+		return Board.files.findIndex((e) => e === s);
 	}
 }
 
@@ -138,7 +143,6 @@ export default class Chess {
 	private _pieces: PieceSquare[];
 	private _turnNumber: number;
 
-	static files: string[] = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 	static STARTING_POSITION =
 		'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -164,19 +168,19 @@ export default class Chess {
 
 			if (i % 2 === 0) {
 				tempBoard[i] = new Square(
-					Chess.files[file],
+					Board.files[file],
 					rank,
 
-					`${Chess.files[file]}${rank}`,
+					`${Board.files[file]}${rank}`,
 					firstSquare,
 					i,
 					null
 				);
 			} else {
 				tempBoard[i] = new Square(
-					Chess.files[file],
+					Board.files[file],
 					rank,
-					`${Chess.files[file]}${rank}`,
+					`${Board.files[file]}${rank}`,
 					secondSquare,
 					i,
 					null
@@ -490,10 +494,6 @@ export default class Chess {
 	startingPosition(): void {
 		this.fen(Chess.STARTING_POSITION);
 	}
-
-	static findFileIndex(s: string): number {
-		return Chess.files.findIndex((e) => e === s);
-	}
 }
 
 class Game {
@@ -600,7 +600,7 @@ class Piece {
 	//for bishop and queen
 	static isDiagonal(startSq: Square, endSq: Square, board: Board): boolean {
 		let fileDiff = Math.abs(
-			Chess.findFileIndex(startSq.getFile) - Chess.findFileIndex(endSq.getFile)
+			Board.findFileIndex(startSq.getFile) - Board.findFileIndex(endSq.getFile)
 		);
 		let rankDiff = Math.abs(startSq.getRank - endSq.getRank);
 		if (fileDiff === rankDiff && fileDiff === 1) {
@@ -619,8 +619,8 @@ class Piece {
 		board: Board
 	): boolean {
 		let index = 0;
-		let startFileIndex = Chess.findFileIndex(startSq.getFile);
-		let endFileIndex = Chess.findFileIndex(endSq.getFile);
+		let startFileIndex = Board.findFileIndex(startSq.getFile);
+		let endFileIndex = Board.findFileIndex(endSq.getFile);
 		//find index of the next square to test
 		if (startSq.getRank < endSq.getRank && startFileIndex > endFileIndex) {
 			index = 7;
@@ -952,7 +952,7 @@ class Pawn extends Piece {
 	static compareFiles(startSqFile: string, endSqFile: string): boolean {
 		return (
 			Math.abs(
-				Chess.findFileIndex(startSqFile) - Chess.findFileIndex(endSqFile)
+				Board.findFileIndex(startSqFile) - Board.findFileIndex(endSqFile)
 			) === 1
 		);
 	}
@@ -1117,13 +1117,13 @@ class Knight extends Piece {
 	static knightMoves(startSq: Square, endSq: Square): boolean {
 		return (
 			(Math.abs(
-				Chess.findFileIndex(startSq.getFile) -
-					Chess.findFileIndex(endSq.getFile)
+				Board.findFileIndex(startSq.getFile) -
+					Board.findFileIndex(endSq.getFile)
 			) === 1 &&
 				Math.abs(startSq.getRank - endSq.getRank) === 2) ||
 			(Math.abs(
-				Chess.findFileIndex(startSq.getFile) -
-					Chess.findFileIndex(endSq.getFile)
+				Board.findFileIndex(startSq.getFile) -
+					Board.findFileIndex(endSq.getFile)
 			) === 2 &&
 				Math.abs(startSq.getRank - endSq.getRank) === 1)
 		);
@@ -1136,110 +1136,28 @@ class Knight extends Piece {
 			let rank = startSq.getRank;
 			let file = startSq.getFile;
 			let startSqName = startSq.getSquareName;
-			let possibleMoves: SingleMove[] = [
-				//one up two right
-				{
-					startSq: startSqName,
-					endSq: board.getSquare(
-						`${String.fromCharCode(file.charCodeAt(0) + 2)}${rank + 1}`
-					)!.getSquareName,
-				},
+			let files = [2, 2, 1, 1, -1, -2, -2, -1];
+			let ranks = [1, -1, 2, -2, -2, -1, 1, 2];
 
-				//one down two right
-				{
-					startSq: startSqName,
-					endSq: board.getSquare(
-						`${String.fromCharCode(file.charCodeAt(0) + 2)}${rank - 1}`
-					)!.getSquareName,
-				},
+			for (let i = 0; i < 8; i++) {
+				let sq = board.getSquare(
+					`${String.fromCharCode(file.charCodeAt(0) + files[i])}${
+						rank + ranks[i]
+					}`
+				);
+				console.log(sq);
+				if (sq && sq.getSquareName) {
+					let endSq = sq.getSquareName;
+					moves.push({
+						startSq: startSqName,
+						endSq: endSq,
+					});
+				}
+			}
 
-				//two up one right
-				{
-					startSq: startSqName,
-					endSq: board.getSquare(
-						`${String.fromCharCode(file.charCodeAt(0) + 1)}${rank + 2}`
-					)!.getSquareName,
-				},
-
-				// //two down one right
-				{
-					startSq: startSqName,
-					endSq: board.getSquare(
-						`${String.fromCharCode(startSq.getFile.charCodeAt(0) + 1)}${
-							rank - 2
-						}`
-					)!.getSquareName,
-				},
-
-				// //two down one left
-				{
-					startSq: startSqName,
-					endSq: board.getSquare(
-						`${String.fromCharCode(startSq.getFile.charCodeAt(0) - 1)}${
-							rank - 2
-						}`
-					)!.getSquareName,
-				},
-
-				// //one down two left
-				{
-					startSq: startSqName,
-					endSq: board.getSquare(
-						`${String.fromCharCode(startSq.getFile.charCodeAt(0) - 2)}${
-							rank - 1
-						}`
-					)!.getSquareName,
-				},
-
-				// //one up two left
-				{
-					startSq: startSqName,
-					endSq: board.getSquare(
-						`${String.fromCharCode(startSq.getFile.charCodeAt(0) - 2)}${
-							rank + 1
-						}`
-					)!.getSquareName,
-				},
-
-				// //two up one left
-				{
-					startSq: startSqName,
-					endSq: board.getSquare(
-						`${String.fromCharCode(startSq.getFile.charCodeAt(0) - 1)}${
-							rank + 2
-						}`
-					)!.getSquareName,
-				},
-			];
-
-			// //not near edges or corners
-			// if (
-			// 	rank > 2 &&
-			// 	rank < 7 &&
-			// 	file !== 'a' &&
-			// 	file !== 'b' &&
-			// 	file !== 'g' &&
-			// 	file !== 'h'
-			// ) {
-			// 	moves.push({
-			// 		startSq: startSqName,
-			// 		endSq: board.getSquare(
-			// 			`${String.fromCharCode(
-			// 				board.getSquare('e2')!.getFile.charCodeAt(0) + 1
-			// 			)}${board.getSquare('e2')!.getRank + 1}`
-			// 		)!.getSquareName,
-			// 	});
-			// }
-			// if (startSq.getFile === 'a' || 'b' || 'g' || 'h') {
-			// 	moves.push({
-			// 		startSq: startSq.getSquareName,
-			// 		endSq: board.getSquare(`${sq.getFile}${sq.getRank - 1}`)!
-			// 			.getSquareName,
-			// 	});
-			// }
-			return possibleMoves;
+			return moves;
 		}
-		throw new Error();
+		throw new Error('Error making possible knight moves');
 	}
 }
 
@@ -1338,7 +1256,7 @@ class Queen extends Piece {
 
 	static queenMoves(startSq: Square, endSq: Square, board: Board): boolean {
 		let fileDiff = Math.abs(
-			Chess.findFileIndex(startSq.getFile) - Chess.findFileIndex(endSq.getFile)
+			Board.findFileIndex(startSq.getFile) - Board.findFileIndex(endSq.getFile)
 		);
 		let rankDiff = Math.abs(startSq.getRank - endSq.getRank);
 		if (fileDiff === rankDiff && startSq !== endSq) {
@@ -1378,7 +1296,7 @@ class King extends Piece {
 
 	static kingMoves(startSq: Square, endSq: Square, board: Board): boolean {
 		let fileDiff = Math.abs(
-			Chess.findFileIndex(startSq.getFile) - Chess.findFileIndex(endSq.getFile)
+			Board.findFileIndex(startSq.getFile) - Board.findFileIndex(endSq.getFile)
 		);
 		let rankDiff = Math.abs(startSq.getRank - endSq.getRank);
 
@@ -1544,8 +1462,8 @@ king.whiteCheck();
 chess.movePiece('d5', 'd4');
 console.log(chess.getBoard.getSquare('d4')?.getPiece);
 chess.emptyBoard();
-const knight = new Knight(chess.getBoard.getSquare('e5')!, Color.black);
-chess.putPieceOnBoard('e5', knight);
+const knight = new Knight(chess.getBoard.getSquare('d1')!, Color.black);
+chess.putPieceOnBoard('d1', knight);
 console.log(knight.possibleMoves(chess.getBoard));
 // const game = new Game(chess);
 // game.playTerminal();

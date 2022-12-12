@@ -652,6 +652,7 @@ class Piece {
 	}
 
 	//for rook and queen
+	//left and right movement
 	static horizontalMove(startSq: Square, endSq: Square, board: Board): boolean {
 		console.log('horizontal move by ' + startSq.getPiece?.getName);
 		let index = startSq.getFile < endSq.getFile ? 1 : -1;
@@ -671,6 +672,7 @@ class Piece {
 		return true;
 	}
 	//for rook and queen
+	//up and down movement
 	static verticalMove(startSq: Square, endSq: Square, board: Board): boolean {
 		console.log('vertical move by ' + startSq.getPiece?.getName);
 		let index = startSq.getId < endSq.getId ? 8 : -8;
@@ -1136,6 +1138,7 @@ class Knight extends Piece {
 			let rank = startSq.getRank;
 			let file = startSq.getFile;
 			let startSqName = startSq.getSquareName;
+
 			let files = [2, 2, 1, 1, -1, -2, -2, -1];
 			let ranks = [1, -1, 2, -2, -2, -1, 1, 2];
 
@@ -1257,7 +1260,39 @@ class Rook extends Piece {
 			: Piece.verticalMove(startSq, endSq, board);
 	}
 
-	//sivuttain
+	override possibleMoves(board: Board): SingleMove[] {
+		let moves: SingleMove[] = [];
+		let startSq = this.square;
+		if (startSq) {
+			let rank = startSq.getRank;
+			let file = startSq.getFile;
+			let startSqName = startSq.getSquareName;
+			let files = [1, -1, 0, 0];
+			let ranks = [0, 0, 1, -1];
+
+			for (let i = 0; i < 4; i++) {
+				for (let j = 0; j < 7; j++) {
+					let nextFile = String.fromCharCode(
+						file.charCodeAt(0) + files[i] + j * files[i]
+					);
+					let nextRank = rank + ranks[i] + j * ranks[i];
+					let sq = board.getSquare(`${nextFile}${nextRank}`);
+
+					if (!sq) break;
+					if (sq && sq.getSquareName) {
+						let endSq = sq.getSquareName;
+						moves.push({
+							startSq: startSqName,
+							endSq: endSq,
+						});
+					}
+				}
+			}
+
+			return moves;
+		}
+		throw new Error('Error making possible rook moves');
+	}
 }
 
 class Queen extends Piece {
@@ -1297,6 +1332,54 @@ class Queen extends Piece {
 		} else if (rankDiff === 0) {
 			return Piece.horizontalMove(startSq, endSq, board);
 		} else return false;
+	}
+
+	override possibleMoves(board: Board): SingleMove[] {
+		let moves: SingleMove[] = [];
+		let startSq = this.square;
+		if (startSq) {
+			let rookMoveFiles = [1, -1, 0, 0];
+			let rookMoveRanks = [0, 0, 1, -1];
+			let bishopMoveFiles = [1, 1, -1, -1];
+			let bishopMoveRanks = [1, -1, 1, -1];
+
+			moves = moves.concat(
+				Queen.queenMoveHelper(rookMoveFiles, rookMoveRanks, board, startSq),
+				Queen.queenMoveHelper(bishopMoveFiles, bishopMoveRanks, board, startSq)
+			);
+			return moves;
+		}
+		throw new Error('Error making possible queen moves');
+	}
+
+	static queenMoveHelper(
+		k: number[],
+		t: number[],
+		board: Board,
+		startSq: Square
+	) {
+		let moves: SingleMove[] = [];
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 7; j++) {
+				let rank = startSq.getRank;
+				let file = startSq.getFile;
+				let startSqName = startSq.getSquareName;
+				let nextFile = String.fromCharCode(
+					file.charCodeAt(0) + k[i] + j * k[i]
+				);
+				let nextRank = rank + t[i] + j * t[i];
+				let sq = board.getSquare(`${nextFile}${nextRank}`);
+
+				if (!sq) break;
+				if (sq && sq.getSquareName) {
+					moves.push({
+						startSq: startSqName,
+						endSq: sq.getSquareName,
+					});
+				}
+			}
+		}
+		return moves;
 	}
 }
 
@@ -1493,8 +1576,8 @@ king.whiteCheck();
 chess.movePiece('d5', 'd4');
 console.log(chess.getBoard.getSquare('d4')?.getPiece);
 chess.emptyBoard();
-const bishop = new Bishop(chess.getBoard.getSquare('a1')!, Color.black);
-chess.putPieceOnBoard('a1', bishop);
+const bishop = new Queen(chess.getBoard.getSquare('e4')!, Color.black);
+chess.putPieceOnBoard('e4', bishop);
 console.log(bishop.possibleMoves(chess.getBoard));
 // const game = new Game(chess);
 // game.playTerminal();

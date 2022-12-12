@@ -18,6 +18,11 @@ type SingleMove = {
 	endSq: string;
 };
 
+type PieceSquare = {
+	square: string;
+	piece: Piece;
+};
+
 enum ChessPieces {
 	PAWN_WHITE = 'pawn',
 	PAWN_BLACK = 'PAWN',
@@ -130,11 +135,6 @@ class Square {
 		return this._piece === null;
 	}
 }
-
-type PieceSquare = {
-	square: string;
-	piece: Piece;
-};
 
 export default class Chess {
 	private _board: Board;
@@ -483,12 +483,12 @@ export default class Chess {
 	}
 
 	emptyBoard(): void {
-		this._board.getBoard.forEach((s) => {
-			s.setPiece(null);
-		});
 		this._moves = [];
 		this._pieces = [];
 		this._turnNumber = 0;
+		this._board.getBoard.forEach((s) => {
+			s.setPiece(null);
+		});
 	}
 
 	startingPosition(): void {
@@ -1159,6 +1159,24 @@ class Knight extends Piece {
 		}
 		throw new Error('Error making possible knight moves');
 	}
+
+	static knightMoveHelper(sq: Square, board: Board): number[] {
+		let endSquares: number[] = [];
+		let files = [2, 2, 1, 1, -1, -2, -2, -1];
+		let ranks = [1, -1, 2, -2, -2, -1, 1, 2];
+		if (!sq) return [];
+		let file = sq.getFile;
+		let rank = sq.getRank;
+		for (let i = 0; i < 8; i++) {
+			let nextFile = String.fromCharCode(file.charCodeAt(0) + files[i]);
+			let nextRank = rank + ranks[i];
+			let sq = board.getSquare(`${nextFile}${nextRank}`);
+			if (sq && sq.getSquareName) {
+				endSquares.push(sq.getSquare.getId);
+			}
+		}
+		return endSquares;
+	}
 }
 
 class Bishop extends Piece {
@@ -1426,159 +1444,585 @@ class King extends Piece {
 		} else return false;
 	}
 
-	whiteCheck(): boolean {
-		if (this.getSquare) {
-			let up = 8 - this.getSquare.getRank;
-			let left = this.getSquare.getId % 8;
-			let right = 8 - left;
-			// let horizontalDiff = Math.abs(sta.id - startSq.id);
-			console.log('up ' + up + ' ' + left);
-			return false;
-		} else return false;
+	whiteCheck(board: Board): boolean {
+		let sq = this.getSquare;
+		if (!sq) {
+			throw new Error('No square for king found');
+		}
+		let sqId = board.getSquareById(sq.getId)?.getId;
+		if (!sqId) {
+			throw new Error('No square id for king found');
+		}
+
+		// upwards
+		for (let i = 1; i < 8; i++) {
+			let testSq = board.getSquareById(sqId + 8 * i);
+			if (!testSq) break;
+			let testSqPiece = testSq.getPiece;
+			if (!testSqPiece) continue;
+			let testSqPieceName = testSqPiece.getFirstLetter();
+			if (
+				(testSqPieceName && testSqPieceName === 'R') ||
+				testSqPieceName === 'Q'
+			) {
+				console.log(
+					'King is in check from square ' +
+						testSq.getSquareName +
+						' by ' +
+						testSqPieceName
+				);
+				return true;
+			}
+			if (testSqPiece) {
+				break;
+			}
+		}
+		// downwards
+		for (let i = 1; i < 8; i++) {
+			let testSq = board.getSquareById(sqId - 8 * i);
+			if (!testSq) break;
+			let testSqPiece = testSq.getPiece;
+			if (!testSqPiece) continue;
+			let testSqPieceName = testSqPiece.getFirstLetter();
+			if (
+				(testSqPieceName && testSqPieceName === 'R') ||
+				testSqPieceName === 'Q'
+			) {
+				console.log(
+					'King is in check from square ' +
+						testSq.getSquareName +
+						' by ' +
+						testSqPieceName
+				);
+				return true;
+			}
+			if (testSqPiece) {
+				break;
+			}
+		}
+		// up and right
+		console.log('up and right');
+		for (let i = 1; i < 8; i++) {
+			let testSq = board.getSquareById(sqId + 9 * i);
+			if (!testSq) break;
+			let testSqPiece = testSq.getPiece;
+			if (!testSqPiece) continue;
+			let testSqPieceName = testSqPiece.getFirstLetter();
+			if (
+				(testSqPieceName && testSqPieceName === 'B') ||
+				testSqPieceName === 'Q'
+			) {
+				console.log(
+					'King is in check from square ' +
+						testSq.getSquareName +
+						' by ' +
+						testSqPiece
+				);
+				return true;
+			}
+			if (testSq.getFile === 'h') break;
+			if (testSqPiece) {
+				break;
+			}
+		}
+		// up and left
+		console.log('up and left');
+		for (let i = 1; i < 8; i++) {
+			let testSq = board.getSquareById(sqId + 7 * i);
+			if (!testSq) break;
+			let testSqPiece = testSq.getPiece;
+			if (!testSqPiece) continue;
+			let testSqPieceName = testSqPiece.getFirstLetter();
+			if (
+				(testSqPieceName && testSqPieceName === 'B') ||
+				testSqPieceName === 'Q'
+			) {
+				console.log(
+					'King is in check from square ' +
+						testSq.getSquareName +
+						' by ' +
+						testSqPiece
+				);
+				return true;
+			}
+			if (testSq.getFile === 'a') break;
+			if (testSqPiece) {
+				break;
+			}
+		}
+		// down and left
+		console.log('down and left');
+		for (let i = 1; i < 8; i++) {
+			let testSq = board.getSquareById(sqId - 9 * i);
+			if (!testSq) break;
+			let testSqPiece = testSq.getPiece;
+			if (!testSqPiece) continue;
+			let testSqPieceName = testSqPiece.getFirstLetter();
+			if (
+				(testSqPieceName && testSqPieceName === 'B') ||
+				testSqPieceName === 'Q'
+			) {
+				console.log(
+					'King is in check from square ' +
+						testSq.getSquareName +
+						' by ' +
+						testSqPiece
+				);
+
+				return true;
+			}
+			if (testSq.getId < 8 || testSq.getFile === 'a') {
+				break;
+			}
+			if (testSqPiece) {
+				break;
+			}
+		}
+		// down and right
+		console.log('down and right');
+		for (let i = 1; i < 8; i++) {
+			let testSq = board.getSquareById(sqId - 7 * i);
+			if (!testSq) break;
+			let testSqPiece = testSq.getPiece;
+			if (!testSqPiece) continue;
+			let testSqPieceName = testSqPiece.getFirstLetter();
+			if (
+				(testSqPieceName && testSqPieceName === 'B') ||
+				testSqPieceName === 'Q'
+			) {
+				console.log(
+					'King is in check from square ' +
+						testSq.getSquareName +
+						' by ' +
+						testSqPiece
+				);
+				return true;
+			}
+			if (testSq.getId < 8) {
+				break;
+			}
+			if (testSqPiece) {
+				break;
+			}
+		}
+
+		//horse things
+		let knightSquares = Knight.knightMoveHelper(sq, board);
+		knightSquares.forEach((k) => {
+			let sq = board.getSquareById(k);
+			if (sq && sq.getPiece && sq.getPiece.getFirstLetter() === 'N') {
+				return true;
+			}
+		});
+
+		//pawn things
+		if (sq.getFile === 'a') {
+			if (board.getSquareById(sqId + 9)?.getPiece?.getFirstLetter() === 'P') {
+				console.log(
+					'King is in check from square ' +
+						board.getSquareById(sqId + 9)!.getSquareName +
+						' by ' +
+						board.getSquareById(sqId + 9)?.getPiece!.getFirstLetter
+				);
+				return true;
+			}
+		} else if (sq.getFile === 'h') {
+			if (board.getSquareById(sqId + 7)?.getPiece?.getFirstLetter() === 'P') {
+				console.log(
+					'King is in check from square ' +
+						board.getSquareById(sqId + 7)!.getSquareName +
+						' by ' +
+						board.getSquareById(sqId + 7)?.getPiece!.getFirstLetter
+				);
+				return true;
+			}
+		} else {
+			if (board.getSquareById(sqId + 9)?.getPiece?.getFirstLetter() === 'P') {
+				console.log(
+					'King is in check from square ' +
+						board.getSquareById(sqId + 9)!.getSquareName +
+						' by ' +
+						board.getSquareById(sqId + 9)?.getPiece!.getFirstLetter
+				);
+				return true;
+			}
+			if (board.getSquareById(sqId + 7)?.getPiece?.getFirstLetter() === 'P') {
+				console.log(
+					'King is in check from square ' +
+						board.getSquareById(sqId + 7)!.getSquareName +
+						' by ' +
+						board.getSquareById(sqId + 7)?.getPiece!.getFirstLetter
+				);
+				return true;
+			}
+		}
+		//if no checks found
+		return false;
 	}
-	blackCheck(): boolean {
+
+	blackCheck(board: Board): boolean {
+		let sq = this.getSquare;
+		if (!sq) {
+			throw new Error('No square for king found');
+		}
+		let sqId = board.getSquareById(sq.getId)?.getId;
+		if (!sqId) {
+			throw new Error('No square id for king found');
+		}
+
+		// upwards
+		for (let i = 1; i < 8; i++) {
+			let testSq = board.getSquareById(sqId + 8 * i);
+			if (!testSq) break;
+			let testSqPiece = testSq.getPiece;
+			if (!testSqPiece) continue;
+			let testSqPieceName = testSqPiece.getFirstLetter();
+			if (
+				(testSqPieceName && testSqPieceName === 'r') ||
+				testSqPieceName === 'q'
+			) {
+				console.log(
+					'King is in check from square ' +
+						testSq.getSquareName +
+						' by ' +
+						testSqPieceName
+				);
+				return true;
+			}
+			if (testSqPiece) {
+				break;
+			}
+		}
+		// downwards
+		for (let i = 1; i < 8; i++) {
+			let testSq = board.getSquareById(sqId - 8 * i);
+			if (!testSq) break;
+			let testSqPiece = testSq.getPiece;
+			if (!testSqPiece) continue;
+			let testSqPieceName = testSqPiece.getFirstLetter();
+			if (
+				(testSqPieceName && testSqPieceName === 'r') ||
+				testSqPieceName === 'q'
+			) {
+				console.log(
+					'King is in check from square ' +
+						testSq.getSquareName +
+						' by ' +
+						testSqPieceName
+				);
+				return true;
+			}
+			if (testSqPiece) {
+				break;
+			}
+		}
+		// up and right
+		console.log('up and right');
+		for (let i = 1; i < 8; i++) {
+			let testSq = board.getSquareById(sqId + 9 * i);
+			if (!testSq) break;
+			let testSqPiece = testSq.getPiece;
+			if (!testSqPiece) continue;
+			let testSqPieceName = testSqPiece.getFirstLetter();
+			if (
+				(testSqPieceName && testSqPieceName === 'b') ||
+				testSqPieceName === 'q'
+			) {
+				console.log(
+					'King is in check from square ' +
+						testSq.getSquareName +
+						' by ' +
+						testSqPiece
+				);
+				return true;
+			}
+			if (testSq.getFile === 'h') break;
+			if (testSqPiece) {
+				break;
+			}
+		}
+		// up and left
+		console.log('up and left');
+		for (let i = 1; i < 8; i++) {
+			let testSq = board.getSquareById(sqId + 7 * i);
+			if (!testSq) break;
+			let testSqPiece = testSq.getPiece;
+			if (!testSqPiece) continue;
+			let testSqPieceName = testSqPiece.getFirstLetter();
+			if (
+				(testSqPieceName && testSqPieceName === 'b') ||
+				testSqPieceName === 'q'
+			) {
+				console.log(
+					'King is in check from square ' +
+						testSq.getSquareName +
+						' by ' +
+						testSqPiece
+				);
+				return true;
+			}
+			if (testSq.getFile === 'a') break;
+			if (testSqPiece) {
+				break;
+			}
+		}
+		// down and left
+		console.log('down and left');
+		for (let i = 1; i < 8; i++) {
+			let testSq = board.getSquareById(sqId - 9 * i);
+			if (!testSq) break;
+			let testSqPiece = testSq.getPiece;
+			if (!testSqPiece) continue;
+			let testSqPieceName = testSqPiece.getFirstLetter();
+			if (
+				(testSqPieceName && testSqPieceName === 'b') ||
+				testSqPieceName === 'q'
+			) {
+				console.log(
+					'King is in check from square ' +
+						testSq.getSquareName +
+						' by ' +
+						testSqPiece
+				);
+
+				return true;
+			}
+			if (testSq.getId < 8 || testSq.getFile === 'a') {
+				break;
+			}
+			if (testSqPiece) {
+				break;
+			}
+		}
+		// down and right
+		console.log('down and right');
+		for (let i = 1; i < 8; i++) {
+			let testSq = board.getSquareById(sqId - 7 * i);
+			if (!testSq) break;
+			let testSqPiece = testSq.getPiece;
+			if (!testSqPiece) continue;
+			let testSqPieceName = testSqPiece.getFirstLetter();
+			if (
+				(testSqPieceName && testSqPieceName === 'b') ||
+				testSqPieceName === 'q'
+			) {
+				console.log(
+					'King is in check from square ' +
+						testSq.getSquareName +
+						' by ' +
+						testSqPiece
+				);
+				return true;
+			}
+			if (testSq.getId < 8) {
+				break;
+			}
+			if (testSqPiece) {
+				break;
+			}
+		}
+
+		//horse things
+		let knightSquares = Knight.knightMoveHelper(sq, board);
+		knightSquares.forEach((k) => {
+			let sq = board.getSquareById(k);
+			if (sq && sq.getPiece && sq.getPiece.getFirstLetter() === 'n') {
+				return true;
+			}
+		});
+
+		//pawn things
+		if (sq.getFile === 'a') {
+			if (board.getSquareById(sqId - 7)?.getPiece?.getFirstLetter() === 'p') {
+				console.log(
+					'King is in check from square ' +
+						board.getSquareById(sqId - 7)!.getSquareName +
+						' by ' +
+						board.getSquareById(sqId - 7)?.getPiece!.getFirstLetter
+				);
+				return true;
+			}
+		} else if (sq.getFile === 'h') {
+			if (board.getSquareById(sqId - 9)?.getPiece?.getFirstLetter() === 'p') {
+				console.log(
+					'King is in check from square ' +
+						board.getSquareById(sqId - 9)!.getSquareName +
+						' by ' +
+						board.getSquareById(sqId - 9)?.getPiece!.getFirstLetter
+				);
+				return true;
+			}
+		} else {
+			if (board.getSquareById(sqId - 9)?.getPiece?.getFirstLetter() === 'p') {
+				console.log(
+					'King is in check from square ' +
+						board.getSquareById(sqId - 9)!.getSquareName +
+						' by ' +
+						board.getSquareById(sqId - 9)?.getPiece!.getFirstLetter
+				);
+				return true;
+			}
+			if (board.getSquareById(sqId - 7)?.getPiece?.getFirstLetter() === 'p') {
+				console.log(
+					'King is in check from square ' +
+						board.getSquareById(sqId - 7)!.getSquareName +
+						' by ' +
+						board.getSquareById(sqId - 7)?.getPiece!.getFirstLetter
+				);
+				return true;
+			}
+		}
+		//if no checks found
 		return false;
 	}
 }
 
 const chess = new Chess();
-chess.putPieceOnBoard(
-	'e2',
-	new Pawn(chess.getBoard.getSquare('e2')!, Color.white)
-);
-chess.putPieceOnBoard(
-	'd7',
-	new Pawn(chess.getBoard.getSquare('d7')!, Color.black)
-);
-console.log(chess.printBoardWhite());
-chess.movePiece('e2', 'e4');
-chess.movePiece('d7', 'd5');
-chess.movePiece('e4', 'd5');
+// chess.putPieceOnBoard(
+// 	'e2',
+// 	new Pawn(chess.getBoard.getSquare('e2')!, Color.white)
+// );
+// chess.putPieceOnBoard(
+// 	'd7',
+// 	new Pawn(chess.getBoard.getSquare('d7')!, Color.black)
+// );
+// console.log(chess.printBoardWhite());
+// chess.movePiece('e2', 'e4');
+// chess.movePiece('d7', 'd5');
+// chess.movePiece('e4', 'd5');
 
-console.log(chess.getPieces);
+// console.log(chess.getPieces);
 
-chess.fen(Chess.STARTING_POSITION);
-console.log(chess.printBoardWhite());
+// chess.fen(Chess.STARTING_POSITION);
+// console.log(chess.printBoardWhite());
 
-// enpassant test
-chess.fen(Chess.STARTING_POSITION);
-chess.movePiece('e2', 'e4');
-chess.movePiece('d7', 'd5');
-chess.movePiece('e4', 'd5');
-chess.movePiece('g8', 'f6');
-chess.movePiece('g1', 'e2');
-chess.movePiece('c7', 'c5');
-chess.movePiece('d5', 'c6');
+// // enpassant test
+// chess.fen(Chess.STARTING_POSITION);
+// chess.movePiece('e2', 'e4');
+// chess.movePiece('d7', 'd5');
+// chess.movePiece('e4', 'd5');
+// chess.movePiece('g8', 'f6');
+// chess.movePiece('g1', 'e2');
+// chess.movePiece('c7', 'c5');
+// chess.movePiece('d5', 'c6');
 
-// // knights test
-chess.fen(Chess.STARTING_POSITION);
-chess.movePiece('b1', 'c3');
-chess.movePiece('b8', 'c6');
-chess.movePiece('c3', 'd5');
-chess.movePiece('c6', 'e5');
-chess.movePiece('d5', 'b6');
-chess.movePiece('e5', 'f3');
-chess.movePiece('g2', 'f3');
-chess.movePiece('g8', 'h6');
+// // // knights test
+// chess.fen(Chess.STARTING_POSITION);
+// chess.movePiece('b1', 'c3');
+// chess.movePiece('b8', 'c6');
+// chess.movePiece('c3', 'd5');
+// chess.movePiece('c6', 'e5');
+// chess.movePiece('d5', 'b6');
+// chess.movePiece('e5', 'f3');
+// chess.movePiece('g2', 'f3');
+// chess.movePiece('g8', 'h6');
 
-// // bishop test
-chess.fen(Chess.STARTING_POSITION);
-chess.movePiece('e2', 'e4');
-chess.movePiece('e7', 'e5');
-chess.movePiece('f1', 'c4');
-chess.movePiece('a7', 'a5');
-chess.movePiece('d2', 'd3');
-chess.movePiece('a5', 'a4');
-chess.movePiece('c4', 'd5');
-chess.movePiece('h7', 'h6');
-chess.movePiece('d5', 'c6');
-chess.movePiece('h6', 'h5');
-chess.movePiece('c6', 'a4');
+// // // bishop test
+// chess.fen(Chess.STARTING_POSITION);
+// chess.movePiece('e2', 'e4');
+// chess.movePiece('e7', 'e5');
+// chess.movePiece('f1', 'c4');
+// chess.movePiece('a7', 'a5');
+// chess.movePiece('d2', 'd3');
+// chess.movePiece('a5', 'a4');
+// chess.movePiece('c4', 'd5');
+// chess.movePiece('h7', 'h6');
+// chess.movePiece('d5', 'c6');
+// chess.movePiece('h6', 'h5');
+// chess.movePiece('c6', 'a4');
 
-// // //rook test
-chess.emptyBoard();
-chess.putPieceOnBoard(
-	'a1',
-	new Rook(chess.getBoard.getSquare('a1')!, Color.white)
-);
-chess.putPieceOnBoard(
-	'd8',
-	new Rook(chess.getBoard.getSquare('a1')!, Color.black)
-);
-chess.movePiece('a1', 'h1');
-chess.movePiece('d8', 'd1');
-chess.movePiece('h1', 'd1');
+// // // //rook test
+// chess.emptyBoard();
+// chess.putPieceOnBoard(
+// 	'a1',
+// 	new Rook(chess.getBoard.getSquare('a1')!, Color.white)
+// );
+// chess.putPieceOnBoard(
+// 	'd8',
+// 	new Rook(chess.getBoard.getSquare('a1')!, Color.black)
+// );
+// chess.movePiece('a1', 'h1');
+// chess.movePiece('d8', 'd1');
+// chess.movePiece('h1', 'd1');
 
-// //queen testing
-chess.emptyBoard();
-chess.putPieceOnBoard(
-	'a1',
-	new Queen(chess.getBoard.getSquare('a1')!, Color.white)
-);
-chess.putPieceOnBoard(
-	'a1',
-	new Queen(chess.getBoard.getSquare('a1')!, Color.white)
-);
-chess.putPieceOnBoard(
-	'a7',
-	new Queen(chess.getBoard.getSquare('a7')!, Color.black)
-);
-chess.putPieceOnBoard(
-	'd8',
-	new Queen(chess.getBoard.getSquare('d8')!, Color.black)
-);
-chess.movePiece('a1', 'h1');
-chess.movePiece('d8', 'd1');
-chess.movePiece('h1', 'f3');
-chess.movePiece('d1', 'f3');
+// // //queen testing
+// chess.emptyBoard();
+// chess.putPieceOnBoard(
+// 	'a1',
+// 	new Queen(chess.getBoard.getSquare('a1')!, Color.white)
+// );
+// chess.putPieceOnBoard(
+// 	'a1',
+// 	new Queen(chess.getBoard.getSquare('a1')!, Color.white)
+// );
+// chess.putPieceOnBoard(
+// 	'a7',
+// 	new Queen(chess.getBoard.getSquare('a7')!, Color.black)
+// );
+// chess.putPieceOnBoard(
+// 	'd8',
+// 	new Queen(chess.getBoard.getSquare('d8')!, Color.black)
+// );
+// chess.movePiece('a1', 'h1');
+// chess.movePiece('d8', 'd1');
+// chess.movePiece('h1', 'f3');
+// chess.movePiece('d1', 'f3');
 
-// //king testing
-chess.emptyBoard();
-chess.putPieceOnBoard(
-	'e1',
-	new King(chess.getBoard.getSquare('e1')!, Color.white)
-);
-chess.putPieceOnBoard(
-	'e8',
-	new King(chess.getBoard.getSquare('e8')!, Color.black)
-);
-chess.movePiece('e1', 'e2');
-chess.movePiece('e8', 'd7');
-chess.movePiece('e2', 'f3');
-chess.movePiece('d7', 'e7');
+// // //king testing
+// chess.emptyBoard();
+// chess.putPieceOnBoard(
+// 	'e1',
+// 	new King(chess.getBoard.getSquare('e1')!, Color.white)
+// );
+// chess.putPieceOnBoard(
+// 	'e8',
+// 	new King(chess.getBoard.getSquare('e8')!, Color.black)
+// );
+// chess.movePiece('e1', 'e2');
+// chess.movePiece('e8', 'd7');
+// chess.movePiece('e2', 'f3');
+// chess.movePiece('d7', 'e7');
 
-console.log(chess.algebraicNotation());
-console.log(chess.printBoardWhite());
+// console.log(chess.algebraicNotation());
+// console.log(chess.printBoardWhite());
 
-console.log(chess.latestMove());
-console.log(chess.printBoardWhite());
-console.log(chess.getBoard);
-chess.startingPosition();
+// console.log(chess.latestMove());
+// console.log(chess.printBoardWhite());
+// console.log(chess.getBoard);
+// chess.startingPosition();
 
-//get
-console.log(
-	chess.getBoard.getSquare(
-		`${String.fromCharCode(
-			chess.getBoard.getSquare('e2')!.getFile.charCodeAt(0) + 1
-		)}${chess.getBoard.getSquare('e2')!.getRank + 1}`
-	)
-);
+// //get
+// console.log(
+// 	chess.getBoard.getSquare(
+// 		`${String.fromCharCode(
+// 			chess.getBoard.getSquare('e2')!.getFile.charCodeAt(0) + 1
+// 		)}${chess.getBoard.getSquare('e2')!.getRank + 1}`
+// 	)
+// );
 
-console.log(
-	chess.getBoard.getSquare('a2')!.getPiece?.possibleMoves(chess.getBoard)
-);
-console.log(chess.printBoardWhite());
+// console.log(
+// 	chess.getBoard.getSquare('a2')!.getPiece?.possibleMoves(chess.getBoard)
+// );
+// console.log(chess.printBoardWhite());
 
-console.log(chess.printBoardWhite());
-const king = new King(chess.getBoard.getSquare('d5')!, Color.white);
-chess.putPieceOnBoard('d5', king);
-king.whiteCheck();
-chess.movePiece('d5', 'd4');
-console.log(chess.getBoard.getSquare('d4')?.getPiece);
-chess.emptyBoard();
-const bishop = new Queen(chess.getBoard.getSquare('e4')!, Color.black);
-chess.putPieceOnBoard('e4', bishop);
-console.log(bishop.possibleMoves(chess.getBoard));
+// console.log(chess.printBoardWhite());
+// chess.movePiece('d5', 'd4');
+// console.log(chess.getBoard.getSquare('d4')?.getPiece);
+// chess.emptyBoard();
+const knight = new Knight(chess.getBoard.getSquare('a1')!, Color.black);
+chess.putPieceOnBoard('a1', knight);
+// console.log(queen.possibleMoves(chess.getBoard));
+// chess.emptyBoard();
+const king = new King(chess.getBoard.getSquare('c2')!, Color.white);
+chess.putPieceOnBoard('c2', king);
+king.whiteCheck(chess.getBoard);
+// console.log(chess.getBoard.getSquare('a2'));
+// console.log(chess.getBoard.getSquareById(21));
+// console.log(chess.getBoard.getSquareById(28));
+
+// chess.fen(Chess.STARTING_POSITION);
+// console.log(chess.printBoardWhite());
+
 // const game = new Game(chess);
 // game.playTerminal();
 console.timeEnd('c');

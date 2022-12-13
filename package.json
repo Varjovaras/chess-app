@@ -7,7 +7,7 @@
 		"frontend": "cd chess-frontend && npm run dev",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"pocketbase": "cd chess-frontend && ./pocketbase serve",
-		"chess": "cd chess && ts-node chess.ts",
+		"chess": "cd chess && ts-node index.ts",
 		"tsc": "cd chess && tsc"
 	},
 	"author": "Kristjan Rajaniemi",

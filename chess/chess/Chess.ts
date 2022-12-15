@@ -179,25 +179,11 @@ export default class Chess {
 			}
 			let move = this.latestMove();
 			//is only an object if promoting a pawn, if not object this runs
-			if (
-				(startSq.getPiece.getFirstLetter() === 'p' &&
-					startSq.getRank === 5 &&
-					endSq.getRank === 6 &&
-					startSq.getFile !== endSq.getFile &&
-					move &&
-					move.endSq.getRank === 5 &&
-					move.startSquarePiece.getFirstLetter() === 'P' &&
-					move.endSq.getFile === endSq.getFile) ||
-				(startSq.getPiece.getFirstLetter() === 'P' &&
-					startSq.getRank === 4 &&
-					endSq.getRank === 3 &&
-					startSq.getFile !== endSq.getFile &&
-					move &&
-					move.endSq.getRank === 4 &&
-					move.startSquarePiece.getFirstLetter() === 'p' &&
-					move.endSq.getFile === endSq.getFile)
-			) {
+			if (Chess.enPassantHelper(startSq, endSq, move) && move) {
 				this._board.getSquareById(move.endSq.getSquare.getId)?.setPiece(null);
+				this._pieces = this._pieces.filter(
+					(p: PieceSquare) => p.square !== move?.endSq.getSquareName
+				);
 			}
 			if (typeof isLegalMoveOrPiece !== 'object' && isLegalMoveOrPiece) {
 				this.handleMove(startSq, endSq);
@@ -399,5 +385,27 @@ export default class Chess {
 		this.fen(Chess.STARTING_POSITION);
 	}
 
-	static enPassantHelper() {}
+	static enPassantHelper(startSq: Square, endSq: Square, move?: Move): boolean {
+		if (
+			(startSq.getPiece?.getFirstLetter() === 'p' &&
+				startSq.getRank === 5 &&
+				endSq.getRank === 6 &&
+				startSq.getFile !== endSq.getFile &&
+				move &&
+				move.endSq.getRank === 5 &&
+				move.startSquarePiece.getFirstLetter() === 'P' &&
+				move.startSq.getFile === endSq.getFile) ||
+			(startSq.getPiece?.getFirstLetter() === 'P' &&
+				startSq.getRank === 4 &&
+				endSq.getRank === 3 &&
+				startSq.getFile !== endSq.getFile &&
+				move &&
+				move.endSq.getRank === 4 &&
+				move.startSquarePiece.getFirstLetter() === 'p' &&
+				move.endSq.getFile === endSq.getFile)
+		) {
+			return true;
+		}
+		return false;
+	}
 }

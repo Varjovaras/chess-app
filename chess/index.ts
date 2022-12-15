@@ -1,12 +1,12 @@
-import Chess from './Chess';
-import { Game } from './Game';
-import { King } from './King';
-import { Knight } from './Knight';
-import { Pawn } from './Pawn';
-import { Queen } from './Queen';
-import { Rook } from './Rook';
-import { Color } from './types';
 console.time('c');
+
+import Chess from './chess/Chess';
+import { King } from './chess/King';
+import { Knight } from './chess/Knight';
+import { Pawn } from './chess/Pawn';
+import { Queen } from './chess/Queen';
+import { Rook } from './chess/Rook';
+import { Color } from './chess/types';
 
 const chess = new Chess();
 chess.putPieceOnBoard(
@@ -34,9 +34,18 @@ chess.movePiece('d7', 'd5');
 chess.movePiece('e4', 'd5');
 chess.movePiece('g8', 'f6');
 chess.movePiece('g1', 'e2');
-// chess.movePiece('c7', 'c5');
-// chess.movePiece('d5', 'c6');
+chess.movePiece('c7', 'c5');
+chess.movePiece('d5', 'c6');
+chess.movePiece('g7', 'g5');
+chess.movePiece('c6', 'c7');
+chess.movePiece('g5', 'g4');
+chess.movePiece('h2', 'h4');
+console.log(chess.getPieces);
+chess.movePiece('g4', 'h3');
+console.log(chess.printBoardWhite());
+console.log(chess.getPieces);
 
+console.log(chess.getMoves);
 // // knights test
 chess.fen(Chess.STARTING_POSITION);
 chess.movePiece('b1', 'c3');

@@ -151,21 +151,24 @@ export class Pawn extends Piece {
 		let color: Color | null =
 			startSq.getPiece?.getColor === Color.white ? Color.black : null;
 
-		//check if it's your own piece
-		if (Piece.capturable(startSq, endSq)) {
-			//check if it's en passant
-			if (
-				startSq.getRank === enPassantStartSqRank &&
-				endSq.getRank === enPassantEndSqRank &&
-				Pawn.compareFiles(startSq.getFile, endSq.getFile) &&
-				move
-			) {
+		//check if it's en passant
+		if (
+			startSq.getRank === enPassantStartSqRank &&
+			endSq.getRank === enPassantEndSqRank &&
+			Pawn.compareFiles(startSq.getFile, endSq.getFile)
+		) {
+			if (!move) return false;
+			if (Piece.capturable(startSq, move.endSq)) {
 				return this.enPassant(move, enPassantStartSqRank);
 			}
+			return false;
+		}
 
+		//check if it's your own piece
+		if (Piece.capturable(startSq, endSq)) {
 			//check if it's a promotion
 			//enpassant is checked before this cause endSq.piece is null on enpassant
-			else if (endSq.getPiece === null) {
+			if (endSq.getPiece === null) {
 				console.log("Pawns can't go diagonally without capturing a piece");
 				return false;
 			}
@@ -186,6 +189,7 @@ export class Pawn extends Piece {
 			) {
 				console.log('Captured a piece with pawn on ' + endSq.getSquareName);
 				return true;
+				// }
 			}
 		}
 		console.log('Error capturing with pawn');
@@ -256,8 +260,7 @@ export class Pawn extends Piece {
 		}
 	}
 
-	static enPassant(move: Move | null, EpStartSqRank: number): boolean {
-		if (!move) return false;
+	static enPassant(move: Move, EpStartSqRank: number): boolean {
 		if (
 			(EpStartSqRank === 5 &&
 				move.startSq.getRank === 7 &&
@@ -267,7 +270,7 @@ export class Pawn extends Piece {
 				move.endSq.getRank === 4)
 		) {
 			console.log('En passant successful');
-			move.endSq.setPiece(null);
+			// move.endSq.setPiece(null);
 			return true;
 		} else {
 			console.log('En passant unsuccessful');

@@ -139,10 +139,10 @@ export default class Chess {
 		}
 		let startSq = this._board.getSquare(startSquare);
 		let endSq = this._board.getSquare(endSquare);
-
+		if (!startSq || !endSq) return;
 		//returns piece if promoting a pawn
 		let isLegalMoveOrPiece: boolean | Piece;
-		if (startSq?.getPiece?.getColor !== this.checkTurn()) {
+		if (startSq.getPiece?.getColor !== this.checkTurn()) {
 			console.log('Wrong players turn');
 			throw new Error();
 		}
@@ -150,36 +150,64 @@ export default class Chess {
 		if (startSq !== null && startSq.getPiece !== null && endSq !== null) {
 			//check if pawn is about to promote
 			if (
-				(startSq?.getRank === 7 &&
-					endSq?.getRank === 8 &&
-					startSq.getPiece?.getName === ChessPieces.PAWN_WHITE) ||
-				(startSq?.getRank === 2 &&
-					endSq?.getRank === 1 &&
-					startSq.getPiece?.getName === ChessPieces.PAWN_BLACK)
+				startSq?.getRank === 7 &&
+				endSq?.getRank === 8 &&
+				startSq.getPiece?.getName.toUpperCase() === ChessPieces.PAWN_BLACK
 			) {
-				let move = this.latestMove();
 				isLegalMoveOrPiece = startSq.getPiece.move(
 					startSq,
 					endSq,
 					this._board,
-					pieceName,
-					move
+					pieceName
 				);
 			} else {
-				isLegalMoveOrPiece = startSq.getPiece.move(startSq, endSq, this._board);
+				let move = this.latestMove();
+				if (move && startSq.getPiece.getFirstLetter().toUpperCase() === 'P')
+					isLegalMoveOrPiece = startSq.getPiece.move(
+						startSq,
+						endSq,
+						this._board,
+						undefined,
+						move
+					);
+				else
+					isLegalMoveOrPiece = startSq.getPiece.move(
+						startSq,
+						endSq,
+						this._board
+					);
 			}
-
+			let move = this.latestMove();
 			//is only an object if promoting a pawn, if not object this runs
+			if (
+				(startSq.getPiece.getFirstLetter() === 'p' &&
+					startSq.getRank === 5 &&
+					endSq.getRank === 6 &&
+					startSq.getFile !== endSq.getFile &&
+					move &&
+					move.endSq.getRank === 5 &&
+					move.startSquarePiece.getFirstLetter() === 'P' &&
+					move.endSq.getFile === endSq.getFile) ||
+				(startSq.getPiece.getFirstLetter() === 'P' &&
+					startSq.getRank === 4 &&
+					endSq.getRank === 3 &&
+					startSq.getFile !== endSq.getFile &&
+					move &&
+					move.endSq.getRank === 4 &&
+					move.startSquarePiece.getFirstLetter() === 'p' &&
+					move.endSq.getFile === endSq.getFile)
+			) {
+				this._board.getSquareById(move.endSq.getSquare.getId)?.setPiece(null);
+			}
 			if (typeof isLegalMoveOrPiece !== 'object' && isLegalMoveOrPiece) {
-				this.addMove(startSq, endSq);
-
+				this.handleMove(startSq, endSq);
 				return;
 			}
 			//promotion logic
 			else if (isLegalMoveOrPiece) {
 				endSq.setPiece(isLegalMoveOrPiece);
 				endSq.setSquareForPiece(endSq);
-				this.addMove(startSq, endSq);
+				this.handleMove(startSq, endSq);
 				startSq.setPiece(null);
 				return;
 			}
@@ -190,13 +218,13 @@ export default class Chess {
 		throw new Error();
 	}
 
-	addMove(startSq: Square, endSq: Square): void {
-		this.handleMove(startSq, endSq);
-		this.handlePieces(startSq, endSq);
+	handleMove(startSq: Square, endSq: Square, enPassantSquare?: Square): void {
+		this.addMove(startSq, endSq);
+		this.handlePieces(startSq, endSq, enPassantSquare);
 		this.incrementMoveNumber();
 	}
 
-	handleMove(startSq: Square, endSq: Square): void {
+	addMove(startSq: Square, endSq: Square): void {
 		if (startSq.getPiece) {
 			this._moves.push({
 				startSq: startSq,
@@ -206,23 +234,24 @@ export default class Chess {
 		}
 	}
 
-	handlePieces(startSq: Square, endSq: Square): void {
-		let startPiece = startSq.getPiece;
-		let endPiece = endSq.getPiece;
-
-		if (endPiece) {
-			console.log('Removing piece from the end square');
+	handlePieces(startSq: Square, endSq: Square, enPassantSquare?: Square): void {
+		let startSqPiece = startSq.getPiece;
+		let endSqPiece = endSq.getPiece;
+		if (enPassantSquare) {
+			this._pieces = this._pieces.filter(
+				(p: PieceSquare) => p.square !== enPassantSquare.getSquareName
+			);
+		}
+		if (endSqPiece) {
 			this._pieces = this._pieces.filter(
 				(p: PieceSquare) => p.square !== endSq.getSquareName
 			);
 		}
-		if (startSq.getPiece) {
-			console.log('Removing piece from the starting square');
+		if (startSqPiece) {
 			this._pieces = this._pieces.filter(
 				(p: PieceSquare) => p.square !== startSq.getSquareName
 			);
-			console.log('Adding piece to the end square');
-			endSq.setPiece(startSq.getPiece);
+			endSq.setPiece(startSqPiece);
 			let endSquareToPiece = endSq;
 			endSq.setSquareForPiece(endSquareToPiece);
 			startSq.setPiece(null);
@@ -369,4 +398,6 @@ export default class Chess {
 	startingPosition(): void {
 		this.fen(Chess.STARTING_POSITION);
 	}
+
+	static enPassantHelper() {}
 }

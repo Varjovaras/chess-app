@@ -44,16 +44,18 @@ export class Piece {
 		this.square = sq;
 	}
 
-	static capturable(startSq: Square, endSq: Square): boolean {
-		if (
-			startSq.getPiece?.color === endSq.getPiece?.color &&
-			endSq.getPiece !== null
-		) {
+	static capturable(startSq: Square, endSq: Square, move?: Move): boolean {
+		let startSqPiece = startSq.getPiece;
+		let endSqPiece = endSq.getPiece;
+		if (move) {
+			endSqPiece = move.endSq.getPiece;
+		}
+		if (startSqPiece?.color === endSqPiece?.color && endSqPiece !== null) {
 			console.log('Cannot capture own piece or capture on an empty square');
 			return false;
 		}
 		console.log(
-			`${startSq.getPiece?.getName} on square ${startSq.getSquareName} is able to capture ${endSq.getPiece?.getName} on ${endSq}`
+			`${startSqPiece?.getName} on square ${startSq.getSquareName} is able to capture ${endSqPiece?.getName} on ${endSq.getSquareName}`
 		);
 		return true;
 	}

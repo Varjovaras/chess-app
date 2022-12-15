@@ -13,11 +13,8 @@ export class Pawn extends Piece {
 	constructor(square: Square, color: Color) {
 		super(square);
 		this.color = color;
-		if (color === Color.white) {
-			this.name = ChessPieces.PAWN_WHITE;
-		} else {
-			this.name = ChessPieces.PAWN_BLACK;
-		}
+		if (color === Color.white) this.name = ChessPieces.PAWN_WHITE;
+		else this.name = ChessPieces.PAWN_BLACK;
 	}
 
 	override move(
@@ -27,11 +24,11 @@ export class Pawn extends Piece {
 		piece?: string,
 		move?: Move
 	): boolean | Piece {
-		if (this.color === Color.white) {
+		if (this.color === Color.white)
 			return Pawn.moveWhite(startSq, endSq, board, piece, move);
-		} else if (this.color === Color.black) {
+		else if (this.color === Color.black)
 			return Pawn.moveBlack(startSq, endSq, board, piece, move);
-		} else {
+		else {
 			console.log('Piece not found');
 			return false;
 		}
@@ -51,12 +48,10 @@ export class Pawn extends Piece {
 			console.log("Pawns can't go backwards!");
 			return false;
 		}
-
 		//Moving diagonally logic
 		else if (startSq.getFile !== endSq.getFile) {
 			return Pawn.capture(startSq, endSq, pieceToPromote, move);
 		}
-
 		//startSquare logic
 		else if (startSq.getRank === 2) {
 			return Pawn.startingSquareMove(startSq, endSq, board);
@@ -145,8 +140,11 @@ export class Pawn extends Piece {
 		pieceToPromote?: string,
 		move?: Move
 	): boolean | Piece {
+		//what is the rank you need to start on to be able to promote
 		let secondToLastRank = startSq.getPiece?.getColor === Color.white ? 7 : 2;
 		let promotionRank = startSq.getPiece?.getColor === Color.white ? 8 : 1;
+
+		//what is the rank you need to start and end on to be able to en passant
 		let enPassantStartSqRank =
 			startSq.getPiece?.getColor === Color.white ? 5 : 4;
 		let enPassantEndSqRank = startSq.getPiece?.getColor === Color.white ? 6 : 3;
@@ -164,6 +162,7 @@ export class Pawn extends Piece {
 			) {
 				return this.enPassant(move, enPassantStartSqRank);
 			}
+
 			//check if it's a promotion
 			//enpassant is checked before this cause endSq.piece is null on enpassant
 			else if (endSq.getPiece === null) {
@@ -198,27 +197,32 @@ export class Pawn extends Piece {
 		endSq: Square,
 		board: Board
 	): boolean {
+		//one square forwards
 		if (
 			Math.abs(startSq.getRank - endSq.getRank) === 1 &&
 			endSq.getPiece === null
 		) {
 			console.log('Moved pawn one square forward');
 			return true;
-		} else if (
+		}
+		//white pawn two squares forwards
+		else if (
 			endSq.getRank - startSq.getRank === 2 &&
 			endSq.getPiece === null &&
 			board.getSquare(`${startSq.getFile}${startSq.getRank + 1}`)?.getPiece ===
 				null
 		) {
-			console.log('Moved and sniped white pawn');
+			console.log('Moved white pawn two squares forward');
 			return true;
-		} else if (
+		}
+		//black pawn two squares forwards
+		else if (
 			startSq.getRank - endSq.getRank === 2 &&
 			endSq.getPiece === null &&
 			board.getSquare(`${startSq.getFile}${startSq.getRank - 1}`)?.getPiece ===
 				null
 		) {
-			console.log('Moved and sniped black pawn');
+			console.log('Moved black pawn two squares forward');
 			return true;
 		} else {
 			console.log('Error moving the pawn from starting square');

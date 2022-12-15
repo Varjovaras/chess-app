@@ -52,7 +52,9 @@ export class Piece {
 			console.log('Cannot capture own piece or capture on an empty square');
 			return false;
 		}
-		console.log('capturable');
+		console.log(
+			`${startSq.getPiece?.getName} on square ${startSq.getSquareName} is able to capture ${endSq.getPiece?.getName} on ${endSq}`
+		);
 		return true;
 	}
 

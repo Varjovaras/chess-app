@@ -1,9 +1,9 @@
-import { Board } from './Board';
-import { Piece } from './Piece';
-import { Square } from './Square';
+import Board from './Board';
+import Piece from './Piece';
+import Square from './Square';
 import { Color, ChessPieces, SingleMove } from './types';
 
-export class Queen extends Piece {
+export default class Queen extends Piece {
 	override readonly color: Color;
 
 	constructor(square: Square, color: Color) {
@@ -18,7 +18,7 @@ export class Queen extends Piece {
 
 	override move(startSq: Square, endSq: Square, board: Board): boolean {
 		if (startSq.getPiece && endSq.getPiece !== null) {
-			if (Piece.capturable(startSq, endSq)) {
+			if (Queen.capturable(startSq, endSq)) {
 				return Queen.queenMoves(startSq, endSq, board);
 			} else {
 				console.log('Capturing with queen failed');

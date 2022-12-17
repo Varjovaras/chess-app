@@ -1,9 +1,9 @@
-import { Board } from './Board';
-import { Piece } from './Piece';
-import { Square } from './Square';
+import Board from './Board';
+import Piece from './Piece';
+import Square from './Square';
 import { Color, ChessPieces, SingleMove } from './types';
 
-export class Bishop extends Piece {
+export default class Bishop extends Piece {
 	override readonly color: Color;
 
 	constructor(square: Square, color: Color) {
@@ -24,7 +24,7 @@ export class Bishop extends Piece {
 
 		//capture logic
 		if (startSq.getPiece && endSq.getPiece !== null) {
-			if (Piece.capturable(startSq, endSq)) {
+			if (Bishop.capturable(startSq, endSq)) {
 				return Piece.isDiagonal(startSq, endSq, board);
 			} else {
 				console.log('Capturing with bishop failed');

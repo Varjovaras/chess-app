@@ -1,9 +1,9 @@
-import { Board } from './Board';
-import { Piece } from './Piece';
-import { Square } from './Square';
+import Board from './Board';
+import Piece from './Piece';
+import Square from './Square';
 import { Color, ChessPieces, SingleMove } from './types';
 
-export class Knight extends Piece {
+export default class Knight extends Piece {
 	override readonly color: Color;
 
 	constructor(square: Square, color: Color) {

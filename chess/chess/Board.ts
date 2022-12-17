@@ -1,6 +1,8 @@
-import { Square } from './Square';
+import King from './King';
+import Square from './Square';
+import { Color } from './types';
 
-export class Board {
+export default class Board {
 	private _board: Square[];
 	static files: string[] = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
@@ -32,6 +34,10 @@ export class Board {
 			if (sq) return sq.getSquareName;
 		}
 		throw new Error('No square found by id or name');
+	}
+
+	findKing(color: Color) {
+		return this._board.find((sq) => sq.getPiece instanceof King);
 	}
 
 	static findFileIndex(s: string): number {

@@ -1,13 +1,13 @@
-import { Bishop } from './Bishop';
-import { Board } from './Board';
-import { Knight } from './Knight';
-import { Piece } from './Piece';
-import { Queen } from './Queen';
-import { Rook } from './Rook';
-import { Square } from './Square';
+import Bishop from './Bishop';
+import Board from './Board';
+import Knight from './Knight';
+import Piece from './Piece';
+import Queen from './Queen';
+import Rook from './Rook';
+import Square from './Square';
 import { Color, ChessPieces, SingleMove, Move } from './types';
 
-export class Pawn extends Piece {
+export default class Pawn extends Piece {
 	override readonly color: Color;
 
 	constructor(square: Square, color: Color) {
@@ -158,14 +158,14 @@ export class Pawn extends Piece {
 			Pawn.compareFiles(startSq.getFile, endSq.getFile)
 		) {
 			if (!move) return false;
-			if (Piece.capturable(startSq, move.endSq)) {
+			if (Pawn.capturable(startSq, move.endSq)) {
 				return this.enPassant(move, enPassantStartSqRank);
 			}
 			return false;
 		}
 
 		//check if it's your own piece
-		if (Piece.capturable(startSq, endSq)) {
+		if (Pawn.capturable(startSq, endSq)) {
 			//check if it's a promotion
 			//enpassant is checked before this cause endSq.piece is null on enpassant
 			if (endSq.getPiece === null) {

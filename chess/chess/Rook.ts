@@ -1,14 +1,16 @@
-import { Board } from './Board';
-import { Piece } from './Piece';
-import { Square } from './Square';
+import Board from './Board';
+import Piece from './Piece';
+import Square from './Square';
 import { Color, ChessPieces, SingleMove } from './types';
 
-export class Rook extends Piece {
+export default class Rook extends Piece {
 	override readonly color: Color;
+	hasMoved: boolean;
 
 	constructor(square: Square, color: Color) {
 		super(square);
 		this.color = color;
+		this.hasMoved = false;
 		if (color === Color.white) {
 			this.name = ChessPieces.ROOK_WHITE;
 		} else {
@@ -21,7 +23,7 @@ export class Rook extends Piece {
 
 		//capture logic
 		if (startSq.getPiece && endSq.getPiece !== null) {
-			if (Piece.capturable(startSq, endSq)) {
+			if (Rook.capturable(startSq, endSq)) {
 				return isHorizontal
 					? Piece.horizontalMove(startSq, endSq, board)
 					: Piece.verticalMove(startSq, endSq, board);

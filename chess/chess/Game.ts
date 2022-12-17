@@ -1,5 +1,5 @@
 import readline from 'readline';
-import Chess from './Chess';
+import Chess from '../Chess';
 
 export class Game {
 	chess: Chess;

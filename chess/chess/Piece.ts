@@ -1,8 +1,8 @@
-import { Board } from './Board';
-import { Square } from './Square';
+import Board from './Board';
+import Square from './Square';
 import { Color, Move, SingleMove } from './types';
 
-export class Piece {
+export default class Piece {
 	protected name: string;
 	protected color: Color | undefined;
 	protected square?: Square;
@@ -35,7 +35,7 @@ export class Piece {
 		return false;
 	}
 
-	getFirstLetter() {
+	get getFirstLetter() {
 		return this.name[0];
 	}
 

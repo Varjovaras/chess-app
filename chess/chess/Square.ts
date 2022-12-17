@@ -1,7 +1,7 @@
-import { Piece } from './Piece';
+import Piece from './Piece';
 import { Color } from './types';
 
-export class Square {
+export default class Square {
 	private _file: string;
 	private _rank: number;
 	private _squareName: string;

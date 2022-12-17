@@ -1,5 +1,5 @@
 console.time('c');
-import Chess from './chess/Chess';
+import Chess from './Chess';
 import { King } from './chess/King';
 import { Knight } from './chess/Knight';
 import { Pawn } from './chess/Pawn';
@@ -8,40 +8,40 @@ import { Rook } from './chess/Rook';
 import { Color } from './chess/types';
 
 const chess = new Chess();
-chess.putPieceOnBoard(
-	'e2',
-	new Pawn(chess.getBoard.getSquare('e2')!, Color.white)
-);
-chess.putPieceOnBoard(
-	'd7',
-	new Pawn(chess.getBoard.getSquare('d7')!, Color.black)
-);
-console.log(chess.printBoardWhite());
-chess.movePiece('e2', 'e4');
-chess.movePiece('d7', 'd5');
-chess.movePiece('e4', 'd5');
+// chess.putPieceOnBoard(
+// 	'e2',
+// 	new Pawn(chess.getBoard.getSquare('e2')!, Color.white)
+// );
+// chess.putPieceOnBoard(
+// 	'd7',
+// 	new Pawn(chess.getBoard.getSquare('d7')!, Color.black)
+// );
+// console.log(chess.printBoardWhite());
+// chess.movePiece('e2', 'e4');
+// chess.movePiece('d7', 'd5');
+// chess.movePiece('e4', 'd5');
 
-console.log(chess.getPieces);
+// console.log(chess.getPieces);
 
-chess.fen(Chess.STARTING_POSITION);
-console.log(chess.printBoardWhite());
+// chess.fen(Chess.STARTING_POSITION);
+// console.log(chess.printBoardWhite());
 
-// enpassant test
-chess.fen(Chess.STARTING_POSITION);
-chess.movePiece('e2', 'e4');
-chess.movePiece('d7', 'd5');
-chess.movePiece('e4', 'd5');
-chess.movePiece('g8', 'f6');
-chess.movePiece('g1', 'e2');
-chess.movePiece('c7', 'c5');
-chess.movePiece('d5', 'c6');
-chess.movePiece('g7', 'g5');
-chess.movePiece('c6', 'c7');
-chess.movePiece('g5', 'g4');
-chess.movePiece('h2', 'h4');
-chess.movePiece('g4', 'h3');
-console.log(chess.getPieces);
-console.log(chess.printBoardWhite());
+// // enpassant test
+// chess.fen(Chess.STARTING_POSITION);
+// chess.movePiece('e2', 'e4');
+// chess.movePiece('d7', 'd5');
+// chess.movePiece('e4', 'd5');
+// chess.movePiece('g8', 'f6');
+// chess.movePiece('g1', 'e2');
+// chess.movePiece('c7', 'c5');
+// chess.movePiece('d5', 'c6');
+// chess.movePiece('g7', 'g5');
+// chess.movePiece('c6', 'c7');
+// chess.movePiece('g5', 'g4');
+// chess.movePiece('h2', 'h4');
+// chess.movePiece('g4', 'h3');
+// console.log(chess.getPieces);
+// console.log(chess.printBoardWhite());
 
 // console.log(chess.getMoves);
 // // // knights test
@@ -149,13 +149,14 @@ console.log(chess.printBoardWhite());
 // chess.emptyBoard();
 // const knight = new Knight(chess.getBoard.getSquare('a1')!, Color.black);
 // chess.putPieceOnBoard('a1', knight);
-// const queen = new Queen(chess.getBoard.getSquare('a6')!, Color.black);
+// const queen = new Queen(chess.getBoard.getSquare('a4')!, Color.black);
+// chess.putPieceOnBoard('a4', queen);
 
 // console.log(queen.possibleMoves(chess.getBoard));
-// chess.emptyBoard();
 // const king = new King(chess.getBoard.getSquare('c2')!, Color.white);
 // chess.putPieceOnBoard('c2', king);
-// king.whiteCheck(chess.getBoard);
+// console.log(chess.printBoardBlack());
+// console.log(King.whiteCheck(king.getSquare!, chess.getBoard));
 // console.log(chess.getBoard.getSquare('a6'));
 // console.log(chess.getBoard.getSquareById(21));
 // console.log(chess.getBoard.getSquareById(28));
@@ -171,6 +172,8 @@ console.log(chess.printBoardWhite());
 // // let game = new Game(chess);
 // // game.playTerminal();
 console.timeEnd('c');
+
+// chess.getBoard.findKing(Color.black);
 
 // //possible moves
 // //checking

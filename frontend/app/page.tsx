@@ -1,4 +1,4 @@
-import Chess from '../chess/Chess';
+import Chess from '/Users/kristjan/Documents/Github/chess/chess/Chess';
 
 const chess = new Chess();
 chess.startingPosition();

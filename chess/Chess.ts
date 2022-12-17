@@ -164,7 +164,7 @@ export default class Chess {
 				);
 			} else {
 				let move = this.latestMove();
-				if (move && startSq.getPiece.getFirstLetter.toUpperCase() === 'P')
+				if (move && startSq.getPiece.getFirstLetter().toUpperCase() === 'P')
 					isLegalMoveOrPiece = startSq.getPiece.move(
 						startSq,
 						endSq,
@@ -281,11 +281,11 @@ export default class Chess {
 		for (const move of this.getMoves) {
 			let startSqPiece =
 				move.startSq.getPiece &&
-				move.startSq.getPiece.getFirstLetter.toLowerCase() !== 'p'
+				move.startSq.getPiece.getFirstLetter().toLowerCase() !== 'p'
 					? move.startSq.getPiece.getFirstLetter
 					: '';
 
-			let piece = move.endSq.getPiece ? move.endSq.getPiece.getFirstLetter : '';
+			let piece = move.endSq.getPiece ? move.endSq.getPiece.getFirstLetter() : '';
 
 			s =
 				s +
@@ -387,21 +387,21 @@ export default class Chess {
 
 	static enPassantHelper(startSq: Square, endSq: Square, move?: Move): boolean {
 		if (
-			(startSq.getPiece?.getFirstLetter === 'p' &&
+			(startSq.getPiece?.getFirstLetter() === 'p' &&
 				startSq.getRank === 5 &&
 				endSq.getRank === 6 &&
 				startSq.getFile !== endSq.getFile &&
 				move &&
 				move.endSq.getRank === 5 &&
-				move.startSquarePiece.getFirstLetter === 'P' &&
+				move.startSquarePiece.getFirstLetter() === 'P' &&
 				move.startSq.getFile === endSq.getFile) ||
-			(startSq.getPiece?.getFirstLetter === 'P' &&
+			(startSq.getPiece?.getFirstLetter() === 'P' &&
 				startSq.getRank === 4 &&
 				endSq.getRank === 3 &&
 				startSq.getFile !== endSq.getFile &&
 				move &&
 				move.endSq.getRank === 4 &&
-				move.startSquarePiece.getFirstLetter === 'p' &&
+				move.startSquarePiece.getFirstLetter() === 'p' &&
 				move.endSq.getFile === endSq.getFile)
 		) {
 			return true;

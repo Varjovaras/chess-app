@@ -35,7 +35,7 @@ export default class Piece {
 		return false;
 	}
 
-	get getFirstLetter() {
+	 getFirstLetter() {
 		return this.name[0];
 	}
 

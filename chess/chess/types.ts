@@ -1,5 +1,5 @@
-import { Piece } from './Piece';
-import { Square } from './Square';
+import  Piece from './Piece';
+import  Square  from './Square';
 
 export enum Color {
 	black = 'BLACK',

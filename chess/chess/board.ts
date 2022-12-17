@@ -1,4 +1,5 @@
 import { Square } from './Square';
+import { Color } from './types';
 
 export class Board {
 	private _board: Square[];
@@ -32,6 +33,15 @@ export class Board {
 			if (sq) return sq.getSquareName;
 		}
 		throw new Error('No square found by id or name');
+	}
+
+	getWhiteKing() {
+		let kingSquare = this._board.find((sq) => sq.getPiece?.getName === 'king');
+		return kingSquare;
+	}
+
+	getBlackKing() {
+		return this._board.find((sq) => sq.getPiece?.getName === 'KING')?.getPiece;
 	}
 
 	static findFileIndex(s: string): number {

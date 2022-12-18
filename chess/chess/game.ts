@@ -19,7 +19,7 @@ export class Game {
 	}
 
 	terminalMoves(): Promise<void> {
-		console.log(this.chess.printBoardWhite());
+		console.log(this.chess.getBoard.printBoardWhite())
 		const rl = readline.createInterface(process.stdin, process.stdout);
 		rl.question(`Input move for ${this.chess.whoseTurn()}:\n`, (input) => {
 			if (input === '') {

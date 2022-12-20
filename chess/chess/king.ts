@@ -1,5 +1,4 @@
 import { Board } from './Board';
-import { Knight } from './Knight';
 import { Piece } from './Piece';
 import { Square } from './Square';
 import { Color, ChessPieces } from './types';
@@ -46,6 +45,4 @@ export class King extends Piece {
 			return Piece.horizontalMove(startSq, endSq, board);
 		} else return false;
 	}
-
-
 }

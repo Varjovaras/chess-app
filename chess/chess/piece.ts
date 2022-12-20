@@ -45,11 +45,15 @@ export class Piece {
 	}
 
 	static capturable(startSq: Square, endSq: Square, move?: Move): boolean {
+		console.log('capturable ??' + endSq.getSquareName);
 		let startSqPiece = startSq.getPiece;
 		let endSqPiece = endSq.getPiece;
+
+		//for en passant
 		if (move) {
 			endSqPiece = move.endSq.getPiece;
 		}
+
 		if (startSqPiece?.color === endSqPiece?.color && endSqPiece !== null) {
 			console.log('Cannot capture own piece or capture on an empty square');
 			return false;

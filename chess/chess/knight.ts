@@ -85,6 +85,4 @@ export class Knight extends Piece {
 		}
 		throw new Error('Error making possible knight moves');
 	}
-
-
 }

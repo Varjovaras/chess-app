@@ -148,14 +148,20 @@ export class Pawn extends Piece {
 		let enPassantStartSqRank =
 			startSq.getPiece?.getColor === Color.white ? 5 : 4;
 		let enPassantEndSqRank = startSq.getPiece?.getColor === Color.white ? 6 : 3;
+
 		let color: Color | null =
 			startSq.getPiece?.getColor === Color.white ? Color.black : null;
+		//is pawn capturing or not
+		let diagonalMove: boolean = Pawn.compareFiles(
+			startSq.getFile,
+			endSq.getFile
+		);
 
 		//check if it's en passant
 		if (
 			startSq.getRank === enPassantStartSqRank &&
 			endSq.getRank === enPassantEndSqRank &&
-			Pawn.compareFiles(startSq.getFile, endSq.getFile)
+			diagonalMove
 		) {
 			if (!move) return false;
 			if (Piece.capturable(startSq, move.endSq)) {
@@ -176,7 +182,7 @@ export class Pawn extends Piece {
 			else if (
 				startSq.getRank === secondToLastRank &&
 				endSq.getRank === promotionRank &&
-				Pawn.compareFiles(startSq.getFile, endSq.getFile) &&
+				diagonalMove &&
 				pieceToPromote &&
 				color
 			) {
@@ -185,7 +191,7 @@ export class Pawn extends Piece {
 			//normal capture logic
 			else if (
 				Math.abs(startSq.getRank - endSq.getRank) === 1 &&
-				Pawn.compareFiles(startSq.getFile, endSq.getFile)
+				diagonalMove
 			) {
 				console.log('Captured a piece with pawn on ' + endSq.getSquareName);
 				return true;

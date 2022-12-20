@@ -19,7 +19,7 @@ export class Game {
 	}
 
 	terminalMoves(): Promise<void> {
-		console.log(this.chess.getBoard.printBoardWhite())
+		console.log(this.chess.getBoard.printBoardWhite());
 		const rl = readline.createInterface(process.stdin, process.stdout);
 		rl.question(`Input move for ${this.chess.whoseTurn()}:\n`, (input) => {
 			if (input === '') {
@@ -31,7 +31,7 @@ export class Game {
 			console.log(`Trying ${input}`);
 			let split = input.toLowerCase().split(' ');
 			try {
-				this.chess.movePiece(split[0], split[1]);
+				this.chess.move(split[0], split[1]);
 				rl.close();
 				return new Promise((resolve) => rl.on('close', resolve));
 			} catch {

@@ -45,7 +45,7 @@ export class Piece {
 	}
 
 	static capturable(startSq: Square, endSq: Square, move?: Move): boolean {
-		console.log('capturable ??' + endSq.getSquareName);
+		console.log('capturable' + endSq.getSquareName);
 		let startSqPiece = startSq.getPiece;
 		let endSqPiece = endSq.getPiece;
 

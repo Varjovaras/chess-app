@@ -53,6 +53,26 @@ export class Square {
 		return this._piece;
 	}
 
+	setFile(file: string) {
+		this._file = file;
+	}
+
+	setRank(rank: number) {
+		this._rank = rank;
+	}
+
+	setSquareName(squareName: string) {
+		this._squareName = squareName;
+	}
+
+	setColor(color: Color) {
+		this._color = color;
+	}
+
+	setId(id: number) {
+		this._id = id;
+	}
+
 	setPiece(piece: Piece | null) {
 		this._piece = piece;
 	}

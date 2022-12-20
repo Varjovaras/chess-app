@@ -48,6 +48,10 @@ export class Board {
 		return this._board;
 	}
 
+	setBoard(board: Square[]) {
+		this._board = board;
+	}
+
 	getSquare(name: string): Square | null {
 		let sq = this._board.find((s: Square) => s.getSquareName === name);
 		return sq ? sq.getSquare : null;
@@ -71,7 +75,7 @@ export class Board {
 	}
 
 	getWhiteKing() {
-		return this._board.find((sq) => sq.getPiece?.getName === 'KING')?.getPiece;
+		return this._board.find((sq) => sq.getPiece?.getName === 'king')?.getPiece;
 	}
 
 	getBlackKing() {
@@ -152,8 +156,12 @@ export class Board {
 		// downwards
 		for (let i = 1; i < 8; i++) {
 			let testSq = this.getSquareById(sqId - 8 * i);
+
 			if (!testSq) break;
 			let testSqPiece = testSq.getPiece;
+			if (!testSqPiece && testSq.getRank === 1) {
+				break;
+			}
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
 			if (
@@ -178,6 +186,7 @@ export class Board {
 			let testSq = this.getSquareById(sqId + 9 * i);
 			if (!testSq) break;
 			let testSqPiece = testSq.getPiece;
+			if (!testSqPiece && testSq.getFile === 'h') break;
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
 			if (
@@ -188,11 +197,10 @@ export class Board {
 					'King is in check from square ' +
 						testSq.getSquareName +
 						' by ' +
-						testSqPiece
+						testSqPieceName
 				);
 				return true;
 			}
-			if (testSq.getFile === 'h') break;
 			if (testSqPiece) {
 				break;
 			}
@@ -203,6 +211,7 @@ export class Board {
 			let testSq = this.getSquareById(sqId + 7 * i);
 			if (!testSq) break;
 			let testSqPiece = testSq.getPiece;
+			if (!testSqPiece && testSq.getFile === 'a') break;
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
 			if (
@@ -213,11 +222,10 @@ export class Board {
 					'King is in check from square ' +
 						testSq.getSquareName +
 						' by ' +
-						testSqPiece
+						testSqPieceName
 				);
 				return true;
 			}
-			if (testSq.getFile === 'a') break;
 			if (testSqPiece) {
 				break;
 			}
@@ -228,6 +236,7 @@ export class Board {
 			let testSq = this.getSquareById(sqId - 9 * i);
 			if (!testSq) break;
 			let testSqPiece = testSq.getPiece;
+			if (testSq.getFile === 'a' || testSq.getId < 8) break;
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
 			if (
@@ -238,13 +247,10 @@ export class Board {
 					'King is in check from square ' +
 						testSq.getSquareName +
 						' by ' +
-						testSqPiece
+						testSqPieceName
 				);
 
 				return true;
-			}
-			if (testSq.getId < 8 || testSq.getFile === 'a') {
-				break;
 			}
 			if (testSqPiece) {
 				break;
@@ -256,6 +262,9 @@ export class Board {
 			let testSq = this.getSquareById(sqId - 7 * i);
 			if (!testSq) break;
 			let testSqPiece = testSq.getPiece;
+			if ((!testSqPiece && testSq.getId < 8) || testSq.getFile === 'h') {
+				break;
+			}
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
 			if (
@@ -266,12 +275,9 @@ export class Board {
 					'King is in check from square ' +
 						testSq.getSquareName +
 						' by ' +
-						testSqPiece
+						testSqPieceName
 				);
 				return true;
-			}
-			if (testSq.getId < 8) {
-				break;
 			}
 			if (testSqPiece) {
 				break;
@@ -355,6 +361,7 @@ export class Board {
 			let testSq = this.getSquareById(sqId + 8 * i);
 			if (!testSq) break;
 			let testSqPiece = testSq.getPiece;
+			if (!testSqPiece && testSq.getRank === 8) break;
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
 			if (
@@ -378,6 +385,7 @@ export class Board {
 			let testSq = this.getSquareById(sqId - 8 * i);
 			if (!testSq) break;
 			let testSqPiece = testSq.getPiece;
+			if (!testSqPiece && testSq.getRank === 1) break;
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
 			if (
@@ -402,6 +410,7 @@ export class Board {
 			let testSq = this.getSquareById(sqId + 9 * i);
 			if (!testSq) break;
 			let testSqPiece = testSq.getPiece;
+			if (!testSqPiece && testSq.getFile === 'h') break;
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
 			if (
@@ -412,11 +421,10 @@ export class Board {
 					'King is in check from square ' +
 						testSq.getSquareName +
 						' by ' +
-						testSqPiece
+						testSqPieceName
 				);
 				return true;
 			}
-			if (testSq.getFile === 'h') break;
 			if (testSqPiece) {
 				break;
 			}
@@ -427,6 +435,8 @@ export class Board {
 			let testSq = this.getSquareById(sqId + 7 * i);
 			if (!testSq) break;
 			let testSqPiece = testSq.getPiece;
+			if (!testSqPiece && testSq.getFile === 'a') break;
+
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
 			if (
@@ -437,11 +447,10 @@ export class Board {
 					'King is in check from square ' +
 						testSq.getSquareName +
 						' by ' +
-						testSqPiece
+						testSqPieceName
 				);
 				return true;
 			}
-			if (testSq.getFile === 'a') break;
 			if (testSqPiece) {
 				break;
 			}
@@ -452,6 +461,7 @@ export class Board {
 			let testSq = this.getSquareById(sqId - 9 * i);
 			if (!testSq) break;
 			let testSqPiece = testSq.getPiece;
+			if ((!testSqPiece && testSq.getFile === 'a') || testSq.getId < 8) break;
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
 			if (
@@ -462,14 +472,12 @@ export class Board {
 					'King is in check from square ' +
 						testSq.getSquareName +
 						' by ' +
-						testSqPiece
+						testSqPieceName
 				);
 
 				return true;
 			}
-			if (testSq.getId < 8 || testSq.getFile === 'a') {
-				break;
-			}
+
 			if (testSqPiece) {
 				break;
 			}
@@ -480,6 +488,9 @@ export class Board {
 			let testSq = this.getSquareById(sqId - 7 * i);
 			if (!testSq) break;
 			let testSqPiece = testSq.getPiece;
+			if ((!testSqPiece && testSq.getId < 8) || testSq.getFile === 'h') {
+				break;
+			}
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
 			if (
@@ -490,13 +501,11 @@ export class Board {
 					'King is in check from square ' +
 						testSq.getSquareName +
 						' by ' +
-						testSqPiece
+						testSqPieceName
 				);
 				return true;
 			}
-			if (testSq.getId < 8) {
-				break;
-			}
+
 			if (testSqPiece) {
 				break;
 			}

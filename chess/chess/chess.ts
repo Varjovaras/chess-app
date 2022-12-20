@@ -22,7 +22,6 @@ export default class Chess {
 
 	constructor(moves?: Move[], pieces?: PieceSquare[]) {
 		this._moves = moves ? moves : [];
-
 		this._pieces = pieces ? pieces : [];
 		this._turnNumber = 0;
 		this._board = new Board();
@@ -67,6 +66,69 @@ export default class Chess {
 		return n;
 	}
 
+	whiteCheck(startSq: Square, endSq: Square, pieceName?: string) {
+		console.log('Checking if move removes white king from check');
+		let tempBoard: Square[] = [];
+		for (let i = 0; i < 64; i++) {
+			let sq = this._board.getSquareById(i);
+			if (!sq) {
+				throw new Error('No 64 squares');
+			}
+			let tempSq = new Square(
+				sq.getFile,
+				sq.getRank,
+				sq.getSquareName,
+				sq.getColor,
+				sq.getId,
+				sq.getPiece
+			);
+			tempBoard.push(tempSq);
+		}
+
+		let newBoard = new Board();
+		newBoard.setBoard(tempBoard);
+		let startSqTempBoard = newBoard.getSquare(startSq.getSquareName);
+		let endSqTempBoard = newBoard.getSquare(endSq.getSquareName);
+		if (!startSqTempBoard || !endSqTempBoard) return;
+		this.fakeMovePiece(startSqTempBoard, endSqTempBoard, newBoard, pieceName);
+		if (newBoard.whiteCheck()) return;
+		console.log('White king not in check anymore. Move legal');
+
+		this.movePiece(startSq, endSq, pieceName);
+	}
+
+	blackCheck(startSq: Square, endSq: Square, pieceName?: string) {
+		console.log('Checking if move removes black king from check');
+		let tempBoard: Square[] = [];
+		for (let i = 0; i < 64; i++) {
+			let sq = this._board.getSquareById(i);
+			if (!sq) {
+				throw new Error('No 64 squares');
+			}
+			let tempSq = new Square(
+				sq.getFile,
+				sq.getRank,
+				sq.getSquareName,
+				sq.getColor,
+				sq.getId,
+				sq.getPiece
+			);
+			tempBoard.push(tempSq);
+		}
+
+		let newBoard = new Board();
+		newBoard.setBoard(tempBoard);
+		let startSqTempBoard = newBoard.getSquare(startSq.getSquareName);
+		let endSqTempBoard = newBoard.getSquare(endSq.getSquareName);
+		if (!startSqTempBoard || !endSqTempBoard) return;
+		this.fakeMovePiece(startSqTempBoard, endSqTempBoard, newBoard, pieceName);
+		if (newBoard.whiteCheck()) return;
+		console.log('White king not in check anymore. Move legal');
+		// console.log(startSq);
+		// console.log(endSq);
+		this.movePiece(startSq, endSq, pieceName);
+	}
+
 	move(startSquare: string, endSquare: string, pieceName?: string): void {
 		if (startSquare === endSquare) {
 			console.log('Same starting and ending square');
@@ -75,20 +137,20 @@ export default class Chess {
 		let startSq = this._board.getSquare(startSquare);
 		let endSq = this._board.getSquare(endSquare);
 		if (!startSq || !endSq) return;
-		let startSqColor = startSq.getColor;
-		if (startSqColor === Color.white) {
+		let startSqPieceColor = startSq.getPiece?.getColor;
+
+		if (startSqPieceColor === Color.white) {
 			if (!this.getBoard.whiteCheck()) {
 				console.log('White king not in check');
-				if (pieceName) this.movePiece(startSq, endSq, pieceName);
-				else this.movePiece(startSq, endSq);
-			}
-		} else if (startSqColor === Color.black) {
+				this.movePiece(startSq, endSq, pieceName);
+			} else this.whiteCheck(startSq, endSq, pieceName);
+		}
+		if (startSqPieceColor === Color.black) {
 			if (!this.getBoard.blackCheck()) {
 				console.log('black king not in check');
-				if (pieceName) this.movePiece(startSq, endSq, pieceName);
-				else this.movePiece(startSq, endSq);
-			}
-		} else throw new Error('No starting square color');
+				this.movePiece(startSq, endSq, pieceName);
+			} else this.blackCheck(startSq, endSq);
+		}
 	}
 
 	movePiece(startSq: Square, endSq: Square, pieceName?: string): void {
@@ -96,7 +158,8 @@ export default class Chess {
 		let isLegalMoveOrPiece: boolean | Piece;
 		if (startSq.getPiece?.getColor !== this.checkTurn()) {
 			console.log('Wrong players turn');
-			throw new Error();
+			return;
+			// throw new Error();
 		}
 
 		if (startSq.getPiece !== null && endSq !== null) {
@@ -156,9 +219,9 @@ export default class Chess {
 		throw new Error();
 	}
 
-	handleMove(startSq: Square, endSq: Square, enPassantSquare?: Square): void {
+	handleMove(startSq: Square, endSq: Square): void {
 		this.addMove(startSq, endSq);
-		this.handlePieces(startSq, endSq, enPassantSquare);
+		this.handlePieces(startSq, endSq);
 		this.incrementMoveNumber();
 	}
 
@@ -201,6 +264,101 @@ export default class Chess {
 				piece: endSq.getPiece!,
 			});
 		}
+	}
+
+	handleTempPieces(
+		startSq: Square,
+		endSq: Square,
+		enPassantSquare?: Square
+	): void {
+		let startSqPiece = startSq.getPiece;
+		let endSqPiece = endSq.getPiece;
+		// if (enPassantSquare) {
+		// 	this._pieces = this._pieces.filter(
+		// 		(p: PieceSquare) => p.square !== enPassantSquare.getSquareName
+		// 	);
+		// }
+		// if (endSqPiece) {
+		// 	this._pieces = this._pieces.filter(
+		// 		(p: PieceSquare) => p.square !== endSq.getSquareName
+		// 	);
+		// }
+		// if (startSqPiece) {§
+		// 	this._pieces = this._pieces.filter(
+		// 		(p: PieceSquare) => p.square !== startSq.getSquareName
+		// 	);
+		endSq.setPiece(startSqPiece!);
+		let endSquareToPiece = endSq;
+		endSq.setSquareForPiece(endSquareToPiece);
+		startSq.setPiece(null);
+	}
+
+	fakeMovePiece(
+		startSq: Square,
+		endSq: Square,
+		board: Board,
+		pieceName?: string
+	): void {
+		//returns piece if promoting a pawn
+		let isLegalMoveOrPiece: boolean | Piece;
+		if (startSq.getPiece?.getColor !== this.checkTurn()) {
+			console.log('Wrong players turn');
+			throw new Error();
+		}
+
+		if (startSq.getPiece !== null && endSq !== null) {
+			//check if pawn is about to promote
+			if (
+				startSq?.getRank === 7 &&
+				endSq?.getRank === 8 &&
+				startSq.getPiece?.getName.toUpperCase() === ChessPieces.PAWN_BLACK
+			) {
+				isLegalMoveOrPiece = startSq.getPiece.move(
+					startSq,
+					endSq,
+					board,
+					pieceName
+				);
+			} else {
+				let move = this.latestMove();
+				if (move && startSq.getPiece.getFirstLetter().toUpperCase() === 'P')
+					isLegalMoveOrPiece = startSq.getPiece.move(
+						startSq,
+						endSq,
+						board,
+						undefined,
+						move
+					);
+				else isLegalMoveOrPiece = startSq.getPiece.move(startSq, endSq, board);
+			}
+			let move = this.latestMove();
+			//is only an object if promoting a pawn, if not object this runs
+			if (move && enPassantHelper(startSq, endSq, move)) {
+				board.getSquareById(move.endSq.getSquare.getId)?.setPiece(null);
+				// this._pieces = this._pieces.filter(
+				// 	(p: PieceSquare) => p.square !== move?.endSq.getSquareName
+				// );
+			}
+
+			//
+			if (typeof isLegalMoveOrPiece !== 'object' && isLegalMoveOrPiece) {
+				// this.handleMove(startSq, endSq);
+				this.handleTempPieces(startSq, endSq);
+				return;
+			}
+			//promotion logic
+			else if (isLegalMoveOrPiece) {
+				endSq.setPiece(isLegalMoveOrPiece);
+				endSq.setSquareForPiece(endSq);
+				this.handleTempPieces(startSq, endSq);
+				startSq.setPiece(null);
+				return;
+			}
+		}
+		console.log(
+			'Starting square is invalid, no piece to be found or ending square is invalid, inputted invalid move or a piece is on the way'
+		);
+		throw new Error();
 	}
 
 	//initialization or promoting

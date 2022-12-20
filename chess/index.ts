@@ -162,14 +162,28 @@ console.log(chess.getBoard.getSquareById(28));
 chess.emptyBoard();
 console.log(chess.getBoard.printBoardWhite());
 
+// chess.fen(Chess.STARTING_POSITION);
+// console.log(chess.getBoard.getWhiteKing());
+// console.log(chess.getBoard.getBlackKing());
 chess.fen(Chess.STARTING_POSITION);
-console.log(chess.getBoard.getWhiteKing());
-console.log(chess.getBoard.getBlackKing());
 
-// // let board = chess.getBoard;
-// // for (let i = 0; i < 10000; i++) {
-// // 	console.log(board);
-// // }
+// console.log(chess.getBoard.getSquare('e2')?.getId);
+// console.log(chess.getBoard.getSquare('f3')?.getId);
+
+chess.move('f2', 'f3');
+chess.move('e7', 'e5');
+chess.move('b2', 'b4');
+chess.move('d8', 'h4');
+chess.move('a2', 'a4');
+chess.move('g7', 'g6');
+chess.move('g2', 'g3');
+console.log(chess.getBoard.printBoardWhite());
+
+chess.emptyBoard();
+let board = chess.getBoard;
+for (let i = 0; i < 10000; i++) {
+	console.log(board);
+}
 
 // // let game = new Game(chess);
 // // game.playTerminal();

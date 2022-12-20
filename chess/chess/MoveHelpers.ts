@@ -25,11 +25,6 @@ export const enPassantHelper = (
 	endSq: Square,
 	move?: Move
 ): boolean => {
-	console.log('first');
-	console.log(startSq);
-	console.log(endSq);
-	console.log(move);
-	console.log('!!');
 	return !!(
 		(startSq.getPiece?.getFirstLetter() === 'p' &&
 			startSq.getRank === 5 &&

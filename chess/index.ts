@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 console.time('c');
-import Chess from './chess/Chess';
+import Chess from './Chess';
 import { King } from './chess/King';
 import { Knight } from './chess/Knight';
 import { Pawn } from './chess/Pawn';
@@ -180,10 +181,7 @@ chess.move('g2', 'g3');
 console.log(chess.getBoard.printBoardWhite());
 
 chess.emptyBoard();
-let board = chess.getBoard;
-for (let i = 0; i < 10000; i++) {
-	console.log(board);
-}
+// let board = chess.getBoard;
 
 // // let game = new Game(chess);
 // // game.playTerminal();

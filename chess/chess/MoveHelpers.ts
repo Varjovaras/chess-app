@@ -3,16 +3,16 @@ import { Board } from './Board';
 import { Move } from './types';
 
 export const knightMoveHelper = (sq: Square, board: Board): number[] => {
-	let endSquares: number[] = [];
-	let files = [2, 2, 1, 1, -1, -2, -2, -1];
-	let ranks = [1, -1, 2, -2, -2, -1, 1, 2];
+	const endSquares: number[] = [];
+	const files = [2, 2, 1, 1, -1, -2, -2, -1];
+	const ranks = [1, -1, 2, -2, -2, -1, 1, 2];
 	if (!sq) return [];
-	let file = sq.getFile;
-	let rank = sq.getRank;
+	const file = sq.getFile;
+	const rank = sq.getRank;
 	for (let i = 0; i < 8; i++) {
-		let nextFile = String.fromCharCode(file.charCodeAt(0) + files[i]);
-		let nextRank = rank + ranks[i];
-		let sq = board.getSquare(`${nextFile}${nextRank}`);
+		const nextFile = String.fromCharCode(file.charCodeAt(0) + files[i]);
+		const nextRank = rank + ranks[i];
+		const sq = board.getSquare(`${nextFile}${nextRank}`);
 		if (sq && sq.getSquareName) {
 			endSquares.push(sq.getSquare.getId);
 		}

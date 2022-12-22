@@ -5,6 +5,9 @@ import { Color, ChessPieces, SingleMove } from './types';
 
 export class Knight extends Piece {
 	override readonly color: Color;
+	//files[i] and ranks[i] counts for a single possible knight move
+	static files = [2, 2, 1, 1, -1, -2, -2, -1];
+	static ranks = [1, -1, 2, -2, -2, -1, 1, 2];
 
 	constructor(square: Square, color: Color) {
 		super(square);
@@ -58,22 +61,21 @@ export class Knight extends Piece {
 	}
 
 	override possibleMoves(board: Board): SingleMove[] {
-		let moves: SingleMove[] = [];
-		let startSq = this.square;
+		const moves: SingleMove[] = [];
+		const startSq = this.square;
 		if (startSq) {
-			let rank = startSq.getRank;
-			let file = startSq.getFile;
-			let startSqName = startSq.getSquareName;
-
-			let files = [2, 2, 1, 1, -1, -2, -2, -1];
-			let ranks = [1, -1, 2, -2, -2, -1, 1, 2];
+			const rank = startSq.getRank;
+			const file = startSq.getFile;
+			const startSqName = startSq.getSquareName;
 
 			for (let i = 0; i < 8; i++) {
-				let nextFile = String.fromCharCode(file.charCodeAt(0) + files[i]);
-				let nextRank = rank + ranks[i];
-				let sq = board.getSquare(`${nextFile}${nextRank}`);
+				const nextFile = String.fromCharCode(
+					file.charCodeAt(0) + Knight.files[i]
+				);
+				const nextRank = rank + Knight.ranks[i];
+				const sq = board.getSquare(`${nextFile}${nextRank}`);
 				if (sq && sq.getSquareName) {
-					let endSq = sq.getSquareName;
+					const endSq = sq.getSquareName;
 					moves.push({
 						startSq: startSqName,
 						endSq: endSq,

@@ -1,5 +1,5 @@
 import readline from 'readline';
-import Chess from './Chess';
+import Chess from '../Chess';
 
 export class Game {
 	chess: Chess;
@@ -21,6 +21,7 @@ export class Game {
 	terminalMoves(): Promise<void> {
 		console.log(this.chess.getBoard.printBoardWhite());
 		const rl = readline.createInterface(process.stdin, process.stdout);
+		// eslint-disable-next-line @typescript-eslint/no-misused-promises
 		rl.question(`Input move for ${this.chess.whoseTurn()}:\n`, (input) => {
 			if (input === '') {
 				this.gameOver = true;
@@ -29,7 +30,7 @@ export class Game {
 			}
 
 			console.log(`Trying ${input}`);
-			let split = input.toLowerCase().split(' ');
+			const split = input.toLowerCase().split(' ');
 			try {
 				this.chess.move(split[0], split[1]);
 				rl.close();

@@ -8,16 +8,21 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"pocketbase": "cd chess-frontend && ./pocketbase serve",
 		"chess": "cd chess && ts-node index.ts",
-		"tsc": "cd chess && tsc"
+		"jschess": "node ./chess/dist/index.js",
+		"tsc": "cd chess && tsc",
+		"lint": "eslint --ext .ts ."
 	},
 	"author": "Kristjan Rajaniemi",
 	"license": "ISC",
 	"dependencies": {
+		"@typescript-eslint/eslint-plugin": "^5.47.0",
+		"@typescript-eslint/parser": "^5.47.0",
 		"ts-node": "^10.9.1"
 	},
 	"devDependencies": {
-		"typescript": "^4.8.4",
 		"@swc/core": "^1.3.19",
-		"@swc/helpers": "^0.4.14"
+		"@swc/helpers": "^0.4.14",
+		"eslint": "^8.30.0",
+		"typescript": "^4.8.4"
 	}
 }

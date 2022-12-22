@@ -9,12 +9,21 @@ import { Color, ChessPieces, SingleMove, Move } from './types';
 
 export class Pawn extends Piece {
 	override readonly color: Color;
+	readonly enPassantStartSqRank: number;
+	readonly enPassantEndSqRank: number;
 
 	constructor(square: Square, color: Color) {
 		super(square);
 		this.color = color;
-		if (color === Color.white) this.name = ChessPieces.PAWN_WHITE;
-		else this.name = ChessPieces.PAWN_BLACK;
+		if (color === Color.white) {
+			this.name = ChessPieces.PAWN_WHITE;
+			this.enPassantStartSqRank = 5;
+			this.enPassantEndSqRank = 6;
+		} else {
+			this.name = ChessPieces.PAWN_BLACK;
+			this.enPassantStartSqRank = 4;
+			this.enPassantEndSqRank = 3;
+		}
 	}
 
 	override move(
@@ -25,16 +34,16 @@ export class Pawn extends Piece {
 		move?: Move
 	): boolean | Piece {
 		if (this.color === Color.white)
-			return Pawn.moveWhite(startSq, endSq, board, piece, move);
+			return this.moveWhite(startSq, endSq, board, piece, move);
 		else if (this.color === Color.black)
-			return Pawn.moveBlack(startSq, endSq, board, piece, move);
+			return this.moveBlack(startSq, endSq, board, piece, move);
 		else {
 			console.log('Piece not found');
 			return false;
 		}
 	}
 
-	static moveWhite(
+	moveWhite(
 		startSq: Square,
 		endSq: Square,
 		board: Board,
@@ -50,7 +59,7 @@ export class Pawn extends Piece {
 		}
 		//Moving diagonally logic
 		else if (startSq.getFile !== endSq.getFile) {
-			return Pawn.capture(startSq, endSq, pieceToPromote, move);
+			return this.capture(startSq, endSq, pieceToPromote, move);
 		}
 		//startSquare logic
 		else if (startSq.getRank === 2) {
@@ -83,7 +92,7 @@ export class Pawn extends Piece {
 		return false;
 	}
 
-	static moveBlack(
+	moveBlack(
 		startSq: Square,
 		endSq: Square,
 		board: Board,
@@ -100,7 +109,7 @@ export class Pawn extends Piece {
 
 		//Moving diagonally logic
 		else if (startSq.getFile !== endSq.getFile) {
-			return Pawn.capture(startSq, endSq, pieceToPromote, move);
+			return this.capture(startSq, endSq, pieceToPromote, move);
 		}
 
 		//startSquare logic
@@ -134,38 +143,35 @@ export class Pawn extends Piece {
 		return false;
 	}
 
-	static capture(
+	capture(
 		startSq: Square,
 		endSq: Square,
 		pieceToPromote?: string,
 		move?: Move
 	): boolean | Piece {
 		//what is the rank you need to start on to be able to promote
-		let secondToLastRank = startSq.getPiece?.getColor === Color.white ? 7 : 2;
-		let promotionRank = startSq.getPiece?.getColor === Color.white ? 8 : 1;
+		const secondToLastRank = startSq.getPiece?.getColor === Color.white ? 7 : 2;
+		const promotionRank = startSq.getPiece?.getColor === Color.white ? 8 : 1;
 
 		//what is the rank you need to start and end on to be able to en passant
-		let enPassantStartSqRank =
-			startSq.getPiece?.getColor === Color.white ? 5 : 4;
-		let enPassantEndSqRank = startSq.getPiece?.getColor === Color.white ? 6 : 3;
 
-		let color: Color | null =
+		const color: Color | null =
 			startSq.getPiece?.getColor === Color.white ? Color.black : null;
 		//is pawn capturing or not
-		let diagonalMove: boolean = Pawn.compareFiles(
+		const diagonalMove: boolean = Pawn.compareFiles(
 			startSq.getFile,
 			endSq.getFile
 		);
 
 		//check if it's en passant
 		if (
-			startSq.getRank === enPassantStartSqRank &&
-			endSq.getRank === enPassantEndSqRank &&
+			startSq.getRank === this.enPassantStartSqRank &&
+			endSq.getRank === this.enPassantEndSqRank &&
 			diagonalMove
 		) {
 			if (!move) return false;
 			if (Piece.capturable(startSq, move.endSq)) {
-				return this.enPassant(move, enPassantStartSqRank);
+				return this.enPassant(move, this.enPassantStartSqRank);
 			}
 			return false;
 		}
@@ -200,6 +206,24 @@ export class Pawn extends Piece {
 		}
 		console.log('Error capturing with pawn');
 		return false;
+	}
+
+	enPassant(move: Move, EpStartSqRank: number): boolean {
+		if (
+			(EpStartSqRank === 5 &&
+				move.startSq.getRank === 7 &&
+				move.endSq.getRank === 5) ||
+			(EpStartSqRank === 4 &&
+				move.startSq.getRank === 2 &&
+				move.endSq.getRank === 4)
+		) {
+			console.log('En passant successful');
+			// move.endSq.setPiece(null);
+			return true;
+		} else {
+			console.log('En passant unsuccessful');
+			return false;
+		}
 	}
 
 	static startingSquareMove(
@@ -266,24 +290,6 @@ export class Pawn extends Piece {
 		}
 	}
 
-	static enPassant(move: Move, EpStartSqRank: number): boolean {
-		if (
-			(EpStartSqRank === 5 &&
-				move.startSq.getRank === 7 &&
-				move.endSq.getRank === 5) ||
-			(EpStartSqRank === 4 &&
-				move.startSq.getRank === 2 &&
-				move.endSq.getRank === 4)
-		) {
-			console.log('En passant successful');
-			// move.endSq.setPiece(null);
-			return true;
-		} else {
-			console.log('En passant unsuccessful');
-			return false;
-		}
-	}
-
 	static compareFiles(startSqFile: string, endSqFile: string): boolean {
 		return (
 			Math.abs(
@@ -293,7 +299,7 @@ export class Pawn extends Piece {
 	}
 
 	override possibleMoves(board: Board): SingleMove[] {
-		let startSq = this.getSquare;
+		const startSq = this.getSquare;
 		if (startSq) {
 			if (this.getColor === Color.white) {
 				return Pawn.possibleWhiteMoves(startSq, board);
@@ -304,107 +310,149 @@ export class Pawn extends Piece {
 	}
 
 	static possibleWhiteMoves(sq: Square, board: Board): SingleMove[] {
-		let moves: SingleMove[] = [];
-		let startSq = sq.getSquareName;
+		const moves: SingleMove[] = [];
+		const startSq = sq.getSquareName;
 		if (sq.getRank === 1) {
 			throw new Error('How is the white pawn on the first rank?');
 		}
 		if (sq.getRank === 2) {
-			moves.push(
-				{
-					startSq: startSq,
-					endSq: board.getSquare(`${sq.getFile}${sq.getRank + 1}`)!
-						.getSquareName,
-				},
-				{
-					startSq: startSq,
-					endSq: board.getSquare(`${sq.getFile}${sq.getRank + 2}`)!
-						.getSquareName,
-				}
-			);
+			const oneForward = board.getSquare(
+				`${sq.getFile}${sq.getRank + 1}`
+			)?.getSquareName;
+			const twoForward = board.getSquare(
+				`${sq.getFile}${sq.getRank + 2}`
+			)?.getSquareName;
+			if (oneForward && twoForward) {
+				moves.push(
+					{
+						startSq: startSq,
+						endSq: oneForward,
+					},
+					{
+						startSq: startSq,
+						endSq: oneForward,
+					}
+				);
+			}
 		}
 		if (sq.getFile === 'a') {
-			moves.push({
-				startSq: startSq,
-				endSq: board.getSquare(`${'b'}${sq.getRank + 1}`)!.getSquareName,
-			});
+			//capturing can only happen on b-file
+			const bFileOneForward = board.getSquare(
+				`${'b'}${sq.getRank + 1}`
+			)?.getSquareName;
+
+			if (bFileOneForward) {
+				moves.push({
+					startSq: startSq,
+					endSq: bFileOneForward,
+				});
+			}
 		} else if (sq.getFile === 'h') {
-			moves.push({
-				startSq: startSq,
-				endSq: board.getSquare(`${'g'}${sq.getRank + 1}`)!.getSquareName,
-			});
+			//capturing can only happen on g-file
+			const gFileOneForward = board.getSquare(
+				`${'g'}${sq.getRank + 1}`
+			)?.getSquareName;
+
+			if (gFileOneForward) {
+				moves.push({
+					startSq: startSq,
+					endSq: gFileOneForward,
+				});
+			}
 		} else {
-			moves.push(
-				{
-					startSq: startSq,
-					endSq: board.getSquare(
-						`${String.fromCharCode(sq.getFile.charCodeAt(0) + 1)}${
-							sq.getRank + 1
-						}`
-					)!.getSquareName,
-				},
-				{
-					startSq: startSq,
-					endSq: board.getSquare(
-						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${
-							sq.getRank + 1
-						}`
-					)!.getSquareName,
-				}
-			);
+			const oneRightForward = board.getSquare(
+				`${String.fromCharCode(sq.getFile.charCodeAt(0) + 1)}${sq.getRank + 1}`
+			)?.getSquareName;
+			const oneLeftForward = board.getSquare(
+				`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${sq.getRank + 1}`
+			)?.getSquareName;
+
+			if (oneRightForward && oneLeftForward) {
+				moves.push(
+					{
+						startSq: startSq,
+						endSq: oneRightForward,
+					},
+					{
+						startSq: startSq,
+						endSq: oneLeftForward,
+					}
+				);
+			}
 		}
 		return moves;
 	}
 
 	static possibleBlackMoves(sq: Square, board: Board): SingleMove[] {
-		let moves: SingleMove[] = [];
-		let startSq = sq.getSquareName;
+		const moves: SingleMove[] = [];
+		const startSq = sq.getSquareName;
 		if (sq.getRank === 8) {
 			throw new Error('How is the black pawn on the 8th rank?');
 		}
 		if (sq.getRank === 7) {
-			moves.push(
-				{
-					startSq: startSq,
-					endSq: board.getSquare(`${sq.getFile}${sq.getRank - 1}`)!
-						.getSquareName,
-				},
-				{
-					startSq: startSq,
-					endSq: board.getSquare(`${sq.getFile}${sq.getRank - 2}`)!
-						.getSquareName,
-				}
-			);
+			const oneForward = board.getSquare(
+				`${sq.getFile}${sq.getRank - 1}`
+			)?.getSquareName;
+			const twoForward = board.getSquare(
+				`${sq.getFile}${sq.getRank - 2}`
+			)?.getSquareName;
+			if (oneForward && twoForward) {
+				moves.push(
+					{
+						startSq: startSq,
+						endSq: oneForward,
+					},
+					{
+						startSq: startSq,
+						endSq: oneForward,
+					}
+				);
+			}
 		}
 		if (sq.getFile === 'a') {
-			moves.push({
-				startSq: startSq,
-				endSq: board.getSquare(`${'b'}${sq.getRank - 1}`)!.getSquareName,
-			});
+			//capturing can only happen on b-file
+			const bFileOneForward = board.getSquare(
+				`${'b'}${sq.getRank - 1}`
+			)?.getSquareName;
+
+			if (bFileOneForward) {
+				moves.push({
+					startSq: startSq,
+					endSq: bFileOneForward,
+				});
+			}
 		} else if (sq.getFile === 'h') {
-			moves.push({
-				startSq: startSq,
-				endSq: board.getSquare(`${'g'}${sq.getRank - 1}`)!.getSquareName,
-			});
+			//capturing can only happen on g-file
+			const gFileOneForward = board.getSquare(
+				`${'g'}${sq.getRank - 1}`
+			)?.getSquareName;
+
+			if (gFileOneForward) {
+				moves.push({
+					startSq: startSq,
+					endSq: gFileOneForward,
+				});
+			}
 		} else {
-			moves.push(
-				{
-					startSq: startSq,
-					endSq: board.getSquare(
-						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${
-							sq.getRank - 1
-						}`
-					)!.getSquareName,
-				},
-				{
-					startSq: startSq,
-					endSq: board.getSquare(
-						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${
-							sq.getRank - 1
-						}`
-					)!.getSquareName,
-				}
-			);
+			const oneRightForward = board.getSquare(
+				`${String.fromCharCode(sq.getFile.charCodeAt(0) + 1)}${sq.getRank - 1}`
+			)?.getSquareName;
+			const oneLeftForward = board.getSquare(
+				`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${sq.getRank - 1}`
+			)?.getSquareName;
+
+			if (oneRightForward && oneLeftForward) {
+				moves.push(
+					{
+						startSq: startSq,
+						endSq: oneRightForward,
+					},
+					{
+						startSq: startSq,
+						endSq: oneLeftForward,
+					}
+				);
+			}
 		}
 		return moves;
 	}

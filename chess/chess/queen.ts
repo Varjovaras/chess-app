@@ -5,6 +5,10 @@ import { Color, ChessPieces, SingleMove } from './types';
 
 export class Queen extends Piece {
 	override readonly color: Color;
+	static rookMoveFiles = [1, -1, 0, 0];
+	static rookMoveRanks = [0, 0, 1, -1];
+	static bishopMoveFiles = [1, 1, -1, -1];
+	static bishopMoveRanks = [1, -1, 1, -1];
 
 	constructor(square: Square, color: Color) {
 		super(square);
@@ -29,10 +33,10 @@ export class Queen extends Piece {
 	}
 
 	static queenMoves(startSq: Square, endSq: Square, board: Board): boolean {
-		let fileDiff = Math.abs(
+		const fileDiff = Math.abs(
 			Board.findFileIndex(startSq.getFile) - Board.findFileIndex(endSq.getFile)
 		);
-		let rankDiff = Math.abs(startSq.getRank - endSq.getRank);
+		const rankDiff = Math.abs(startSq.getRank - endSq.getRank);
 		if (fileDiff === rankDiff && startSq !== endSq) {
 			return Piece.isDiagonal(startSq, endSq, board);
 		} else if (fileDiff === 0) {
@@ -44,16 +48,21 @@ export class Queen extends Piece {
 
 	override possibleMoves(board: Board): SingleMove[] {
 		let moves: SingleMove[] = [];
-		let startSq = this.square;
+		const startSq = this.square;
 		if (startSq) {
-			let rookMoveFiles = [1, -1, 0, 0];
-			let rookMoveRanks = [0, 0, 1, -1];
-			let bishopMoveFiles = [1, 1, -1, -1];
-			let bishopMoveRanks = [1, -1, 1, -1];
-
 			moves = moves.concat(
-				Queen.queenMoveHelper(rookMoveFiles, rookMoveRanks, board, startSq),
-				Queen.queenMoveHelper(bishopMoveFiles, bishopMoveRanks, board, startSq)
+				Queen.queenMoveHelper(
+					Queen.rookMoveFiles,
+					Queen.rookMoveRanks,
+					board,
+					startSq
+				),
+				Queen.queenMoveHelper(
+					Queen.bishopMoveFiles,
+					Queen.bishopMoveRanks,
+					board,
+					startSq
+				)
 			);
 			return moves;
 		}
@@ -65,18 +74,18 @@ export class Queen extends Piece {
 		t: number[],
 		board: Board,
 		startSq: Square
-	) {
-		let moves: SingleMove[] = [];
+	): SingleMove[] {
+		const moves: SingleMove[] = [];
 		for (let i = 0; i < 4; i++) {
 			for (let j = 0; j < 7; j++) {
-				let rank = startSq.getRank;
-				let file = startSq.getFile;
-				let startSqName = startSq.getSquareName;
-				let nextFile = String.fromCharCode(
+				const rank = startSq.getRank;
+				const file = startSq.getFile;
+				const startSqName = startSq.getSquareName;
+				const nextFile = String.fromCharCode(
 					file.charCodeAt(0) + k[i] + j * k[i]
 				);
-				let nextRank = rank + t[i] + j * t[i];
-				let sq = board.getSquare(`${nextFile}${nextRank}`);
+				const nextRank = rank + t[i] + j * t[i];
+				const sq = board.getSquare(`${nextFile}${nextRank}`);
 
 				if (!sq) break;
 				if (sq && sq.getSquareName) {

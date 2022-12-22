@@ -26,16 +26,16 @@ export class Piece {
 	}
 
 	move(
-		startSq: Square,
-		endSq: Square,
-		board: Board,
-		piece?: string,
-		move?: Move | undefined
+		_startSq: Square,
+		_endSq: Square,
+		_board: Board,
+		_piece?: string,
+		_move?: Move | undefined
 	): boolean | Piece {
 		return false;
 	}
 
-	getFirstLetter() {
+	getFirstLetter(): string {
 		return this.name[0];
 	}
 
@@ -46,7 +46,7 @@ export class Piece {
 
 	static capturable(startSq: Square, endSq: Square, move?: Move): boolean {
 		console.log('capturable' + endSq.getSquareName);
-		let startSqPiece = startSq.getPiece;
+		const startSqPiece = startSq.getPiece;
 		let endSqPiece = endSq.getPiece;
 
 		//for en passant
@@ -64,17 +64,17 @@ export class Piece {
 		return true;
 	}
 
-	possibleMoves(board: Board): SingleMove[] {
+	possibleMoves(_board: Board): SingleMove[] {
 		console.log('Piece without type has no possible moves');
 		return [];
 	}
 
 	//for bishop and queen
 	static isDiagonal(startSq: Square, endSq: Square, board: Board): boolean {
-		let fileDiff = Math.abs(
+		const fileDiff = Math.abs(
 			Board.findFileIndex(startSq.getFile) - Board.findFileIndex(endSq.getFile)
 		);
-		let rankDiff = Math.abs(startSq.getRank - endSq.getRank);
+		const rankDiff = Math.abs(startSq.getRank - endSq.getRank);
 		if (fileDiff === rankDiff && fileDiff === 1) {
 			return true;
 		}
@@ -91,8 +91,8 @@ export class Piece {
 		board: Board
 	): boolean {
 		let index = 0;
-		let startFileIndex = Board.findFileIndex(startSq.getFile);
-		let endFileIndex = Board.findFileIndex(endSq.getFile);
+		const startFileIndex = Board.findFileIndex(startSq.getFile);
+		const endFileIndex = Board.findFileIndex(endSq.getFile);
 		//find index of the next square to test
 		if (startSq.getRank < endSq.getRank && startFileIndex > endFileIndex) {
 			index = 7;
@@ -111,7 +111,7 @@ export class Piece {
 		let startSqIndex = startSq.getId + index;
 
 		for (let i = 0; i < rankDiff; i++, startSqIndex += index) {
-			let sq = board.getSquareById(startSqIndex);
+			const sq = board.getSquareById(startSqIndex);
 			if (sq === endSq) break;
 			else if (!sq) return false;
 			else if (sq.getPiece !== null) {
@@ -127,12 +127,12 @@ export class Piece {
 	//left and right movement
 	static horizontalMove(startSq: Square, endSq: Square, board: Board): boolean {
 		console.log('horizontal move by ' + startSq.getPiece?.getName);
-		let index = startSq.getFile < endSq.getFile ? 1 : -1;
+		const index = startSq.getFile < endSq.getFile ? 1 : -1;
 		let startSqIndex = startSq.getId + index;
-		let horizontalDiff = Math.abs(endSq.getId - startSq.getId);
+		const horizontalDiff = Math.abs(endSq.getId - startSq.getId);
 		if (horizontalDiff === 1 && endSq.getPiece === null) return true;
 		for (let i = 0; i < horizontalDiff; i++, startSqIndex += index) {
-			let sq = board.getSquareById(startSqIndex);
+			const sq = board.getSquareById(startSqIndex);
 			if (sq === startSq) continue;
 			else if (sq === endSq) break;
 			else if (!sq) return false;
@@ -147,12 +147,12 @@ export class Piece {
 	//up and down movement
 	static verticalMove(startSq: Square, endSq: Square, board: Board): boolean {
 		console.log('vertical move by ' + startSq.getPiece?.getName);
-		let index = startSq.getId < endSq.getId ? 8 : -8;
+		const index = startSq.getId < endSq.getId ? 8 : -8;
 		let startSqIndex = startSq.getId + index;
-		let verticalDiff = Math.abs(endSq.getRank - startSq.getRank);
+		const verticalDiff = Math.abs(endSq.getRank - startSq.getRank);
 		if (verticalDiff === 1 && endSq.getPiece === null) return true;
 		for (let i = 0; i < verticalDiff; i++, startSqIndex += index) {
-			let sq = board.getSquareById(startSqIndex);
+			const sq = board.getSquareById(startSqIndex);
 			if (sq === startSq) continue;
 			if (!sq) return false;
 			else if (sq === endSq) break;

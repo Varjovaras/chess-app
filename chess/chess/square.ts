@@ -82,7 +82,8 @@ export class Square {
 	}
 
 	static omitPiece(s: Square) {
-		let sq = s;
+		const sq = s;
+		console.log('omit piece' + sq.getPiece?.getName);
 		sq._piece = null;
 		return sq;
 	}

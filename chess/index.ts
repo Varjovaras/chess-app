@@ -181,6 +181,20 @@ console.log(chess.getBoard.printBoardWhite());
 
 chess.emptyBoard();
 let board = chess.getBoard;
+console.log(board.blackCheck());
+console.log('123123');
+chess.fen(Chess.STARTING_POSITION);
+chess.move('e2', 'e4');
+chess.move('e7', 'e5');
+chess.move('f1', 'd3');
+chess.move('f8', 'd6');
+chess.move('g1', 'f3');
+chess.move('g8', 'f6');
+console.log(chess.getBoard.printBoardWhite());
+chess.move('e1', 'g1');
+
+console.log(chess.getBoard.printBoardWhite());
+
 // for (let i = 0; i < 10000; i++) {
 // 	console.log(board);
 // }

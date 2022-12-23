@@ -153,7 +153,7 @@ export default class Chess {
 		}
 	}
 
-	movePiece(startSq: Square, endSq: Square, pieceName?: string): void {
+	private movePiece(startSq: Square, endSq: Square, pieceName?: string): void {
 		//returns piece if promoting a pawn
 		let isLegalMoveOrPiece: boolean | Piece;
 		if (startSq.getPiece?.getColor !== this.checkTurn()) {

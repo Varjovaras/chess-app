@@ -5,10 +5,12 @@ import { Color, ChessPieces, SingleMove } from './types';
 
 export class Rook extends Piece {
 	override readonly color: Color;
+	private castlingAllowed: boolean;
 
 	constructor(square: Square, color: Color) {
 		super(square);
 		this.color = color;
+		this.castlingAllowed = true;
 		if (color === Color.white) {
 			this.name = ChessPieces.ROOK_WHITE;
 		} else {
@@ -16,24 +18,38 @@ export class Rook extends Piece {
 		}
 	}
 
+	isCastlingAllowed() {
+		return this.castlingAllowed;
+	}
+
 	override move(startSq: Square, endSq: Square, board: Board): boolean {
 		let isHorizontal = startSq.getRank === endSq.getRank ? true : false;
-
 		//capture logic
 		if (startSq.getPiece && endSq.getPiece !== null) {
 			if (Piece.capturable(startSq, endSq)) {
-				return isHorizontal
-					? Piece.horizontalMove(startSq, endSq, board)
-					: Piece.verticalMove(startSq, endSq, board);
+				return this.rookMoveHelper(startSq, endSq, board, isHorizontal);
 			} else {
 				console.log('Capturing with rook failed');
 				return false;
 			}
 		}
+		return this.rookMoveHelper(startSq, endSq, board, isHorizontal);
+	}
 
-		return isHorizontal
+	rookMoveHelper(
+		startSq: Square,
+		endSq: Square,
+		board: Board,
+		isHorizontal: boolean
+	): boolean {
+		let isMoveSuccessful = isHorizontal
 			? Piece.horizontalMove(startSq, endSq, board)
 			: Piece.verticalMove(startSq, endSq, board);
+
+		if (isMoveSuccessful) {
+			this.castlingAllowed = true;
+		}
+		return isMoveSuccessful;
 	}
 
 	override possibleMoves(board: Board): SingleMove[] {

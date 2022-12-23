@@ -1,8 +1,8 @@
 console.time('c');
-import Chess from './chess/Chess';
-import { King } from './chess/King';
-import { Knight } from './chess/Knight';
-import { Pawn } from './chess/Pawn';
+import Chess from './chess';
+import { King } from './chess/king';
+import { Knight } from './chess/knight';
+import { Pawn } from './chess/pawn';
 import { Queen } from './chess/Queen';
 import { Rook } from './chess/Rook';
 import { Color } from './chess/types';
@@ -181,9 +181,9 @@ console.log(chess.getBoard.printBoardWhite());
 
 chess.emptyBoard();
 let board = chess.getBoard;
-for (let i = 0; i < 10000; i++) {
-	console.log(board);
-}
+// for (let i = 0; i < 10000; i++) {
+// 	console.log(board);
+// }
 
 // // let game = new Game(chess);
 // // game.playTerminal();

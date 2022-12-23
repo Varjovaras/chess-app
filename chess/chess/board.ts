@@ -1,6 +1,6 @@
 import { Square } from './Square';
 import { Color } from './types';
-import { knightMoveHelper } from './MoveHelpers';
+import { knightMoveHelper } from './moveHelpers';
 
 export class Board {
 	private _board: Square[];

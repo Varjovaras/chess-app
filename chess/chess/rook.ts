@@ -22,6 +22,10 @@ export class Rook extends Piece {
 		return this.castlingAllowed;
 	}
 
+	castled() {
+		this.castlingAllowed = false;
+	}
+
 	override move(startSq: Square, endSq: Square, board: Board): boolean {
 		let isHorizontal = startSq.getRank === endSq.getRank ? true : false;
 		//capture logic

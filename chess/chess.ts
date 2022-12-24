@@ -220,6 +220,13 @@ export default class Chess {
 	}
 
 	handleMove(startSq: Square, endSq: Square): void {
+		if (
+			startSq.getPiece instanceof King &&
+			startSq.getFile === 'e' &&
+			(endSq.getFile === 'c' || endSq.getFile === 'g')
+		) {
+			this.castlingHelper(startSq, endSq);
+		}
 		this.addMove(startSq, endSq);
 		this.handlePieces(startSq, endSq);
 		this.incrementMoveNumber();
@@ -235,6 +242,41 @@ export default class Chess {
 				endSq: endSq,
 				startSquarePiece: startSq.getPiece,
 			});
+		}
+	}
+
+	castlingHelper(startSq: Square, endSq: Square) {
+		if (endSq.getSquareName === 'g1') {
+			let rook = this._board.getSquare('h1')?.getPiece;
+			if (!rook || !(rook instanceof Rook))
+				throw new Error('Castling completed without rook');
+			rook.castled();
+			this._board.getSquare('h1')?.setPiece(null);
+			this._board.getSquare('f1')?.setPiece(rook);
+		}
+		if (endSq.getSquareName === 'c1') {
+			let rook = this._board.getSquare('a1')?.getPiece;
+			if (!rook || !(rook instanceof Rook))
+				throw new Error('Castling completed without rook');
+			rook.castled();
+			this._board.getSquare('a1')?.setPiece(null);
+			this._board.getSquare('c1')?.setPiece(rook);
+		}
+		if (endSq.getSquareName === 'g8') {
+			let rook = this._board.getSquare('h8')?.getPiece;
+			if (!rook || !(rook instanceof Rook))
+				throw new Error('Castling completed without rook');
+			rook.castled();
+			this._board.getSquare('h8')?.setPiece(null);
+			this._board.getSquare('f8')?.setPiece(rook);
+		}
+		if (endSq.getSquareName === 'c8') {
+			let rook = this._board.getSquare('a8')?.getPiece;
+			if (!rook || !(rook instanceof Rook))
+				throw new Error('Castling completed without rook');
+			rook.castled();
+			this._board.getSquare('a8')?.setPiece(null);
+			this._board.getSquare('c8')?.setPiece(rook);
 		}
 	}
 

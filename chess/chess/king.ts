@@ -85,7 +85,38 @@ export class King extends Piece {
 		console.log('castling not allowed');
 		return false;
 	}
-	queenSideCastling(_startSq: Square, endSq: Square, board: Board): boolean {
+	queenSideCastling(startSq: Square, endSq: Square, board: Board): boolean {
+		if (startSq.getRank === 1) {
+			let rook = board.getSquare('h1')?.getPiece;
+			if (!rook || !(rook instanceof Rook) || !rook.isCastlingAllowed()) {
+				console.log('no rook, piece on h1 is not a rook or the rook has moved');
+				return false;
+			}
+			console.log(board.getSquare('f1')?.getPiece);
+			console.log(board.getSquare('f1')?.getPiece);
+
+			if (
+				!board.getSquare('f1')?.getPiece ||
+				!board.getSquare('g1')?.getPiece
+			) {
+				console.log(
+					'Castling allowed kingside. Moving king on ' +
+						this.getSquare?.getSquareName
+				);
+				return true;
+			}
+			if (
+				!board.getSquare('d1')?.getPiece &&
+				!board.getSquare('c1')?.getPiece
+			) {
+				console.log(
+					'Castling allowed queenside. Moving king on ' +
+						this.getSquare?.getSquareName
+				);
+				return true;
+			}
+		}
+		console.log('castling not allowed');
 		return false;
 	}
 

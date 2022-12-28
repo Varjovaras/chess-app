@@ -29,9 +29,8 @@ export class Piece {
 		startSq: Square,
 		endSq: Square,
 		board: Board,
-		piece?: string,
 		move?: Move | undefined
-	): boolean | Piece {
+	): boolean {
 		return false;
 	}
 

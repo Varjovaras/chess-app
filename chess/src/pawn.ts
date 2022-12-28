@@ -21,16 +21,29 @@ export class Pawn extends Piece {
 		startSq: Square,
 		endSq: Square,
 		board: Board,
-		piece?: string,
 		move?: Move
-	): boolean | Piece {
-		if (this.color === Color.white)
-			return Pawn.moveWhite(startSq, endSq, board, piece, move);
-		else if (this.color === Color.black)
-			return Pawn.moveBlack(startSq, endSq, board, piece, move);
-		else {
-			console.log('Piece not found');
-			return false;
+	): boolean {
+		if (this.color === Color.white) {
+			let bool = Pawn.moveWhite(startSq, endSq, board, undefined, move);
+			if (typeof bool === 'boolean') return bool;
+		} else if (this.color === Color.black) {
+			let bool = Pawn.moveBlack(startSq, endSq, board, undefined, move);
+			if (typeof bool === 'boolean') return bool;
+		}
+		return false;
+	}
+
+	promote(startSq: Square, endSq: Square, board: Board, piece: string): Piece {
+		if (this.color === Color.white) {
+			let returnPiece = Pawn.moveWhite(startSq, endSq, board, piece);
+			if (!(returnPiece instanceof Piece)) {
+				throw new Error('Error promoting');
+			} else return returnPiece;
+		} else {
+			let returnPiece = Pawn.moveBlack(startSq, endSq, board, piece);
+			if (!(returnPiece instanceof Piece)) {
+				throw new Error('Error promoting');
+			} else return returnPiece;
 		}
 	}
 

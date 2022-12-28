@@ -226,8 +226,10 @@ export default class Chess {
 					startSqPiece.getName === ChessPieces.PAWN_BLACK)
 			) {
 				promotedPiece = startSqPiece.promote(startSq, endSq, board, pieceName);
-			} else if (enPassantHelper(startSq, endSq, move)) {
-				isLegalMove = startSqPiece.move(startSq, endSq, board, move);
+			} else if (move && enPassantHelper(startSq, endSq, move)) {
+				isLegalMove = startSqPiece.move(startSq, endSq, this._board, move);
+				console.log(isLegalMove);
+				this._board.getSquareById(move.endSq.getSquare.getId)?.setPiece(null);
 			} else isLegalMove = startSqPiece.move(startSq, endSq, board);
 		} else isLegalMove = startSqPiece.move(startSq, endSq, board);
 

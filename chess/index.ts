@@ -40,7 +40,6 @@ chess.move('c6', 'c7');
 chess.move('g5', 'g4');
 chess.move('h2', 'h4');
 chess.move('g4', 'h3');
-// console.log(chess.getPieces);
 console.log(chess.getBoard.printBoardWhite());
 
 console.log(chess.getMoves);

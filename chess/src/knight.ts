@@ -1,7 +1,7 @@
 import { Board } from './Board';
 import { Piece } from './Piece';
 import { Square } from './Square';
-import { Color, ChessPieces, SingleMove } from './types';
+import { ChessPieces, Color, SingleMove } from './types';
 
 export class Knight extends Piece {
 	override readonly color: Color;

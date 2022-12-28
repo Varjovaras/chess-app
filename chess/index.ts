@@ -1,11 +1,11 @@
 console.time('c');
-import Chess from './chess';
-import { King } from './chess/king';
-import { Knight } from './chess/knight';
-import { Pawn } from './chess/pawn';
-import { Queen } from './chess/Queen';
-import { Rook } from './chess/Rook';
-import { Color } from './chess/types';
+import Chess from './src/chess';
+import { Queen } from './src/Queen';
+import { Rook } from './src/Rook';
+import { King } from './src/king';
+import { Knight } from './src/knight';
+import { Pawn } from './src/pawn';
+import { Color } from './src/types';
 
 const chess = new Chess();
 chess.putPieceOnBoard(
@@ -182,7 +182,8 @@ console.log(chess.getBoard.printBoardWhite());
 chess.emptyBoard();
 let board = chess.getBoard;
 console.log(board.blackCheck());
-console.log('123123');
+
+console.log('castling kingside');
 chess.fen(Chess.STARTING_POSITION);
 chess.move('e2', 'e4');
 chess.move('e7', 'e5');
@@ -190,10 +191,26 @@ chess.move('f1', 'd3');
 chess.move('f8', 'd6');
 chess.move('g1', 'f3');
 chess.move('g8', 'f6');
-console.log(chess.getBoard.printBoardWhite());
 chess.move('e1', 'g1');
+chess.move('e8', 'g8');
 
 console.log(chess.getBoard.printBoardWhite());
+
+//castling queenside
+chess.fen(Chess.STARTING_POSITION);
+chess.move('d2', 'd4');
+chess.move('d7', 'd5');
+chess.move('b1', 'c3');
+chess.move('b8', 'c6');
+chess.move('c1', 'f4');
+chess.move('c8', 'f5');
+chess.move('d1', 'd2');
+chess.move('d8', 'd7');
+
+chess.move('e1', 'c1');
+chess.move('e8', 'c8');
+console.log(chess.getBoard.printBoardWhite());
+console.log(chess.getBoard.getSquare('d8'));
 
 // for (let i = 0; i < 10000; i++) {
 // 	console.log(board);

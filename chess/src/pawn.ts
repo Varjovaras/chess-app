@@ -5,7 +5,7 @@ import { Piece } from './Piece';
 import { Queen } from './Queen';
 import { Rook } from './Rook';
 import { Square } from './Square';
-import { Color, ChessPieces, SingleMove, Move } from './types';
+import { ChessPieces, Color, Move, SingleMove } from './types';
 
 export class Pawn extends Piece {
 	override readonly color: Color;
@@ -151,6 +151,7 @@ export class Pawn extends Piece {
 
 		let color: Color | null =
 			startSq.getPiece?.getColor === Color.white ? Color.black : null;
+
 		//is pawn capturing or not
 		let diagonalMove: boolean = Pawn.compareFiles(
 			startSq.getFile,

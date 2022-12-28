@@ -1,59 +1,37 @@
 import { Board } from './Board';
 import { Piece } from './Piece';
 import { Square } from './Square';
-import { Color, ChessPieces, SingleMove } from './types';
+import { ChessPieces, Color, SingleMove } from './types';
 
-export class Rook extends Piece {
+export class Bishop extends Piece {
 	override readonly color: Color;
-	private castlingAllowed: boolean;
 
 	constructor(square: Square, color: Color) {
 		super(square);
 		this.color = color;
-		this.castlingAllowed = true;
 		if (color === Color.white) {
-			this.name = ChessPieces.ROOK_WHITE;
+			this.name = ChessPieces.BISHOP_WHITE;
 		} else {
-			this.name = ChessPieces.ROOK_BLACK;
+			this.name = ChessPieces.BISHOP_BLACK;
 		}
-	}
-
-	isCastlingAllowed() {
-		return this.castlingAllowed;
-	}
-
-	castled() {
-		this.castlingAllowed = false;
 	}
 
 	override move(startSq: Square, endSq: Square, board: Board): boolean {
-		let isHorizontal = startSq.getRank === endSq.getRank ? true : false;
+		if (startSq.getColor !== endSq.getColor) {
+			console.log('Bishop cannot move to a different color square');
+			return false;
+		}
+
 		//capture logic
 		if (startSq.getPiece && endSq.getPiece !== null) {
 			if (Piece.capturable(startSq, endSq)) {
-				return this.rookMoveHelper(startSq, endSq, board, isHorizontal);
+				return Piece.isDiagonal(startSq, endSq, board);
 			} else {
-				console.log('Capturing with rook failed');
+				console.log('Capturing with bishop failed');
 				return false;
 			}
 		}
-		return this.rookMoveHelper(startSq, endSq, board, isHorizontal);
-	}
-
-	rookMoveHelper(
-		startSq: Square,
-		endSq: Square,
-		board: Board,
-		isHorizontal: boolean
-	): boolean {
-		let isMoveSuccessful = isHorizontal
-			? Piece.horizontalMove(startSq, endSq, board)
-			: Piece.verticalMove(startSq, endSq, board);
-
-		if (isMoveSuccessful) {
-			this.castlingAllowed = true;
-		}
-		return isMoveSuccessful;
+		return Piece.isDiagonal(startSq, endSq, board);
 	}
 
 	override possibleMoves(board: Board): SingleMove[] {
@@ -63,8 +41,8 @@ export class Rook extends Piece {
 			let rank = startSq.getRank;
 			let file = startSq.getFile;
 			let startSqName = startSq.getSquareName;
-			let files = [1, -1, 0, 0];
-			let ranks = [0, 0, 1, -1];
+			let files = [1, 1, -1, -1];
+			let ranks = [1, -1, 1, -1];
 
 			for (let i = 0; i < 4; i++) {
 				for (let j = 0; j < 7; j++) {
@@ -87,6 +65,6 @@ export class Rook extends Piece {
 
 			return moves;
 		}
-		throw new Error('Error making possible rook moves');
+		throw new Error('Error making possible bishop moves');
 	}
 }

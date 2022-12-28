@@ -1,14 +1,14 @@
-import { Bishop } from './chess/bishop';
-import { Board } from './chess/Board';
-import { King } from './chess/king';
-import { Knight } from './chess/knight';
-import { enPassantHelper } from './chess/moveHelpers';
-import { Pawn } from './chess/pawn';
-import { Piece } from './chess/Piece';
-import { Queen } from './chess/Queen';
-import { Rook } from './chess/Rook';
-import { Square } from './chess/Square';
-import { Move, PieceSquare, Color, ChessPieces } from './chess/types';
+import { Board } from './Board';
+import { Piece } from './Piece';
+import { Queen } from './Queen';
+import { Rook } from './Rook';
+import { Square } from './Square';
+import { Bishop } from './bishop';
+import { King } from './king';
+import { Knight } from './knight';
+import { enPassantHelper } from './moveHelpers';
+import { Pawn } from './pawn';
+import { ChessPieces, Color, Move, PieceSquare } from './types';
 
 export default class Chess {
 	private _board: Board;
@@ -159,7 +159,6 @@ export default class Chess {
 		if (startSq.getPiece?.getColor !== this.checkTurn()) {
 			console.log('Wrong players turn');
 			return;
-			// throw new Error();
 		}
 
 		if (startSq.getPiece !== null && endSq !== null) {
@@ -213,10 +212,9 @@ export default class Chess {
 				return;
 			}
 		}
-		console.log(
+		throw new Error(
 			'Starting square is invalid, no piece to be found or ending square is invalid, inputted invalid move or a piece is on the way'
 		);
-		throw new Error();
 	}
 
 	handleMove(startSq: Square, endSq: Square): void {
@@ -225,7 +223,7 @@ export default class Chess {
 			startSq.getFile === 'e' &&
 			(endSq.getFile === 'c' || endSq.getFile === 'g')
 		) {
-			this.castlingHelper(startSq, endSq);
+			this.castling(startSq, endSq);
 		}
 		this.addMove(startSq, endSq);
 		this.handlePieces(startSq, endSq);
@@ -245,39 +243,28 @@ export default class Chess {
 		}
 	}
 
-	castlingHelper(startSq: Square, endSq: Square) {
+	castling(startSq: Square, endSq: Square) {
 		if (endSq.getSquareName === 'g1') {
-			let rook = this._board.getSquare('h1')?.getPiece;
-			if (!rook || !(rook instanceof Rook))
-				throw new Error('Castling completed without rook');
-			rook.castled();
-			this._board.getSquare('h1')?.setPiece(null);
-			this._board.getSquare('f1')?.setPiece(rook);
+			this.castlingRookHelper('h1', 'f1');
 		}
 		if (endSq.getSquareName === 'c1') {
-			let rook = this._board.getSquare('a1')?.getPiece;
-			if (!rook || !(rook instanceof Rook))
-				throw new Error('Castling completed without rook');
-			rook.castled();
-			this._board.getSquare('a1')?.setPiece(null);
-			this._board.getSquare('c1')?.setPiece(rook);
+			this.castlingRookHelper('a1', 'd1');
 		}
 		if (endSq.getSquareName === 'g8') {
-			let rook = this._board.getSquare('h8')?.getPiece;
-			if (!rook || !(rook instanceof Rook))
-				throw new Error('Castling completed without rook');
-			rook.castled();
-			this._board.getSquare('h8')?.setPiece(null);
-			this._board.getSquare('f8')?.setPiece(rook);
+			this.castlingRookHelper('h8', 'f8');
 		}
 		if (endSq.getSquareName === 'c8') {
-			let rook = this._board.getSquare('a8')?.getPiece;
-			if (!rook || !(rook instanceof Rook))
-				throw new Error('Castling completed without rook');
-			rook.castled();
-			this._board.getSquare('a8')?.setPiece(null);
-			this._board.getSquare('c8')?.setPiece(rook);
+			this.castlingRookHelper('a8', 'd8');
 		}
+	}
+
+	castlingRookHelper(rookStartSq: string, rookEndSq: string) {
+		let rook = this._board.getSquare(rookStartSq)?.getPiece;
+		if (!rook || !(rook instanceof Rook))
+			throw new Error('Castling cannot be completed without a rook');
+		this._board.getSquare(rookEndSq)?.setPiece(rook);
+		rook.castled(this._board.getSquare('f1')!);
+		this._board.getSquare(rookStartSq)?.setPiece(null);
 	}
 
 	handlePieces(startSq: Square, endSq: Square, enPassantSquare?: Square): void {
@@ -344,8 +331,7 @@ export default class Chess {
 		//returns piece if promoting a pawn
 		let isLegalMoveOrPiece: boolean | Piece;
 		if (startSq.getPiece?.getColor !== this.checkTurn()) {
-			console.log('Wrong players turn');
-			throw new Error();
+			throw new Error('Wrong players turn');
 		}
 
 		if (startSq.getPiece !== null && endSq !== null) {
@@ -397,10 +383,9 @@ export default class Chess {
 				return;
 			}
 		}
-		console.log(
+		throw new Error(
 			'Starting square is invalid, no piece to be found or ending square is invalid, inputted invalid move or a piece is on the way'
 		);
-		throw new Error();
 	}
 
 	//initialization or promoting
@@ -413,10 +398,7 @@ export default class Chess {
 			sq.setPiece(piece);
 			this.addPiece(piece, square);
 			console.log(`${piece.getName} put on ${square}`);
-		} else {
-			console.log('No square found');
-			throw new Error();
-		}
+		} else throw new Error('No square found');
 	}
 
 	addPiece(piece: Piece, square: string): void {

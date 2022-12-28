@@ -1,5 +1,5 @@
-import { Square } from './Square';
 import { Board } from './Board';
+import { Square } from './Square';
 import { Move } from './types';
 
 export const knightMoveHelper = (sq: Square, board: Board): number[] => {

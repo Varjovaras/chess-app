@@ -2,13 +2,13 @@ import { Board } from './Board';
 import { Piece } from './Piece';
 import { Rook } from './Rook';
 import { Square } from './Square';
-import { ChessPieces, Color } from './types';
+import { ChessPieces, Color, ColorType } from './types';
 
 export class King extends Piece {
-	override readonly color: Color;
+	override readonly color: ColorType;
 	private castlingAllowed: boolean;
 
-	constructor(square: Square, color: Color) {
+	constructor(square: Square, color: ColorType) {
 		super(square);
 		this.color = color;
 		this.castlingAllowed = true;
@@ -91,6 +91,7 @@ export class King extends Piece {
 		console.log('castling not allowed');
 		return false;
 	}
+
 	queenSideCastling(startSq: Square, endSq: Square, board: Board): boolean {
 		if (startSq.getRank === 1) {
 			let rook = board.getSquare('a1')?.getPiece;

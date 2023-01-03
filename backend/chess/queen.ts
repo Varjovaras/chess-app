@@ -1,12 +1,12 @@
 import { Board } from './Board';
 import { Piece } from './Piece';
 import { Square } from './Square';
-import { ChessPieces, Color, SingleMove } from './types';
+import { ChessPieces, Color, ColorType, SingleMove } from './types';
 
 export class Queen extends Piece {
-	override readonly color: Color;
+	override readonly color: ColorType;
 
-	constructor(square: Square, color: Color) {
+	constructor(square: Square, color: ColorType) {
 		super(square);
 		this.color = color;
 		if (color === Color.white) {

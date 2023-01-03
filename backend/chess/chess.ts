@@ -8,21 +8,19 @@ import { King } from './king';
 import { Knight } from './knight';
 import { enPassantHelper } from './moveHelpers';
 import { Pawn } from './pawn';
-import { ChessPieces, Color, Move, PieceSquare } from './types';
+import { ChessPieces, Color, ColorType, Move } from './types';
 
 export default class Chess {
 	private _board: Board;
 	private _moves: Move[];
 
-	private _pieces: PieceSquare[];
 	private _turnNumber: number;
 
 	static STARTING_POSITION =
 		'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
-	constructor(moves?: Move[], pieces?: PieceSquare[]) {
+	constructor(moves?: Move[]) {
 		this._moves = moves ? moves : [];
-		this._pieces = pieces ? pieces : [];
 		this._turnNumber = 0;
 		this._board = new Board();
 	}
@@ -35,10 +33,6 @@ export default class Chess {
 		return this._moves;
 	}
 
-	get getPieces() {
-		return this._pieces;
-	}
-
 	get getTurnNumber() {
 		return this._turnNumber;
 	}
@@ -47,7 +41,7 @@ export default class Chess {
 		this._turnNumber++;
 	}
 
-	checkTurn(): Color {
+	checkTurn(): ColorType {
 		return this.getTurnNumber % 2 === 0 ? Color.white : Color.black;
 	}
 
@@ -124,8 +118,6 @@ export default class Chess {
 		this.fakeMovePiece(startSqTempBoard, endSqTempBoard, newBoard, pieceName);
 		if (newBoard.whiteCheck()) return;
 		console.log('White king not in check anymore. Move legal');
-		// console.log(startSq);
-		// console.log(endSq);
 		this.movePiece(startSq, endSq, pieceName);
 	}
 
@@ -154,64 +146,106 @@ export default class Chess {
 	}
 
 	private movePiece(startSq: Square, endSq: Square, pieceName?: string): void {
-		//returns piece if promoting a pawn
-		let isLegalMoveOrPiece: boolean | Piece;
-		if (startSq.getPiece?.getColor !== this.checkTurn()) {
+		let isLegalMove: boolean = false;
+		let promotedPiece: Piece | boolean = false;
+		let startSqPiece = startSq.getPiece;
+		if (!startSqPiece || !endSq) return;
+		if (startSqPiece.getColor !== this.checkTurn()) {
 			console.log('Wrong players turn');
 			return;
 		}
+		let move = this.latestMove();
 
-		if (startSq.getPiece !== null && endSq !== null) {
-			//check if pawn is about to promote
+		if (startSqPiece instanceof Pawn) {
 			if (
-				startSq?.getRank === 7 &&
-				endSq?.getRank === 8 &&
-				startSq.getPiece?.getName.toUpperCase() === ChessPieces.PAWN_BLACK
+				(pieceName &&
+					startSq?.getRank === 7 &&
+					endSq?.getRank === 8 &&
+					startSqPiece.getName === ChessPieces.PAWN_WHITE) ||
+				(pieceName &&
+					startSq?.getRank === 2 &&
+					endSq?.getRank === 1 &&
+					startSqPiece.getName === ChessPieces.PAWN_BLACK)
 			) {
-				isLegalMoveOrPiece = startSq.getPiece.move(
+				promotedPiece = startSqPiece.promote(
 					startSq,
 					endSq,
 					this._board,
 					pieceName
 				);
-			} else {
-				let move = this.latestMove();
-				if (move && startSq.getPiece.getFirstLetter().toUpperCase() === 'P')
-					isLegalMoveOrPiece = startSq.getPiece.move(
-						startSq,
-						endSq,
-						this._board,
-						undefined,
-						move
-					);
-				else
-					isLegalMoveOrPiece = startSq.getPiece.move(
-						startSq,
-						endSq,
-						this._board
-					);
-			}
-			let move = this.latestMove();
-			//is only an object if promoting a pawn, if not object this runs
-			if (move && enPassantHelper(startSq, endSq, move)) {
+			} else if (move && enPassantHelper(startSq, endSq, move)) {
+				isLegalMove = startSqPiece.move(startSq, endSq, this._board, move);
+				console.log(isLegalMove);
 				this._board.getSquareById(move.endSq.getSquare.getId)?.setPiece(null);
-				this._pieces = this._pieces.filter(
-					(p: PieceSquare) => p.square !== move?.endSq.getSquareName
-				);
-			}
-			if (typeof isLegalMoveOrPiece !== 'object' && isLegalMoveOrPiece) {
-				this.handleMove(startSq, endSq);
-				return;
-			}
-			//promotion logic
-			else if (isLegalMoveOrPiece) {
-				endSq.setPiece(isLegalMoveOrPiece);
-				endSq.setSquareForPiece(endSq);
-				this.handleMove(startSq, endSq);
-				startSq.setPiece(null);
-				return;
-			}
+			} else isLegalMove = startSqPiece.move(startSq, endSq, this._board);
+		} else isLegalMove = startSqPiece.move(startSq, endSq, this._board);
+
+		if (promotedPiece instanceof Piece) {
+			endSq.setPiece(promotedPiece);
+			endSq.setSquareForPiece(endSq);
+			this.handleMove(startSq, endSq);
+			startSq.setPiece(null);
+			return;
 		}
+
+		if (isLegalMove) {
+			this.handleMove(startSq, endSq);
+			return;
+		}
+
+		throw new Error(
+			'Starting square is invalid, no piece to be found or ending square is invalid, inputted invalid move or a piece is on the way'
+		);
+	}
+
+	private fakeMovePiece(
+		startSq: Square,
+		endSq: Square,
+		board: Board,
+		pieceName?: string
+	): void {
+		let isLegalMove: boolean = false;
+		let promotedPiece: Piece | boolean = false;
+		let startSqPiece = startSq.getPiece;
+		if (!startSqPiece || !endSq) return;
+		if (startSqPiece.getColor !== this.checkTurn()) {
+			console.log('Wrong players turn');
+			return;
+		}
+		let move = this.latestMove();
+
+		if (startSqPiece instanceof Pawn) {
+			if (
+				(pieceName &&
+					startSq?.getRank === 7 &&
+					endSq?.getRank === 8 &&
+					startSqPiece.getName === ChessPieces.PAWN_WHITE) ||
+				(pieceName &&
+					startSq?.getRank === 2 &&
+					endSq?.getRank === 1 &&
+					startSqPiece.getName === ChessPieces.PAWN_BLACK)
+			) {
+				promotedPiece = startSqPiece.promote(startSq, endSq, board, pieceName);
+			} else if (move && enPassantHelper(startSq, endSq, move)) {
+				isLegalMove = startSqPiece.move(startSq, endSq, this._board, move);
+				console.log(isLegalMove);
+				this._board.getSquareById(move.endSq.getSquare.getId)?.setPiece(null);
+			} else isLegalMove = startSqPiece.move(startSq, endSq, board);
+		} else isLegalMove = startSqPiece.move(startSq, endSq, board);
+
+		if (promotedPiece instanceof Piece) {
+			endSq.setPiece(promotedPiece);
+			endSq.setSquareForPiece(endSq);
+			this.handleTempPieces(startSq, endSq);
+			startSq.setPiece(null);
+			return;
+		}
+
+		if (isLegalMove) {
+			this.handleTempPieces(startSq, endSq);
+			return;
+		}
+
 		throw new Error(
 			'Starting square is invalid, no piece to be found or ending square is invalid, inputted invalid move or a piece is on the way'
 		);
@@ -271,143 +305,59 @@ export default class Chess {
 		let startSqPiece = startSq.getPiece;
 		let endSqPiece = endSq.getPiece;
 		if (enPassantSquare) {
-			this._pieces = this._pieces.filter(
-				(p: PieceSquare) => p.square !== enPassantSquare.getSquareName
-			);
+			// this._pieces = this._pieces.filter(
+			// 	(p: PieceSquare) => p.square !== enPassantSquare.getSquareName
+			// );
 		}
 		if (endSqPiece) {
-			this._pieces = this._pieces.filter(
-				(p: PieceSquare) => p.square !== endSq.getSquareName
-			);
+			// this._pieces = this._pieces.filter(
+			// 	(p: PieceSquare) => p.square !== endSq.getSquareName
+			// );
 		}
 		if (startSqPiece) {
-			this._pieces = this._pieces.filter(
-				(p: PieceSquare) => p.square !== startSq.getSquareName
-			);
+			// this._pieces = this._pieces.filter(
+			// 	(p: PieceSquare) => p.square !== startSq.getSquareName
+			// );
+			console.log(startSqPiece);
 			endSq.setPiece(startSqPiece);
 			let endSquareToPiece = endSq;
 			endSq.setSquareForPiece(endSquareToPiece);
 			startSq.setPiece(null);
-			this._pieces.push({
-				square: endSq.getSquareName,
-				piece: endSq.getPiece!,
-			});
+			// this._pieces.push({
+			// 	square: endSq.getSquareName,
+			// 	piece: endSq.getPiece!,
+			// });
 		}
 	}
 
-	handleTempPieces(
-		startSq: Square,
-		endSq: Square,
-		enPassantSquare?: Square
-	): void {
+	handleTempPieces(startSq: Square, endSq: Square): void {
 		let startSqPiece = startSq.getPiece;
-		let endSqPiece = endSq.getPiece;
-		// if (enPassantSquare) {
-		// 	this._pieces = this._pieces.filter(
-		// 		(p: PieceSquare) => p.square !== enPassantSquare.getSquareName
-		// 	);
-		// }
-		// if (endSqPiece) {
-		// 	this._pieces = this._pieces.filter(
-		// 		(p: PieceSquare) => p.square !== endSq.getSquareName
-		// 	);
-		// }
-		// if (startSqPiece) {§
-		// 	this._pieces = this._pieces.filter(
-		// 		(p: PieceSquare) => p.square !== startSq.getSquareName
-		// 	);
 		endSq.setPiece(startSqPiece!);
 		let endSquareToPiece = endSq;
 		endSq.setSquareForPiece(endSquareToPiece);
 		startSq.setPiece(null);
 	}
 
-	fakeMovePiece(
-		startSq: Square,
-		endSq: Square,
-		board: Board,
-		pieceName?: string
-	): void {
-		//returns piece if promoting a pawn
-		let isLegalMoveOrPiece: boolean | Piece;
-		if (startSq.getPiece?.getColor !== this.checkTurn()) {
-			throw new Error('Wrong players turn');
-		}
-
-		if (startSq.getPiece !== null && endSq !== null) {
-			//check if pawn is about to promote
-			if (
-				startSq?.getRank === 7 &&
-				endSq?.getRank === 8 &&
-				startSq.getPiece?.getName.toUpperCase() === ChessPieces.PAWN_BLACK
-			) {
-				isLegalMoveOrPiece = startSq.getPiece.move(
-					startSq,
-					endSq,
-					board,
-					pieceName
-				);
-			} else {
-				let move = this.latestMove();
-				if (move && startSq.getPiece.getFirstLetter().toUpperCase() === 'P')
-					isLegalMoveOrPiece = startSq.getPiece.move(
-						startSq,
-						endSq,
-						board,
-						undefined,
-						move
-					);
-				else isLegalMoveOrPiece = startSq.getPiece.move(startSq, endSq, board);
-			}
-			let move = this.latestMove();
-			//is only an object if promoting a pawn, if not object this runs
-			if (move && enPassantHelper(startSq, endSq, move)) {
-				board.getSquareById(move.endSq.getSquare.getId)?.setPiece(null);
-				// this._pieces = this._pieces.filter(
-				// 	(p: PieceSquare) => p.square !== move?.endSq.getSquareName
-				// );
-			}
-
-			//
-			if (typeof isLegalMoveOrPiece !== 'object' && isLegalMoveOrPiece) {
-				// this.handleMove(startSq, endSq);
-				this.handleTempPieces(startSq, endSq);
-				return;
-			}
-			//promotion logic
-			else if (isLegalMoveOrPiece) {
-				endSq.setPiece(isLegalMoveOrPiece);
-				endSq.setSquareForPiece(endSq);
-				this.handleTempPieces(startSq, endSq);
-				startSq.setPiece(null);
-				return;
-			}
-		}
-		throw new Error(
-			'Starting square is invalid, no piece to be found or ending square is invalid, inputted invalid move or a piece is on the way'
-		);
-	}
-
 	//initialization or promoting
 	putPieceOnBoard(square: string, piece: Piece): void {
 		let sq = this._board.getSquare(square);
 		if (sq && !this.getBoard.getSquare(sq.getSquareName)!.isSquareOccupied()) {
-			this.removePiece(square);
+			// this.removePiece(square);
 		}
 		if (sq) {
 			sq.setPiece(piece);
-			this.addPiece(piece, square);
+			// this.addPiece(piece, square);
 			console.log(`${piece.getName} put on ${square}`);
 		} else throw new Error('No square found');
 	}
 
-	addPiece(piece: Piece, square: string): void {
-		this._pieces.push({ square: square, piece: piece });
-	}
+	// addPiece(piece: Piece, square: string): void {
+	// 	this._pieces.push({ square: square, piece: piece });
+	// }
 
-	removePiece(square: string): void {
-		this._pieces = this._pieces.filter((p: PieceSquare) => p.square !== square);
-	}
+	// removePiece(square: string): void {
+	// 	this._pieces = this._pieces.filter((p: PieceSquare) => p.square !== square);
+	// }
 
 	algebraicNotation(): string[] {
 		let returnArray: string[] = [];
@@ -443,7 +393,7 @@ export default class Chess {
 
 		//initialize
 		this._moves = [];
-		this._pieces = [];
+		// this._pieces = [];
 		this._turnNumber = 0;
 		this._board.getBoard.forEach((s) => {
 			s.setPiece(null);
@@ -513,7 +463,7 @@ export default class Chess {
 
 	emptyBoard(): void {
 		this._moves = [];
-		this._pieces = [];
+		// this._pieces = [];
 		this._turnNumber = 0;
 		this._board.getBoard.forEach((s) => {
 			s.setPiece(null);

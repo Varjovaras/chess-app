@@ -5,12 +5,12 @@ import { Piece } from './Piece';
 import { Queen } from './Queen';
 import { Rook } from './Rook';
 import { Square } from './Square';
-import { ChessPieces, Color, Move, SingleMove } from './types';
+import { ChessPieces, Color, ColorType, Move, SingleMove } from './types';
 
 export class Pawn extends Piece {
-	override readonly color: Color;
+	override readonly color: ColorType;
 
-	constructor(square: Square, color: Color) {
+	constructor(square: Square, color: ColorType) {
 		super(square);
 		this.color = color;
 		if (color === Color.white) this.name = ChessPieces.PAWN_WHITE;
@@ -21,16 +21,29 @@ export class Pawn extends Piece {
 		startSq: Square,
 		endSq: Square,
 		board: Board,
-		piece?: string,
 		move?: Move
-	): boolean | Piece {
-		if (this.color === Color.white)
-			return Pawn.moveWhite(startSq, endSq, board, piece, move);
-		else if (this.color === Color.black)
-			return Pawn.moveBlack(startSq, endSq, board, piece, move);
-		else {
-			console.log('Piece not found');
-			return false;
+	): boolean {
+		if (this.color === Color.white) {
+			let bool = Pawn.moveWhite(startSq, endSq, board, undefined, move);
+			if (typeof bool === 'boolean') return bool;
+		} else if (this.color === Color.black) {
+			let bool = Pawn.moveBlack(startSq, endSq, board, undefined, move);
+			if (typeof bool === 'boolean') return bool;
+		}
+		return false;
+	}
+
+	promote(startSq: Square, endSq: Square, board: Board, piece: string): Piece {
+		if (this.color === Color.white) {
+			let returnPiece = Pawn.moveWhite(startSq, endSq, board, piece);
+			if (!(returnPiece instanceof Piece)) {
+				throw new Error('Error promoting');
+			} else return returnPiece;
+		} else {
+			let returnPiece = Pawn.moveBlack(startSq, endSq, board, piece);
+			if (!(returnPiece instanceof Piece)) {
+				throw new Error('Error promoting');
+			} else return returnPiece;
 		}
 	}
 
@@ -149,7 +162,7 @@ export class Pawn extends Piece {
 			startSq.getPiece?.getColor === Color.white ? 5 : 4;
 		let enPassantEndSqRank = startSq.getPiece?.getColor === Color.white ? 6 : 3;
 
-		let color: Color | null =
+		let color: ColorType | null =
 			startSq.getPiece?.getColor === Color.white ? Color.black : null;
 
 		//is pawn capturing or not
@@ -241,7 +254,7 @@ export class Pawn extends Piece {
 		}
 	}
 
-	static promotion(endSq: Square, piece: string, color: Color): Piece {
+	static promotion(endSq: Square, piece: string, color: ColorType): Piece {
 		switch (piece) {
 			case 'PAWN':
 				console.log('Promote to pawn');

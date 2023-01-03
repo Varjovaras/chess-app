@@ -1,6 +1,6 @@
 import { Square } from './Square';
 import { knightMoveHelper } from './moveHelpers';
-import { Color } from './types';
+import { Color, ColorType } from './types';
 
 export class Board {
 	private _board: Square[];
@@ -8,14 +8,14 @@ export class Board {
 
 	constructor() {
 		let board = new Array(64);
-		let firstSquare = Color.black;
-		let secondSquare = Color.white;
+		let firstSquare: ColorType = Color.black;
+		let secondSquare: ColorType = Color.white;
 		let rank = 1;
 		for (let i = 0, file = 0; i < board.length; i++, file++) {
 			if (file === 8) {
 				file = 0;
 				rank++;
-				let temp: Color = firstSquare;
+				let temp: ColorType = firstSquare;
 				firstSquare = secondSquare;
 				secondSquare = temp;
 			}
@@ -123,9 +123,8 @@ export class Board {
 			console.log('No square for white king found');
 			return false;
 		}
-		let sqId = this.getSquareById(sq.getId)?.getId;
-
-		if (!sqId) {
+		let sqId = sq.getId;
+		if (!sqId && sqId !== 0) {
 			console.log('No square id for white king found');
 			return false;
 		}
@@ -156,7 +155,6 @@ export class Board {
 		// downwards
 		for (let i = 1; i < 8; i++) {
 			let testSq = this.getSquareById(sqId - 8 * i);
-
 			if (!testSq) break;
 			let testSqPiece = testSq.getPiece;
 			if (!testSqPiece && testSq.getRank === 1) {
@@ -563,6 +561,10 @@ export class Board {
 		}
 		//if no checks found
 		return false;
+	}
+
+	isEmpty(): boolean {
+		return this._board.every((sq) => sq.getPiece === null);
 	}
 
 	static findFileIndex(s: string): number {

@@ -1,19 +1,19 @@
 import { Piece } from './Piece';
-import { Color } from './types';
+import { Color, ColorType } from './types';
 
 export class Square {
 	private _file: string;
 	private _rank: number;
 	private _squareName: string;
-	private _color: Color;
-	private _piece?: Piece | null;
+	private _color: ColorType;
 	private _id: number;
+	private _piece?: Piece | null;
 
 	constructor(
 		file: string,
 		rank: number,
 		squareName: string,
-		color: Color,
+		color: ColorType,
 		id: number,
 		piece?: Piece | null
 	) {
@@ -65,7 +65,7 @@ export class Square {
 		this._squareName = squareName;
 	}
 
-	setColor(color: Color) {
+	setColor(color: ColorType) {
 		this._color = color;
 	}
 
@@ -89,5 +89,9 @@ export class Square {
 
 	isSquareOccupied(): boolean {
 		return this._piece === null;
+	}
+
+	removePiece() {
+		this._piece = null;
 	}
 }

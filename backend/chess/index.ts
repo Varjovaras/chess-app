@@ -1,11 +1,11 @@
 console.time('c');
-import Chess from './src/chess';
-import { Queen } from './src/Queen';
-import { Rook } from './src/Rook';
-import { King } from './src/king';
-import { Knight } from './src/knight';
-import { Pawn } from './src/pawn';
-import { Color } from './src/types';
+import Chess from './chess';
+import { Queen } from './Queen';
+import { Rook } from './Rook';
+import { King } from './king';
+import { Knight } from './knight';
+import { Pawn } from './pawn';
+import { Color } from './types';
 
 const chess = new Chess();
 chess.putPieceOnBoard(
@@ -21,8 +21,6 @@ chess.move('e2', 'e4');
 chess.move('d7', 'd5');
 chess.move('e4', 'd5');
 
-console.log(chess.getPieces);
-
 chess.fen(Chess.STARTING_POSITION);
 console.log(chess.getBoard.printBoardWhite());
 
@@ -30,6 +28,8 @@ console.log(chess.getBoard.printBoardWhite());
 chess.fen(Chess.STARTING_POSITION);
 chess.move('e2', 'e4');
 chess.move('d7', 'd5');
+console.log(chess.getBoard.getSquare('e4'));
+console.log('blyat');
 chess.move('e4', 'd5');
 chess.move('g8', 'f6');
 chess.move('g1', 'e2');
@@ -40,7 +40,6 @@ chess.move('c6', 'c7');
 chess.move('g5', 'g4');
 chess.move('h2', 'h4');
 chess.move('g4', 'h3');
-console.log(chess.getPieces);
 console.log(chess.getBoard.printBoardWhite());
 
 console.log(chess.getMoves);
@@ -212,8 +211,11 @@ chess.move('e8', 'c8');
 console.log(chess.getBoard.printBoardWhite());
 console.log(chess.getBoard.getSquare('d8'));
 
-// for (let i = 0; i < 10000; i++) {
-// 	console.log(board);
+// for (let i = 0; i < 100000000; i++) {
+// 	let board = chess.getBoard;
+// 	//@ts-ignore
+// 	// board = chess.getBoard.getBlackKing;
+// 	// console.log(board);
 // }
 
 // // let game = new Game(chess);

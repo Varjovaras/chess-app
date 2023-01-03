@@ -1,13 +1,13 @@
 import { Board } from './Board';
 import { Square } from './Square';
-import { Color, Move, SingleMove } from './types';
+import { ColorType, Move, SingleMove } from './types';
 
 export class Piece {
 	protected name: string;
-	protected color: Color | undefined;
+	protected color: ColorType | undefined;
 	protected square?: Square;
 
-	constructor(square?: Square, color?: Color) {
+	constructor(square?: Square, color?: ColorType) {
 		this.name = '';
 		this.square = square;
 		this.color = color;

@@ -1,6 +1,6 @@
 import { Square } from './Square';
 import { knightMoveHelper } from './moveHelpers';
-import { Color } from './types';
+import { Color, ColorType } from './types';
 
 export class Board {
 	private _board: Square[];
@@ -8,14 +8,14 @@ export class Board {
 
 	constructor() {
 		let board = new Array(64);
-		let firstSquare = Color.black;
-		let secondSquare = Color.white;
+		let firstSquare: ColorType = Color.black;
+		let secondSquare: ColorType = Color.white;
 		let rank = 1;
 		for (let i = 0, file = 0; i < board.length; i++, file++) {
 			if (file === 8) {
 				file = 0;
 				rank++;
-				let temp: Color = firstSquare;
+				let temp: ColorType = firstSquare;
 				firstSquare = secondSquare;
 				secondSquare = temp;
 			}

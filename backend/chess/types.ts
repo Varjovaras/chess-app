@@ -1,10 +1,31 @@
 import { Piece } from './Piece';
 import { Square } from './Square';
 
-export enum Color {
-	black = 'BLACK',
-	white = 'WHITE',
-}
+export const Color = {
+	black: 'BLACK',
+	white: 'WHITE',
+} as const;
+
+type ObjectValues<T> = T[keyof T];
+
+export type ColorType = ObjectValues<typeof Color>;
+
+export const ChessPieces = {
+	PAWN_WHITE: 'pawn',
+	PAWN_BLACK: 'PAWN',
+	KNIGHT_WHITE: 'night', //first letter n for printing purposes
+	KNIGHT_BLACK: 'NIGHT', //first letter N for printing purposes
+	BISHOP_WHITE: 'bishop',
+	BISHOP_BLACK: 'BISHOP',
+	ROOK_WHITE: 'rook',
+	ROOK_BLACK: 'ROOK',
+	QUEEN_WHITE: 'queen',
+	QUEEN_BLACK: 'QUEEN',
+	KING_WHITE: 'king',
+	KING_BLACK: 'KING',
+} as const;
+
+export type PieceType = ObjectValues<typeof ChessPieces>;
 
 export type Move = {
 	startSq: Square;
@@ -23,17 +44,17 @@ export type PieceSquare = {
 	piece: Piece;
 };
 
-export enum ChessPieces {
-	PAWN_WHITE = 'pawn',
-	PAWN_BLACK = 'PAWN',
-	KNIGHT_WHITE = 'night', //first letter n for printing purposes
-	KNIGHT_BLACK = 'NIGHT', //first letter N for printing purposes
-	BISHOP_WHITE = 'bishop',
-	BISHOP_BLACK = 'BISHOP',
-	ROOK_WHITE = 'rook',
-	ROOK_BLACK = 'ROOK',
-	QUEEN_WHITE = 'queen',
-	QUEEN_BLACK = 'QUEEN',
-	KING_WHITE = 'king',
-	KING_BLACK = 'KING',
-}
+// export enum ChessPieces {
+// 	PAWN_WHITE = 'pawn',
+// 	PAWN_BLACK = 'PAWN',
+// 	KNIGHT_WHITE = 'night', //first letter n for printing purposes
+// 	KNIGHT_BLACK = 'NIGHT', //first letter N for printing purposes
+// 	BISHOP_WHITE = 'bishop',
+// 	BISHOP_BLACK = 'BISHOP',
+// 	ROOK_WHITE = 'rook',
+// 	ROOK_BLACK = 'ROOK',
+// 	QUEEN_WHITE = 'queen',
+// 	QUEEN_BLACK = 'QUEEN',
+// 	KING_WHITE = 'king',
+// 	KING_BLACK = 'KING',
+// }

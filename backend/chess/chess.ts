@@ -8,7 +8,7 @@ import { King } from './king';
 import { Knight } from './knight';
 import { enPassantHelper } from './moveHelpers';
 import { Pawn } from './pawn';
-import { ChessPieces, Color, Move } from './types';
+import { ChessPieces, Color, ColorType, Move } from './types';
 
 export default class Chess {
 	private _board: Board;
@@ -41,7 +41,7 @@ export default class Chess {
 		this._turnNumber++;
 	}
 
-	checkTurn(): Color {
+	checkTurn(): ColorType {
 		return this.getTurnNumber % 2 === 0 ? Color.white : Color.black;
 	}
 

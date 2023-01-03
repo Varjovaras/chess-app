@@ -1,11 +1,11 @@
 import { Piece } from './Piece';
-import { Color } from './types';
+import { Color, ColorType } from './types';
 
 export class Square {
 	private _file: string;
 	private _rank: number;
 	private _squareName: string;
-	private _color: Color;
+	private _color: ColorType;
 	private _id: number;
 	private _piece?: Piece | null;
 
@@ -13,7 +13,7 @@ export class Square {
 		file: string,
 		rank: number,
 		squareName: string,
-		color: Color,
+		color: ColorType,
 		id: number,
 		piece?: Piece | null
 	) {
@@ -65,7 +65,7 @@ export class Square {
 		this._squareName = squareName;
 	}
 
-	setColor(color: Color) {
+	setColor(color: ColorType) {
 		this._color = color;
 	}
 

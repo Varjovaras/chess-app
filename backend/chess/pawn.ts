@@ -5,12 +5,12 @@ import { Piece } from './Piece';
 import { Queen } from './Queen';
 import { Rook } from './Rook';
 import { Square } from './Square';
-import { ChessPieces, Color, Move, SingleMove } from './types';
+import { ChessPieces, Color, ColorType, Move, SingleMove } from './types';
 
 export class Pawn extends Piece {
-	override readonly color: Color;
+	override readonly color: ColorType;
 
-	constructor(square: Square, color: Color) {
+	constructor(square: Square, color: ColorType) {
 		super(square);
 		this.color = color;
 		if (color === Color.white) this.name = ChessPieces.PAWN_WHITE;
@@ -162,7 +162,7 @@ export class Pawn extends Piece {
 			startSq.getPiece?.getColor === Color.white ? 5 : 4;
 		let enPassantEndSqRank = startSq.getPiece?.getColor === Color.white ? 6 : 3;
 
-		let color: Color | null =
+		let color: ColorType | null =
 			startSq.getPiece?.getColor === Color.white ? Color.black : null;
 
 		//is pawn capturing or not
@@ -254,7 +254,7 @@ export class Pawn extends Piece {
 		}
 	}
 
-	static promotion(endSq: Square, piece: string, color: Color): Piece {
+	static promotion(endSq: Square, piece: string, color: ColorType): Piece {
 		switch (piece) {
 			case 'PAWN':
 				console.log('Promote to pawn');

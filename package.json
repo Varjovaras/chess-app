@@ -8,8 +8,8 @@
 		"test": "jest",
 		"pocketbase": "cd chess-frontend && ./pocketbase serve",
 		"chess": "cd backend && ts-node ./chess/index.ts",
-		"tsc": "cd chess && tsc",
-		"js": "cd chess && cd dist && node index.js"
+		"tsc": "cd backend && tsc",
+		"js": "cd backend && cd dist && cd chess && node index.js"
 	},
 	"author": "Kristjan Rajaniemi",
 	"license": "ISC",

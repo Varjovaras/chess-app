@@ -91,6 +91,7 @@ export class King extends Piece {
 		console.log('castling not allowed');
 		return false;
 	}
+	
 	queenSideCastling(startSq: Square, endSq: Square, board: Board): boolean {
 		if (startSq.getRank === 1) {
 			let rook = board.getSquare('a1')?.getPiece;

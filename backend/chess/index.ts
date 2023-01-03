@@ -1,11 +1,11 @@
 console.time('c');
-import Chess from './src/chess';
-import { Queen } from './src/Queen';
-import { Rook } from './src/Rook';
-import { King } from './src/king';
-import { Knight } from './src/knight';
-import { Pawn } from './src/pawn';
-import { Color } from './src/types';
+import Chess from './chess';
+import { Queen } from './Queen';
+import { Rook } from './Rook';
+import { King } from './king';
+import { Knight } from './knight';
+import { Pawn } from './pawn';
+import { Color } from './types';
 
 const chess = new Chess();
 chess.putPieceOnBoard(

@@ -6,8 +6,8 @@ export class Square {
 	private _rank: number;
 	private _squareName: string;
 	private _color: Color;
-	private _piece?: Piece | null;
 	private _id: number;
+	private _piece?: Piece | null;
 
 	constructor(
 		file: string,
@@ -89,5 +89,9 @@ export class Square {
 
 	isSquareOccupied(): boolean {
 		return this._piece === null;
+	}
+
+	removePiece() {
+		this._piece = null;
 	}
 }

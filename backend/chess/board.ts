@@ -123,9 +123,8 @@ export class Board {
 			console.log('No square for white king found');
 			return false;
 		}
-		let sqId = this.getSquareById(sq.getId)?.getId;
-
-		if (!sqId) {
+		let sqId = sq.getId;
+		if (!sqId && sqId !== 0) {
 			console.log('No square id for white king found');
 			return false;
 		}
@@ -156,7 +155,6 @@ export class Board {
 		// downwards
 		for (let i = 1; i < 8; i++) {
 			let testSq = this.getSquareById(sqId - 8 * i);
-
 			if (!testSq) break;
 			let testSqPiece = testSq.getPiece;
 			if (!testSqPiece && testSq.getRank === 1) {
@@ -563,6 +561,10 @@ export class Board {
 		}
 		//if no checks found
 		return false;
+	}
+
+	isEmpty(): boolean {
+		return this._board.every((sq) => sq.getPiece === null);
 	}
 
 	static findFileIndex(s: string): number {

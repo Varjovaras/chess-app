@@ -211,8 +211,8 @@ chess.move('e8', 'c8');
 console.log(chess.getBoard.printBoardWhite());
 console.log(chess.getBoard.getSquare('d8'));
 
-// for (let i = 0; i < 100000000; i++) {
-// 	let board = chess.getBoard;
+// for (let i = 0; i < 1000000; i++) {
+// 	let board = chess.getBoard.getSquareById(i);
 // 	//@ts-ignore
 // 	// board = chess.getBoard.getBlackKing;
 // 	// console.log(board);

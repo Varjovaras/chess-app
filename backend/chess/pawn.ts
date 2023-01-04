@@ -291,7 +291,6 @@ export class Pawn extends Piece {
 				move.endSq.getRank === 4)
 		) {
 			console.log('En passant successful');
-			// move.endSq.setPiece(null);
 			return true;
 		} else {
 			console.log('En passant unsuccessful');

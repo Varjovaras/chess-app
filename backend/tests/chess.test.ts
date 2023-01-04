@@ -38,7 +38,7 @@ describe('Adding and removing pieces works', () => {
 		expect(chess.getBoard.isEmpty()).toBe(true);
 	});
 
-	test('Moving function works and checks if your king is in check', () => {
+	test('Moving function works and checks if white king is in check', () => {
 		chess.putPieceOnBoard(
 			'a1',
 			new King(chess.getBoard.getSquare('a1')!, Color.white)
@@ -47,14 +47,34 @@ describe('Adding and removing pieces works', () => {
 			'a8',
 			new Rook(chess.getBoard.getSquare('a8')!, Color.black)
 		);
-		console.log(chess.getBoard.getSquare('a1'));
+		chess.move('e2', 'e4');
+		expect(
+			chess.getSquareFromBoard('e2').getPiece && chess.getBoard.whiteCheck()
+		).toBeTruthy();
+	});
 
-		console.log(chess.getBoard.whiteCheck());
-		expect(chess.move('e2', 'e4')).toBeTruthy();
+	test('Moving function works and checks if black king is in check', () => {
+		chess.putPieceOnBoard(
+			'a1',
+			new King(chess.getBoard.getSquare('a1')!, Color.black)
+		);
+		chess.putPieceOnBoard(
+			'a8',
+			new Rook(chess.getBoard.getSquare('a8')!, Color.white)
+		);
+		chess.putPieceOnBoard(
+			'e7',
+			new Pawn(chess.getBoard.getSquare('e7')!, Color.black)
+		);
+		chess.move('e2', 'e4');
+		chess.move('e7', 'e5');
+
+		console.log(chess.getBoard.printBoardBlack());
+
+		expect(
+			chess.getSquareFromBoard('e4').getPiece &&
+				chess.getSquareFromBoard('e7').getPiece &&
+				chess.getBoard.blackCheck()
+		).toBeTruthy();
 	});
 });
-
-// chess.putPieceOnBoard(
-// 	'e2',
-// 	new Pawn(chess.getBoard.getSquare('e2')!, Color.white)
-// );

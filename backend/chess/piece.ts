@@ -39,7 +39,7 @@ export class Piece {
 	}
 
 	setSquare(sq: Square) {
-		console.log(`${this.getName} set on ${sq.getSquareName}`);
+		// console.log(`${this.getName} set on ${sq.getSquareName}`);
 		this.square = sq;
 	}
 

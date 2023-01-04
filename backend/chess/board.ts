@@ -347,9 +347,10 @@ export class Board {
 			console.log('No square for black king found');
 			return false;
 		}
+
 		let sqId = this.getSquareById(sq.getId)?.getId;
 
-		if (!sqId) {
+		if (!sqId && sqId !== 0) {
 			console.log('No square id for black king found');
 			return false;
 		}
@@ -357,6 +358,7 @@ export class Board {
 		// upwards
 		for (let i = 1; i < 8; i++) {
 			let testSq = this.getSquareById(sqId + 8 * i);
+			console.log(testSq);
 			if (!testSq) break;
 			let testSqPiece = testSq.getPiece;
 			if (!testSqPiece && testSq.getRank === 8) break;

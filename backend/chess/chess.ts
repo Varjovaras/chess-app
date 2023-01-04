@@ -123,7 +123,7 @@ export default class Chess {
 		let endSqTempBoard = newBoard.getSquare(endSq.getSquareName);
 		if (!startSqTempBoard || !endSqTempBoard) return;
 		this.fakeMovePiece(startSqTempBoard, endSqTempBoard, newBoard, pieceName);
-		if (newBoard.whiteCheck()) return;
+		if (newBoard.blackCheck()) return;
 		console.log('White king not in check anymore. Move legal');
 		this.movePiece(startSq, endSq, pieceName);
 	}
@@ -182,7 +182,6 @@ export default class Chess {
 				);
 			} else if (move && enPassantHelper(startSq, endSq, move)) {
 				isLegalMove = startSqPiece.move(startSq, endSq, this._board, move);
-				console.log(isLegalMove);
 				this._board.getSquareById(move.endSq.getSquare.getId)?.setPiece(null);
 			} else isLegalMove = startSqPiece.move(startSq, endSq, this._board);
 		} else isLegalMove = startSqPiece.move(startSq, endSq, this._board);
@@ -332,7 +331,7 @@ export default class Chess {
 
 		if (sq) {
 			sq.setPiece(piece);
-			console.log(`${piece.getName} put on ${square}`);
+			// console.log(`${piece.getName} put on ${square}`);
 		} else throw new Error('No square found');
 	}
 

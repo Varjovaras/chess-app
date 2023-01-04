@@ -1,5 +1,5 @@
 import { Piece } from './Piece';
-import { Color, ColorType } from './types';
+import { ColorType } from './types';
 
 export class Square {
 	private _file: string;

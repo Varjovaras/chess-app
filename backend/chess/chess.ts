@@ -8,7 +8,14 @@ import { King } from './king';
 import { Knight } from './knight';
 import { enPassantHelper } from './moveHelpers';
 import { Pawn } from './pawn';
-import { ChessPieces, Color, ColorType, Move } from './types';
+import {
+	ChessPieceType,
+	ChessPieces,
+	Color,
+	ColorType,
+	Move,
+	Pieces,
+} from './types';
 
 export default class Chess {
 	private _board: Board;
@@ -341,23 +348,12 @@ export default class Chess {
 	//initialization or promoting
 	putPieceOnBoard(square: string, piece: Piece): void {
 		let sq = this._board.getSquare(square);
-		if (sq && !this.getBoard.getSquare(sq.getSquareName)!.isSquareOccupied()) {
-			// this.removePiece(square);
-		}
+
 		if (sq) {
 			sq.setPiece(piece);
-			// this.addPiece(piece, square);
 			console.log(`${piece.getName} put on ${square}`);
 		} else throw new Error('No square found');
 	}
-
-	// addPiece(piece: Piece, square: string): void {
-	// 	this._pieces.push({ square: square, piece: piece });
-	// }
-
-	// removePiece(square: string): void {
-	// 	this._pieces = this._pieces.filter((p: PieceSquare) => p.square !== square);
-	// }
 
 	algebraicNotation(): string[] {
 		let returnArray: string[] = [];
@@ -468,6 +464,12 @@ export default class Chess {
 		this._board.getBoard.forEach((s) => {
 			s.setPiece(null);
 		});
+	}
+
+	getSquareFromBoard(s: string): Square {
+		let sq = this._board.getSquare(s);
+		if (!sq) throw new Error('Square ' + sq + ' not found');
+		return sq;
 	}
 
 	startingPosition(): void {

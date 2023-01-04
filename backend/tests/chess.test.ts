@@ -50,7 +50,7 @@ describe('Adding and removing pieces works', () => {
 		console.log(chess.getBoard.getSquare('a1'));
 
 		console.log(chess.getBoard.whiteCheck());
-		// expect(chess.move('e2', 'e4')).toBeTruthy();
+		expect(chess.move('e2', 'e4')).toBeTruthy();
 	});
 });
 

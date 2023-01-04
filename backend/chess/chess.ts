@@ -8,19 +8,11 @@ import { King } from './king';
 import { Knight } from './knight';
 import { enPassantHelper } from './moveHelpers';
 import { Pawn } from './pawn';
-import {
-	ChessPieceType,
-	ChessPieces,
-	Color,
-	ColorType,
-	Move,
-	Pieces,
-} from './types';
+import { ChessPieces, Color, ColorType, Move } from './types';
 
 export default class Chess {
 	private _board: Board;
 	private _moves: Move[];
-
 	private _turnNumber: number;
 
 	static STARTING_POSITION =
@@ -44,7 +36,7 @@ export default class Chess {
 		return this._turnNumber;
 	}
 
-	incrementMoveNumber() {
+	private incrementMoveNumber() {
 		this._turnNumber++;
 	}
 
@@ -63,11 +55,7 @@ export default class Chess {
 		return this.checkTurn() === Color.white ? 'White' : 'Black';
 	}
 
-	isGameOver(n: boolean): boolean {
-		return n;
-	}
-
-	whiteCheck(startSq: Square, endSq: Square, pieceName?: string) {
+	private whiteCheck(startSq: Square, endSq: Square, pieceName?: string) {
 		console.log('Checking if move removes white king from check');
 		let tempBoard: Square[] = [];
 		for (let i = 0; i < 64; i++) {
@@ -98,7 +86,7 @@ export default class Chess {
 		this.movePiece(startSq, endSq, pieceName);
 	}
 
-	blackCheck(startSq: Square, endSq: Square, pieceName?: string) {
+	private blackCheck(startSq: Square, endSq: Square, pieceName?: string) {
 		console.log('Checking if move removes black king from check');
 		let tempBoard: Square[] = [];
 		for (let i = 0; i < 64; i++) {
@@ -257,7 +245,7 @@ export default class Chess {
 		);
 	}
 
-	handleMove(startSq: Square, endSq: Square): void {
+	private handleMove(startSq: Square, endSq: Square): void {
 		if (
 			startSq.getPiece instanceof King &&
 			startSq.getFile === 'e' &&
@@ -270,7 +258,7 @@ export default class Chess {
 		this.incrementMoveNumber();
 	}
 
-	addMove(startSq: Square, endSq: Square): void {
+	private addMove(startSq: Square, endSq: Square): void {
 		console.log(
 			'Adding move: ' + startSq.getSquareName + ' ' + endSq.getSquareName
 		);
@@ -283,7 +271,7 @@ export default class Chess {
 		}
 	}
 
-	castling(startSq: Square, endSq: Square) {
+	private castling(startSq: Square, endSq: Square) {
 		if (endSq.getSquareName === 'g1') {
 			this.castlingRookHelper('h1', 'f1');
 		}
@@ -298,7 +286,7 @@ export default class Chess {
 		}
 	}
 
-	castlingRookHelper(rookStartSq: string, rookEndSq: string) {
+	private castlingRookHelper(rookStartSq: string, rookEndSq: string) {
 		let rook = this._board.getSquare(rookStartSq)?.getPiece;
 		if (!rook || !(rook instanceof Rook))
 			throw new Error('Castling cannot be completed without a rook');
@@ -307,7 +295,11 @@ export default class Chess {
 		this._board.getSquare(rookStartSq)?.setPiece(null);
 	}
 
-	handlePieces(startSq: Square, endSq: Square, enPassantSquare?: Square): void {
+	private handlePieces(
+		startSq: Square,
+		endSq: Square,
+		enPassantSquare?: Square
+	): void {
 		let startSqPiece = startSq.getPiece;
 		if (startSqPiece) {
 			endSq.setPiece(startSqPiece);
@@ -317,7 +309,7 @@ export default class Chess {
 		}
 	}
 
-	handleTempPieces(startSq: Square, endSq: Square): void {
+	private handleTempPieces(startSq: Square, endSq: Square): void {
 		let startSqPiece = startSq.getPiece;
 		endSq.setPiece(startSqPiece!);
 		let endSquareToPiece = endSq;
@@ -378,7 +370,7 @@ export default class Chess {
 	}
 
 	//what the hell
-	analyzeFen(pieces: string[]) {
+	private analyzeFen(pieces: string[]) {
 		for (let i = 0; i < 8; i++) {
 			let str = pieces[i];
 			if (str.length !== 8) {
@@ -390,7 +382,7 @@ export default class Chess {
 		}
 	}
 
-	fenHelper(i: number, str: string) {
+	private fenHelper(i: number, str: string) {
 		//i is row
 		//j is row times 8
 		//k iterates files

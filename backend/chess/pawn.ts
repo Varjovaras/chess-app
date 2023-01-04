@@ -33,6 +33,7 @@ export class Pawn extends Piece {
 		return false;
 	}
 
+	//only ran by chess.ts
 	promote(startSq: Square, endSq: Square, board: Board, piece: string): Piece {
 		if (this.color === Color.white) {
 			let returnPiece = Pawn.moveWhite(startSq, endSq, board, piece);
@@ -47,7 +48,7 @@ export class Pawn extends Piece {
 		}
 	}
 
-	static moveWhite(
+	private static moveWhite(
 		startSq: Square,
 		endSq: Square,
 		board: Board,
@@ -96,7 +97,7 @@ export class Pawn extends Piece {
 		return false;
 	}
 
-	static moveBlack(
+	private static moveBlack(
 		startSq: Square,
 		endSq: Square,
 		board: Board,

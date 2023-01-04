@@ -51,7 +51,11 @@ export class King extends Piece {
 		else return false;
 	}
 
-	kingSideCastling(startSq: Square, endSq: Square, board: Board): boolean {
+	private kingSideCastling(
+		startSq: Square,
+		endSq: Square,
+		board: Board
+	): boolean {
 		if (startSq.getRank === 1) {
 			let rook = board.getSquare('h1')?.getPiece;
 			if (!rook || !(rook instanceof Rook) || !rook.isCastlingAllowed()) {
@@ -92,7 +96,11 @@ export class King extends Piece {
 		return false;
 	}
 
-	queenSideCastling(startSq: Square, endSq: Square, board: Board): boolean {
+	private queenSideCastling(
+		startSq: Square,
+		endSq: Square,
+		board: Board
+	): boolean {
 		if (startSq.getRank === 1) {
 			let rook = board.getSquare('a1')?.getPiece;
 			if (!rook || !(rook instanceof Rook) || !rook.isCastlingAllowed()) {

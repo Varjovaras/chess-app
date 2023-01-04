@@ -310,30 +310,11 @@ export default class Chess {
 
 	handlePieces(startSq: Square, endSq: Square, enPassantSquare?: Square): void {
 		let startSqPiece = startSq.getPiece;
-		let endSqPiece = endSq.getPiece;
-		if (enPassantSquare) {
-			// this._pieces = this._pieces.filter(
-			// 	(p: PieceSquare) => p.square !== enPassantSquare.getSquareName
-			// );
-		}
-		if (endSqPiece) {
-			// this._pieces = this._pieces.filter(
-			// 	(p: PieceSquare) => p.square !== endSq.getSquareName
-			// );
-		}
 		if (startSqPiece) {
-			// this._pieces = this._pieces.filter(
-			// 	(p: PieceSquare) => p.square !== startSq.getSquareName
-			// );
-			console.log(startSqPiece);
 			endSq.setPiece(startSqPiece);
 			let endSquareToPiece = endSq;
 			endSq.setSquareForPiece(endSquareToPiece);
 			startSq.setPiece(null);
-			// this._pieces.push({
-			// 	square: endSq.getSquareName,
-			// 	piece: endSq.getPiece!,
-			// });
 		}
 	}
 

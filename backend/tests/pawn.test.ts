@@ -1,3 +1,5 @@
+import { Queen } from '../chess/Queen';
+import { Bishop } from '../chess/bishop';
 import Chess from '../chess/chess';
 import { Color } from '../chess/types';
 
@@ -68,6 +70,28 @@ describe('Pawn tests', () => {
 				!chess.getSquareFromBoard('f4').getPiece &&
 				!chess.getSquareFromBoard('e4').getPiece &&
 				chess.getSquareFromBoard('f3').getPiece?.getColor === Color.black
+		).toBeTruthy();
+	});
+
+	test('Promotion while capturing', () => {
+		chess.move('a2', 'a4');
+		chess.move('h7', 'h5');
+		chess.move('a4', 'a5');
+		chess.move('h5', 'h4');
+		chess.move('a5', 'a6');
+		chess.move('h4', 'h3');
+		chess.move('a6', 'b7');
+		chess.move('h3', 'g2');
+		chess.move('b7', 'c8', 'BISHOP');
+		chess.move('g2', 'f1', 'QUEEN');
+		console.log(chess.getBoard.printBoardWhite());
+		expect(
+			chess.getSquareFromBoard('c8').getPiece instanceof Bishop &&
+				chess.getSquareFromBoard('c8').getPiece?.getColor === 'WHITE' &&
+				!chess.getSquareFromBoard('b7').getPiece &&
+				chess.getSquareFromBoard('f1').getPiece instanceof Queen &&
+				chess.getSquareFromBoard('f1').getPiece?.getColor === 'BLACK' &&
+				!chess.getSquareFromBoard('g2').getPiece
 		).toBeTruthy();
 	});
 });

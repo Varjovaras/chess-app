@@ -168,19 +168,20 @@ export default class Chess {
 					this._board,
 					pieceName
 				);
+				endSq.setPiece(promotedPiece);
+				this._moves.push({
+					startSq: startSq,
+					endSq: endSq,
+					startSquarePiece: promotedPiece,
+				});
+				this.incrementMoveNumber();
+				startSq.setPiece(null);
+				return;
 			} else if (move && enPassantHelper(startSq, endSq, move)) {
 				isLegalMove = startSqPiece.move(startSq, endSq, this._board, move);
 				this._board.getSquareById(move.endSq.getSquare.getId)?.setPiece(null);
 			} else isLegalMove = startSqPiece.move(startSq, endSq, this._board);
 		} else isLegalMove = startSqPiece.move(startSq, endSq, this._board);
-
-		if (promotedPiece instanceof Piece) {
-			endSq.setPiece(promotedPiece);
-			endSq.setSquareForPiece(endSq);
-			this.handleMove(startSq, endSq);
-			startSq.setPiece(null);
-			return;
-		}
 
 		if (isLegalMove) {
 			this.handleMove(startSq, endSq);

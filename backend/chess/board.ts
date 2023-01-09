@@ -358,7 +358,6 @@ export class Board {
 		// upwards
 		for (let i = 1; i < 8; i++) {
 			let testSq = this.getSquareById(sqId + 8 * i);
-			console.log(testSq);
 			if (!testSq) break;
 			let testSqPiece = testSq.getPiece;
 			if (!testSqPiece && testSq.getRank === 8) break;

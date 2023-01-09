@@ -39,12 +39,18 @@ export class Pawn extends Piece {
 			let returnPiece = Pawn.moveWhite(startSq, endSq, board, piece);
 			if (!(returnPiece instanceof Piece)) {
 				throw new Error('Error promoting');
-			} else return returnPiece;
+			} else {
+				console.log('White promotion successful');
+				return returnPiece;
+			}
 		} else {
 			let returnPiece = Pawn.moveBlack(startSq, endSq, board, piece);
 			if (!(returnPiece instanceof Piece)) {
 				throw new Error('Error promoting');
-			} else return returnPiece;
+			} else {
+				console.log('Black promotion successful');
+				return returnPiece;
+			}
 		}
 	}
 
@@ -163,9 +169,7 @@ export class Pawn extends Piece {
 			startSq.getPiece?.getColor === Color.white ? 5 : 4;
 		let enPassantEndSqRank = startSq.getPiece?.getColor === Color.white ? 6 : 3;
 
-		let color: ColorType | null =
-			startSq.getPiece?.getColor === Color.white ? Color.black : null;
-
+		let color: ColorType | undefined = startSq.getPiece?.getColor;
 		//is pawn capturing or not
 		let diagonalMove: boolean = Pawn.compareFiles(
 			startSq.getFile,
@@ -198,10 +202,14 @@ export class Pawn extends Piece {
 				startSq.getRank === secondToLastRank &&
 				endSq.getRank === promotionRank &&
 				diagonalMove &&
-				pieceToPromote &&
+				pieceToPromote !== undefined &&
 				color
 			) {
-				return Pawn.promotion(endSq, pieceToPromote, color);
+				console.log('trolled');
+				console.log(color);
+				let promotedPiece = Pawn.promotion(endSq, pieceToPromote, color);
+				console.log(promotedPiece);
+				return promotedPiece;
 			}
 			//normal capture logic
 			else if (
@@ -210,7 +218,6 @@ export class Pawn extends Piece {
 			) {
 				console.log('Captured a piece with pawn on ' + endSq.getSquareName);
 				return true;
-				// }
 			}
 		}
 		console.log('Error capturing with pawn');
@@ -256,7 +263,8 @@ export class Pawn extends Piece {
 	}
 
 	static promotion(endSq: Square, piece: string, color: ColorType): Piece {
-		switch (piece) {
+		console.log(piece);
+		switch (piece.toUpperCase()) {
 			case 'PAWN':
 				console.log('Promote to pawn');
 				return new Pawn(endSq, color);

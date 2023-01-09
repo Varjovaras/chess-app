@@ -1,11 +1,5 @@
-import { Knight } from './Knight';
 import { Piece } from './Piece';
-import { Queen } from './Queen';
-import { Rook } from './Rook';
 import { Square } from './Square';
-import { Bishop } from './bishop';
-import { King } from './king';
-import { Pawn } from './pawn';
 
 export const Color = {
 	black: 'BLACK',
@@ -42,12 +36,6 @@ export type Move = {
 
 export type Pieces = {
 	Piece: Piece;
-	// Pawn: Pawn;
-	// Bishop: Bishop;
-	// Knight: Knight;
-	// Queen: Queen;
-	// Rook: Rook;
-	// King: King;
 };
 
 export type SingleMove = {

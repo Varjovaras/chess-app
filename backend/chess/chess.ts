@@ -52,7 +52,7 @@ export default class Chess {
 	}
 
 	whoseTurn(): string {
-		return this.checkTurn() === Color.white ? 'White' : 'Black';
+		return this.checkTurn() === Color.white ? 'WHITE' : 'BLACK';
 	}
 
 	private whiteCheck(startSq: Square, endSq: Square, pieceName?: string) {

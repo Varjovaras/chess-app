@@ -5,12 +5,12 @@ import { Color } from '../chess/types';
 
 const chess = new Chess();
 
-describe('Pawn tests', () => {
+describe('pawn tests', () => {
 	beforeEach(() => {
 		chess.startingPosition();
 	});
 
-	test('One square forward works', () => {
+	test('one square forward works', () => {
 		chess.move('e2', 'e3');
 		chess.move('e7', 'e6');
 		expect(
@@ -19,7 +19,7 @@ describe('Pawn tests', () => {
 		).toBeTruthy();
 	});
 
-	test('Two squares forward works', () => {
+	test('two squares forward works', () => {
 		chess.move('e2', 'e4');
 		chess.move('e7', 'e5');
 		expect(
@@ -28,7 +28,7 @@ describe('Pawn tests', () => {
 		).toBeTruthy();
 	});
 
-	test('Capturing works with both black and white', () => {
+	test('capturing works with both black and white', () => {
 		chess.move('e2', 'e4');
 		chess.move('d7', 'd5');
 		chess.move('e4', 'd5');
@@ -43,7 +43,7 @@ describe('Pawn tests', () => {
 		).toBeTruthy();
 	});
 
-	test('En passant white', () => {
+	test('en passant white', () => {
 		chess.move('e2', 'e4');
 		chess.move('a7', 'a5');
 		chess.move('e4', 'e5');
@@ -57,7 +57,7 @@ describe('Pawn tests', () => {
 		).toBeTruthy();
 	});
 
-	test('En passant black', () => {
+	test('en passant black', () => {
 		chess.move('a2', 'a4');
 		chess.move('e7', 'e5');
 		chess.move('a4', 'a5');
@@ -73,7 +73,7 @@ describe('Pawn tests', () => {
 		).toBeTruthy();
 	});
 
-	test('Promotion while capturing', () => {
+	test('promotion while capturing', () => {
 		chess.move('a2', 'a4');
 		chess.move('h7', 'h5');
 		chess.move('a4', 'a5');

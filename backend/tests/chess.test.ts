@@ -5,22 +5,34 @@ import { Pawn } from '../chess/pawn';
 import { Color } from '../chess/types';
 
 const chess = new Chess();
-describe('Board works', () => {
+
+describe('board works', () => {
 	beforeEach(() => {
 		chess.emptyBoard();
 	});
 
-	test('Board is empty', () => {
+	test('board is empty', () => {
 		expect(chess.getBoard.isEmpty()).toBe(true);
 	});
 
-	test('Board is not empty', () => {
+	test('board is initialized', () => {
 		chess.startingPosition();
 		expect(chess.getBoard.isEmpty()).toBe(false);
 	});
+
+	test('turn number goes up and checks the right player', () => {
+		chess.startingPosition();
+		expect(
+			chess.getTurnNumber === 0 && chess.whoseTurn() === 'WHITE'
+		).toBeTruthy();
+		chess.move('e2', 'e4');
+		expect(
+			chess.getTurnNumber === 1 && chess.whoseTurn() === 'BLACK'
+		).toBeTruthy();
+	});
 });
 
-describe('Adding and removing pieces works', () => {
+describe('adding and removing pieces works', () => {
 	beforeEach(() => {
 		chess.emptyBoard();
 		chess.putPieceOnBoard(
@@ -29,7 +41,8 @@ describe('Adding and removing pieces works', () => {
 		);
 	});
 
-	test('Add piece on board', () => {
+	test('add piece on board', () => {
+		2;
 		expect(chess.getBoard.isEmpty()).toBe(false);
 	});
 
@@ -38,7 +51,7 @@ describe('Adding and removing pieces works', () => {
 		expect(chess.getBoard.isEmpty()).toBe(true);
 	});
 
-	test('Moving function works and checks if white king is in check', () => {
+	test('moving function works and checks if white king is in check', () => {
 		chess.putPieceOnBoard(
 			'a1',
 			new King(chess.getBoard.getSquare('a1')!, Color.white)
@@ -53,7 +66,7 @@ describe('Adding and removing pieces works', () => {
 		).toBeTruthy();
 	});
 
-	test('Moving function works and checks if black king is in check', () => {
+	test('moving function works and checks if black king is in check', () => {
 		chess.putPieceOnBoard(
 			'a1',
 			new King(chess.getBoard.getSquare('a1')!, Color.black)

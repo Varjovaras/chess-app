@@ -1,4 +1,4 @@
-import { Rook } from '../chess/Rook';
+import { Rook } from '../chess/rook';
 import { Bishop } from '../chess/bishop';
 import Chess from '../chess/chess';
 import { King } from '../chess/king';

@@ -1,7 +1,7 @@
 console.time('c');
 import Chess from './chess';
-import { Queen } from './Queen';
-import { Rook } from './Rook';
+import { Queen } from './queen';
+import { Rook } from './rook';
 import { King } from './king';
 import { Knight } from './knight';
 import { Pawn } from './pawn';
@@ -125,7 +125,6 @@ console.log(chess.getBoard.printBoardWhite());
 
 console.log(chess.latestMove());
 console.log(chess.getBoard.printBoardWhite());
-// console.log(chess.getBoard);
 chess.startingPosition();
 
 //get
@@ -154,20 +153,13 @@ console.log(queen.possibleMoves(chess.getBoard));
 chess.emptyBoard();
 const king = new King(chess.getBoard.getSquare('c2')!, Color.white);
 chess.putPieceOnBoard('c2', king);
-// chess.getBoard.whiteCheck();
 console.log(chess.getBoard.getSquare('a6'));
 console.log(chess.getBoard.getSquareById(21));
 console.log(chess.getBoard.getSquareById(28));
 chess.emptyBoard();
 console.log(chess.getBoard.printBoardWhite());
 
-// chess.fen(Chess.STARTING_POSITION);
-// console.log(chess.getBoard.getWhiteKing());
-// console.log(chess.getBoard.getBlackKing());
 chess.fen(Chess.STARTING_POSITION);
-
-// console.log(chess.getBoard.getSquare('e2')?.getId);
-// console.log(chess.getBoard.getSquare('f3')?.getId);
 
 chess.move('f2', 'f3');
 chess.move('e7', 'e5');
@@ -211,16 +203,4 @@ chess.move('e8', 'c8');
 console.log(chess.getBoard.printBoardWhite());
 console.log(chess.getBoard.getSquare('d8'));
 
-// for (let i = 0; i < 1000000; i++) {
-// 	let board = chess.getBoard.getSquareById(i);
-// 	//@ts-ignore
-// 	// board = chess.getBoard.getBlackKing;
-// 	// console.log(board);
-// }
-
-// // let game = new Game(chess);
-// // game.playTerminal();
 console.timeEnd('c');
-
-// //possible moves
-// //checking

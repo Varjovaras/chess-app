@@ -1,4 +1,4 @@
-import { Queen } from '../chess/Queen';
+import { Queen } from '../chess/queen';
 import { Bishop } from '../chess/bishop';
 import Chess from '../chess/chess';
 import { Color } from '../chess/types';

@@ -1,10 +1,10 @@
-import { Bishop } from './Bishop';
-import { Board } from './Board';
-import { Knight } from './Knight';
-import { Piece } from './Piece';
-import { Queen } from './Queen';
-import { Rook } from './Rook';
-import { Square } from './Square';
+import { Bishop } from './bishop';
+import { Board } from './board';
+import { Knight } from './knight';
+import { Piece } from './piece';
+import { Queen } from './queen';
+import { Rook } from './rook';
+import { Square } from './square';
 import { ChessPieces, Color, ColorType, Move, SingleMove } from './types';
 
 export class Pawn extends Piece {
@@ -160,6 +160,9 @@ export class Pawn extends Piece {
 		pieceToPromote?: string,
 		move?: Move
 	): boolean | Piece {
+		if (!Piece.capturable(startSq, endSq)) {
+			return false;
+		}
 		//what is the rank you need to start on to be able to promote
 		let secondToLastRank = startSq.getPiece?.getColor === Color.white ? 7 : 2;
 		let promotionRank = startSq.getPiece?.getColor === Color.white ? 8 : 1;
@@ -183,42 +186,34 @@ export class Pawn extends Piece {
 			diagonalMove
 		) {
 			if (!move) return false;
-			if (Piece.capturable(startSq, move.endSq)) {
-				return this.enPassant(move, enPassantStartSqRank);
-			}
-			return false;
+			return this.enPassant(move, enPassantStartSqRank);
 		}
 
 		//check if it's your own piece
-		if (Piece.capturable(startSq, endSq)) {
-			//check if it's a promotion
-			//enpassant is checked before this cause endSq.piece is null on enpassant
-			if (endSq.getPiece === null) {
-				console.log("Pawns can't go diagonally without capturing a piece");
-				return false;
-			}
-			//check if it's a promotion
-			else if (
-				startSq.getRank === secondToLastRank &&
-				endSq.getRank === promotionRank &&
-				diagonalMove &&
-				pieceToPromote !== undefined &&
-				color
-			) {
-				console.log('trolled');
-				console.log(color);
-				let promotedPiece = Pawn.promotion(endSq, pieceToPromote, color);
-				console.log(promotedPiece);
-				return promotedPiece;
-			}
-			//normal capture logic
-			else if (
-				Math.abs(startSq.getRank - endSq.getRank) === 1 &&
-				diagonalMove
-			) {
-				console.log('Captured a piece with pawn on ' + endSq.getSquareName);
-				return true;
-			}
+		//check if it's a promotion
+		//enpassant is checked before this cause endSq.piece is null on enpassant
+		if (endSq.getPiece === null) {
+			console.log("Pawns can't go diagonally without capturing a piece");
+			return false;
+		}
+		//check if it's a promotion
+		else if (
+			startSq.getRank === secondToLastRank &&
+			endSq.getRank === promotionRank &&
+			diagonalMove &&
+			pieceToPromote !== undefined &&
+			color
+		) {
+			console.log('trolled');
+			console.log(color);
+			let promotedPiece = Pawn.promotion(endSq, pieceToPromote, color);
+			console.log(promotedPiece);
+			return promotedPiece;
+		}
+		//normal capture logic
+		else if (Math.abs(startSq.getRank - endSq.getRank) === 1 && diagonalMove) {
+			console.log('Captured a piece with pawn on ' + endSq.getSquareName);
+			return true;
 		}
 		console.log('Error capturing with pawn');
 		return false;

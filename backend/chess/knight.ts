@@ -1,6 +1,6 @@
-import { Board } from './Board';
-import { Piece } from './Piece';
-import { Square } from './Square';
+import { Board } from './board';
+import { Piece } from './piece';
+import { Square } from './square';
 import { ChessPieces, Color, ColorType, SingleMove } from './types';
 
 export class Knight extends Piece {

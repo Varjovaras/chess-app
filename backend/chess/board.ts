@@ -1,5 +1,5 @@
-import { Square } from './Square';
 import { knightMoveHelper } from './moveHelpers';
+import { Square } from './square';
 import { Color, ColorType } from './types';
 
 export class Board {

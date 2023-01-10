@@ -1,4 +1,4 @@
-import { Rook } from '../chess/Rook';
+import { Rook } from '../chess/rook';
 import Chess from '../chess/chess';
 import { King } from '../chess/king';
 import { Pawn } from '../chess/pawn';
@@ -42,7 +42,6 @@ describe('adding and removing pieces works', () => {
 	});
 
 	test('add piece on board', () => {
-		2;
 		expect(chess.getBoard.isEmpty()).toBe(false);
 	});
 

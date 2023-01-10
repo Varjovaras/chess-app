@@ -1,14 +1,14 @@
-import { Board } from './Board';
-import { Piece } from './Piece';
-import { Queen } from './Queen';
-import { Rook } from './Rook';
-import { Square } from './Square';
+import { Board } from './board';
+import { Piece } from './piece';
+import { Queen } from './queen';
+import { Rook } from './rook';
+import { Square } from './square';
 import { Bishop } from './bishop';
 import { King } from './king';
 import { Knight } from './knight';
-import { enPassantHelper } from './moveHelpers';
 import { Pawn } from './pawn';
 import { ChessPieces, Color, ColorType, Move } from './types';
+import { enPassantHelper } from './moveHelpers';
 
 export default class Chess {
 	private _board: Board;
@@ -324,7 +324,6 @@ export default class Chess {
 
 		if (sq) {
 			sq.setPiece(piece);
-			// console.log(`${piece.getName} put on ${square}`);
 		} else throw new Error('No square found');
 	}
 
@@ -362,7 +361,6 @@ export default class Chess {
 
 		//initialize
 		this._moves = [];
-		// this._pieces = [];
 		this._turnNumber = 0;
 		this._board.getBoard.forEach((s) => {
 			s.setPiece(null);
@@ -370,7 +368,6 @@ export default class Chess {
 		this.analyzeFen(pieces);
 	}
 
-	//what the hell
 	private analyzeFen(pieces: string[]) {
 		for (let i = 0; i < 8; i++) {
 			let str = pieces[i];
@@ -432,7 +429,6 @@ export default class Chess {
 
 	emptyBoard(): void {
 		this._moves = [];
-		// this._pieces = [];
 		this._turnNumber = 0;
 		this._board.getBoard.forEach((s) => {
 			s.setPiece(null);

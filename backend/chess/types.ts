@@ -1,5 +1,5 @@
-import { Piece } from './Piece';
-import { Square } from './Square';
+import { Piece } from './piece';
+import { Square } from './square';
 
 export const Color = {
 	black: 'BLACK',

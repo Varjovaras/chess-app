@@ -1,4 +1,3 @@
-import { ChildProcess } from 'child_process';
 import styles from './index.module.css';
 import { type NextPage } from 'next';
 import Head from 'next/head';
@@ -26,13 +25,11 @@ const Home: NextPage = (props) => {
 
 export default Home;
 
-export async function getServerSideProps() {
-	if (localStorage.getItem('moves')) {
-	}
-	// Fetch data from external API
-	const res = await fetch(`localhost:3000/`);
-	const data = await res.json();
+// export async function getServerSideProps() {
+// 	//JSON.stringify(object)
+// 	const res = await fetch(`localhost:3001/`);
+// 	const data = await res.json();
 
-	// Pass data to the page via props
-	return { props: { data } };
-}
+// 	// Pass data to the page via props
+// 	return { props: { data } };
+// }

@@ -10,7 +10,7 @@ router.get('/', (_req, res) => {
 
 router.get('/moves', (_req, res) => {
 	const chess = new Chess();
-	const moves: string = _req.body;
+	// const moves: string = _req.body;
 	res.send(chess);
 });
 

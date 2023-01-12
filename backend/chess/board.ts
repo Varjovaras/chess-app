@@ -296,9 +296,9 @@ export class Board {
 			if (this.getSquareById(sqId + 9)?.getPiece?.getFirstLetter() === 'P') {
 				console.log(
 					'King is in check from square ' +
-						this.getSquareById(sqId + 9)!.getSquareName +
+						this.getSquareById(sqId + 9)?.getSquareName +
 						' by ' +
-						this.getSquareById(sqId + 9)?.getPiece!.getFirstLetter
+						this.getSquareById(sqId + 9)?.getPiece?.getFirstLetter
 				);
 				return true;
 			}
@@ -306,9 +306,9 @@ export class Board {
 			if (this.getSquareById(sqId + 7)?.getPiece?.getFirstLetter() === 'P') {
 				console.log(
 					'King is in check from square ' +
-						this.getSquareById(sqId + 7)!.getSquareName +
+						this.getSquareById(sqId + 7)?.getSquareName +
 						' by ' +
-						this.getSquareById(sqId + 7)?.getPiece!.getFirstLetter
+						this.getSquareById(sqId + 7)?.getPiece?.getFirstLetter
 				);
 				return true;
 			}
@@ -316,16 +316,16 @@ export class Board {
 			if (this.getSquareById(sqId + 9)?.getPiece?.getFirstLetter() === 'P') {
 				console.log(
 					'King is in check from square ' +
-						this.getSquareById(sqId + 9)!.getSquareName +
+						this.getSquareById(sqId + 9)?.getSquareName +
 						' by ' +
-						this.getSquareById(sqId + 9)?.getPiece!.getFirstLetter
+						this.getSquareById(sqId + 9)?.getPiece?.getFirstLetter
 				);
 				return true;
 			}
 			if (this.getSquareById(sqId + 7)?.getPiece?.getFirstLetter() === 'P') {
 				console.log(
 					'King is in check from square ' +
-						this.getSquareById(sqId + 7)!.getSquareName +
+						this.getSquareById(sqId + 7)?.getSquareName +
 						' by ' +
 						this.getSquareById(sqId + 7)?.getPiece!.getFirstLetter
 				);

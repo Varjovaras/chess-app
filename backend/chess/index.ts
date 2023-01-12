@@ -5,7 +5,7 @@ import { Rook } from './rook';
 import { King } from './king';
 import { Knight } from './knight';
 import { Pawn } from './pawn';
-import { Color } from './types';
+import { Color } from '../../types/types';
 
 const chess = new Chess();
 chess.putPieceOnBoard(

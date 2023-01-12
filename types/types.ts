@@ -1,5 +1,5 @@
-import { Piece } from './piece';
-import { Square } from './square';
+import { Piece } from '../backend/chess/piece';
+import { Square } from '../backend/chess/square';
 
 export const Color = {
 	black: 'BLACK',
@@ -41,9 +41,4 @@ export type Pieces = {
 export type SingleMove = {
 	startSq: string;
 	endSq: string;
-};
-
-export type PieceSquare = {
-	square: string;
-	piece: Piece;
 };

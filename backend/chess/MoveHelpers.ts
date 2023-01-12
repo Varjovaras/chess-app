@@ -1,6 +1,6 @@
 import { Board } from './board';
 import { Square } from './square';
-import { Move } from './types';
+import { Move } from '../../types/types';
 
 export const knightMoveHelper = (sq: Square, board: Board): number[] => {
 	let endSquares: number[] = [];

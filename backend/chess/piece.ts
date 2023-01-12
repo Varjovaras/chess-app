@@ -1,6 +1,6 @@
 import { Board } from './board';
 import { Square } from './square';
-import { ColorType, Move, SingleMove } from './types';
+import { ColorType, Move, SingleMove } from '../../types/types';
 
 export class Piece {
 	protected name: string;
@@ -26,10 +26,10 @@ export class Piece {
 	}
 
 	move(
-		startSq: Square,
-		endSq: Square,
-		board: Board,
-		move?: Move | undefined
+		_startSq: Square,
+		_endSq: Square,
+		_board: Board,
+		_move?: Move | undefined
 	): boolean {
 		return false;
 	}
@@ -62,7 +62,7 @@ export class Piece {
 		return true;
 	}
 
-	possibleMoves(board: Board): SingleMove[] {
+	possibleMoves(_board: Board): SingleMove[] {
 		console.log('Piece without type has no possible moves');
 		return [];
 	}

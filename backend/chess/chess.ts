@@ -7,7 +7,7 @@ import { Bishop } from './bishop';
 import { King } from './king';
 import { Knight } from './knight';
 import { Pawn } from './pawn';
-import { ChessPieces, Color, ColorType, Move } from './types';
+import { ChessPieces, Color, ColorType, Move } from '../../types/types';
 import { enPassantHelper } from './moveHelpers';
 
 export default class Chess {
@@ -252,7 +252,7 @@ export default class Chess {
 			startSq.getFile === 'e' &&
 			(endSq.getFile === 'c' || endSq.getFile === 'g')
 		) {
-			this.castling(startSq, endSq);
+			this.castling(endSq);
 		}
 		this.addMove(startSq, endSq);
 		this.handlePieces(startSq, endSq);
@@ -272,7 +272,7 @@ export default class Chess {
 		}
 	}
 
-	private castling(startSq: Square, endSq: Square) {
+	private castling(endSq: Square) {
 		if (endSq.getSquareName === 'g1') {
 			this.castlingRookHelper('h1', 'f1');
 		}
@@ -296,11 +296,7 @@ export default class Chess {
 		this._board.getSquare(rookStartSq)?.setPiece(null);
 	}
 
-	private handlePieces(
-		startSq: Square,
-		endSq: Square,
-		enPassantSquare?: Square
-	): void {
+	private handlePieces(startSq: Square, endSq: Square): void {
 		let startSqPiece = startSq.getPiece;
 		if (startSqPiece) {
 			endSq.setPiece(startSqPiece);

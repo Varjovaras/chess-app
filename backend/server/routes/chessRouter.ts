@@ -2,10 +2,11 @@ import express from 'express';
 import Chess from '../../chess/chess';
 
 const router = express.Router();
+const chess = new Chess();
 
 router.get('/', (_req, res) => {
-	const chess = new Chess();
-	res.send(chess);
+	console.log('trolled');
+	res.send('problem ?');
 });
 
 router.get('/moves', (_req, res) => {

@@ -53,6 +53,14 @@ export class Square {
 		return this._piece;
 	}
 
+	getPieceWithoutSquare() {
+		let piece = this._piece;
+		if (!piece) return null;
+		delete piece['square'];
+		console.log(piece);
+		return piece;
+	}
+
 	setFile(file: string) {
 		this._file = file;
 	}

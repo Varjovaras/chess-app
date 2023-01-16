@@ -34,10 +34,6 @@ export type Move = {
 	promotion?: Piece | null;
 };
 
-export type Pieces = {
-	Piece: Piece;
-};
-
 export type SingleMove = {
 	startSq: string;
 	endSq: string;

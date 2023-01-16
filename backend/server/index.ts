@@ -3,7 +3,7 @@ import chessRouter from './routes/chessRouter';
 const app = express();
 app.use(express.json());
 
-const PORT = 3002;
+const PORT = 3003;
 
 app.get('/ping', (_req, res) => {
 	console.log('someone pinged here');

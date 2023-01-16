@@ -1,18 +1,17 @@
 import express from 'express';
 import Chess from '../../chess/chess';
+import { Square } from '../../chess/square';
+// import { stringify } from 'flatted';
 
 const router = express.Router();
 const chess = new Chess();
 
 router.get('/', (_req, res) => {
-	console.log('trolled');
-	res.send('problem ?');
-});
-
-router.get('/moves', (_req, res) => {
-	const chess = new Chess();
-	// const moves: string = _req.body;
-	res.send(chess);
+	chess.startingPosition();
+	let squares = chess.getBoard.getBoard;
+	squares = removeSquareFromPiece(squares);
+	console.log(squares);
+	res.send(squares);
 });
 
 router.post('/', (_req, res) => {
@@ -20,3 +19,12 @@ router.post('/', (_req, res) => {
 });
 
 export default router;
+
+const removeSquareFromPiece = (squares: Square[]) => {
+	squares.forEach((sq) => {
+		if (sq.getPiece) {
+			delete sq.getPiece['square'];
+		}
+	});
+	return squares;
+};

@@ -1,8 +1,6 @@
 {
 	"ts-node": {
-		"swc": true,
-		"transpileOnly": true,
-		"logError": true
+		"swc": false
 	},
 	"compilerOptions": {
 		/* Visit https://aka.ms/tsconfig to read more about this file */

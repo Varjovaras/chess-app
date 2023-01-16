@@ -12,12 +12,13 @@
 		"js": "cd backend && cd dist && cd chess && node index.js",
 		"lines": "count-lines-of-code",
 		"front": "cd frontend && npm run dev",
-		"backend": "cd backend && cd server && ts-node index.ts"
+		"backend": "cd backend && cd server && ts-node-dev index.ts"
 	},
 	"author": "Kristjan Rajaniemi",
 	"license": "ISC",
 	"dependencies": {
 		"express": "^4.18.2",
+		"flatted": "^3.2.7",
 		"ts-node": "^10.9.1"
 	},
 	"devDependencies": {

@@ -55,6 +55,7 @@ export class Square {
 
 	getPieceWithoutSquare() {
 		let piece = this._piece;
+
 		if (!piece) return null;
 		delete piece['square'];
 		console.log(piece);

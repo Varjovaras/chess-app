@@ -96,6 +96,22 @@ export class Board {
 		return rows.reverse();
 	}
 
+	getBoardWhite() {
+		let rows: Square[][] = [[], [], [], [], [], [], [], []];
+		let row = 0;
+		let i = 0;
+
+		for (const sq of this._board) {
+			rows[row][i] = sq;
+			if (i === 7) {
+				i = 0;
+				row++;
+			} else i++;
+		}
+
+		return rows.reverse();
+	}
+
 	printBoardBlack() {
 		let rows = ['', '', '', '', '', '', '', ''];
 
@@ -115,6 +131,7 @@ export class Board {
 	whiteCheck(): boolean {
 		let king = this.getWhiteKing();
 		if (!king) {
+			0;
 			console.log('No white king found');
 			return false;
 		}

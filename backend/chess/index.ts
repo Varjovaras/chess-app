@@ -201,6 +201,7 @@ chess.move('d8', 'd7');
 chess.move('e1', 'c1');
 chess.move('e8', 'c8');
 console.log(chess.getBoard.printBoardWhite());
-console.log(chess.getBoard.getSquare('d8'));
+// console.log(chess.getBoard.getSquare('d8'));
 
+console.log(chess.getBoard.getBoardWhite());
 console.timeEnd('c');

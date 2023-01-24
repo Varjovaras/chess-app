@@ -5,6 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"frontend": "cd frontend && npm run dev",
+		"installfront": "cd frontend 6& npm i",
 		"test": "jest --verbose --silent",
 		"pocketbase": "cd chess-frontend && ./pocketbase serve",
 		"chess": "cd backend && ts-node ./chess/index.ts",

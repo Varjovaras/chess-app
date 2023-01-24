@@ -2,8 +2,8 @@ import { Queen } from '../chess/queen';
 import { Bishop } from '../chess/bishop';
 import Chess from '../chess/chess';
 import { Color } from '../../types/types';
-const chess = new Chess();
 
+const chess = new Chess();
 describe('pawn tests', () => {
 	beforeEach(() => {
 		chess.startingPosition();

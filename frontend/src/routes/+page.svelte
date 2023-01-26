@@ -17,7 +17,6 @@
 		endSq = '';
 		console.log(moves);
 	};
-
 	const resetChess = () => {
 		data.chess.startingPosition();
 		board = data.chess.getBoard.getBoardWhite();
@@ -49,8 +48,17 @@
 				<button type="button" on:click={resetChess} class="my-1 border-4 border-slate-800 w-full"
 					>Reset game</button
 				>
-				<p class="my-1">Moves of the game: {lastMove.startSq} {lastMove.endSq}</p>
-				<p class="my-1">Last move: {lastMove.startSq} {lastMove.endSq}</p>
+				<p class="my-1">
+					Moves of the game:
+
+					{#each moves as move}
+						{' '}{move}
+					{/each}
+				</p>
+				<p class="my-1">
+					Last move: {lastMove.startSq}
+					{lastMove.endSq}
+				</p>
 			</form>
 		</div>
 	</div>

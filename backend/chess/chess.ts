@@ -40,6 +40,16 @@ export default class Chess {
 		this._turnNumber++;
 	}
 
+	getMovesAsString(): string[] {
+		let moves = this.getMoves;
+		let strArr: string[] = [];
+
+		moves.forEach((move) => {
+			strArr.push(`${move.startSq.getSquareName} ${move.endSq.getSquareName}`);
+		});
+		return strArr;
+	}
+
 	checkTurn(): ColorType {
 		return this.getTurnNumber % 2 === 0 ? Color.white : Color.black;
 	}

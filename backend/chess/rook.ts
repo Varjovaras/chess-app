@@ -63,7 +63,6 @@ export class Rook extends Piece {
 		if (startSq) {
 			let rank = startSq.getRank;
 			let file = startSq.getFile;
-			let startSqName = startSq.getSquareName;
 			let files = [1, -1, 0, 0];
 			let ranks = [0, 0, 1, -1];
 
@@ -76,10 +75,10 @@ export class Rook extends Piece {
 					let sq = board.getSquare(`${nextFile}${nextRank}`);
 
 					if (!sq) break;
-					if (sq && sq.getSquareName) {
-						let endSq = sq.getSquareName;
+					if (sq && sq.getSquare) {
+						let endSq = sq.getSquare;
 						moves.push({
-							startSq: startSqName,
+							startSq: startSq,
 							endSq: endSq,
 						});
 					}

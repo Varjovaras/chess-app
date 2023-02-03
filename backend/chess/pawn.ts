@@ -328,7 +328,7 @@ export class Pawn extends Piece {
 
 	static possibleWhiteMoves(sq: Square, board: Board): SingleMove[] {
 		let moves: SingleMove[] = [];
-		let startSq = sq.getSquareName;
+		let startSq = sq.getSquare;
 		if (sq.getRank === 1) {
 			throw new Error('How is the white pawn on the first rank?');
 		}
@@ -336,25 +336,23 @@ export class Pawn extends Piece {
 			moves.push(
 				{
 					startSq: startSq,
-					endSq: board.getSquare(`${sq.getFile}${sq.getRank + 1}`)!
-						.getSquareName,
+					endSq: board.getSquare(`${sq.getFile}${sq.getRank + 1}`)!.getSquare,
 				},
 				{
 					startSq: startSq,
-					endSq: board.getSquare(`${sq.getFile}${sq.getRank + 2}`)!
-						.getSquareName,
+					endSq: board.getSquare(`${sq.getFile}${sq.getRank + 2}`)!.getSquare,
 				}
 			);
 		}
 		if (sq.getFile === 'a') {
 			moves.push({
 				startSq: startSq,
-				endSq: board.getSquare(`${'b'}${sq.getRank + 1}`)!.getSquareName,
+				endSq: board.getSquare(`${'b'}${sq.getRank + 1}`)!.getSquare,
 			});
 		} else if (sq.getFile === 'h') {
 			moves.push({
 				startSq: startSq,
-				endSq: board.getSquare(`${'g'}${sq.getRank + 1}`)!.getSquareName,
+				endSq: board.getSquare(`${'g'}${sq.getRank + 1}`)!.getSquare,
 			});
 		} else {
 			moves.push(
@@ -364,7 +362,7 @@ export class Pawn extends Piece {
 						`${String.fromCharCode(sq.getFile.charCodeAt(0) + 1)}${
 							sq.getRank + 1
 						}`
-					)!.getSquareName,
+					)!.getSquare,
 				},
 				{
 					startSq: startSq,
@@ -372,7 +370,7 @@ export class Pawn extends Piece {
 						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${
 							sq.getRank + 1
 						}`
-					)!.getSquareName,
+					)!.getSquare,
 				}
 			);
 		}
@@ -381,7 +379,7 @@ export class Pawn extends Piece {
 
 	static possibleBlackMoves(sq: Square, board: Board): SingleMove[] {
 		let moves: SingleMove[] = [];
-		let startSq = sq.getSquareName;
+		let startSq = sq.getSquare;
 		if (sq.getRank === 8) {
 			throw new Error('How is the black pawn on the 8th rank?');
 		}
@@ -389,25 +387,23 @@ export class Pawn extends Piece {
 			moves.push(
 				{
 					startSq: startSq,
-					endSq: board.getSquare(`${sq.getFile}${sq.getRank - 1}`)!
-						.getSquareName,
+					endSq: board.getSquare(`${sq.getFile}${sq.getRank - 1}`)!.getSquare,
 				},
 				{
 					startSq: startSq,
-					endSq: board.getSquare(`${sq.getFile}${sq.getRank - 2}`)!
-						.getSquareName,
+					endSq: board.getSquare(`${sq.getFile}${sq.getRank - 2}`)!.getSquare,
 				}
 			);
 		}
 		if (sq.getFile === 'a') {
 			moves.push({
 				startSq: startSq,
-				endSq: board.getSquare(`${'b'}${sq.getRank - 1}`)!.getSquareName,
+				endSq: board.getSquare(`${'b'}${sq.getRank - 1}`)!.getSquare,
 			});
 		} else if (sq.getFile === 'h') {
 			moves.push({
 				startSq: startSq,
-				endSq: board.getSquare(`${'g'}${sq.getRank - 1}`)!.getSquareName,
+				endSq: board.getSquare(`${'g'}${sq.getRank - 1}`)!.getSquare,
 			});
 		} else {
 			moves.push(
@@ -417,7 +413,7 @@ export class Pawn extends Piece {
 						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${
 							sq.getRank - 1
 						}`
-					)!.getSquareName,
+					)!.getSquare,
 				},
 				{
 					startSq: startSq,

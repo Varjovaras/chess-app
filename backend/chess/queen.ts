@@ -71,7 +71,6 @@ export class Queen extends Piece {
 			for (let j = 0; j < 7; j++) {
 				let rank = startSq.getRank;
 				let file = startSq.getFile;
-				let startSqName = startSq.getSquareName;
 				let nextFile = String.fromCharCode(
 					file.charCodeAt(0) + k[i] + j * k[i]
 				);
@@ -79,10 +78,10 @@ export class Queen extends Piece {
 				let sq = board.getSquare(`${nextFile}${nextRank}`);
 
 				if (!sq) break;
-				if (sq && sq.getSquareName) {
+				if (sq && sq.getSquare) {
 					moves.push({
-						startSq: startSqName,
-						endSq: sq.getSquareName,
+						startSq: startSq,
+						endSq: sq.getSquare,
 					});
 				}
 			}

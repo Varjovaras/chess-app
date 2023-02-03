@@ -35,6 +35,6 @@ export type Move = {
 };
 
 export type SingleMove = {
-	startSq: string;
-	endSq: string;
+	startSq: Square;
+	endSq: Square;
 };

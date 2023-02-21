@@ -201,7 +201,46 @@ chess.move('d8', 'd7');
 chess.move('e1', 'c1');
 chess.move('e8', 'c8');
 console.log(chess.getBoard.printBoardWhite());
-// console.log(chess.getBoard.getSquare('d8'));
+chess.fen(Chess.STARTING_POSITION);
+chess.move('d2', 'd4');
+chess.move('d7', 'd5');
+chess.move('b1', 'c3');
+chess.move('b8', 'c6');
+chess.move('c1', 'f4');
+chess.move('c8', 'f5');
+chess.move('d1', 'd2');
+chess.move('d8', 'd7');
 
+chess.move('e1', 'c1');
+chess.move('e8', 'c8');
+// console.log(chess.getBoard.printBoardWhite());
+chess.fen(Chess.STARTING_POSITION);
+chess.move('d2', 'd4');
+chess.move('d7', 'd5');
+chess.move('b1', 'c3');
+chess.move('b8', 'c6');
+chess.move('c1', 'f4');
+chess.move('c8', 'f5');
+chess.move('d1', 'd2');
+chess.move('d8', 'd7');
+
+chess.move('e1', 'c1');
+chess.move('e8', 'c8');
+// console.log(chess.getBoard.printBoardWhite());
+chess.fen(Chess.STARTING_POSITION);
+chess.move('d2', 'd4');
+chess.move('d7', 'd5');
+chess.move('b1', 'c3');
+chess.move('b8', 'c6');
+chess.move('c1', 'f4');
+chess.move('c8', 'f5');
+chess.move('d1', 'd2');
+chess.move('d8', 'd7');
+
+chess.move('e1', 'c1');
+chess.move('e8', 'c8');
 console.log(chess.getBoard.getBoardWhite());
+console.log(chess.getBoard.getSquare('d8'));
+
+console.log(chess.getBoard);
 console.timeEnd('c');

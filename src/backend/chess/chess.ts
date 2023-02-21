@@ -233,7 +233,6 @@ export default class Chess {
 				promotedPiece = startSqPiece.promote(startSq, endSq, board, pieceName);
 			} else if (move && enPassantHelper(startSq, endSq, move)) {
 				isLegalMove = startSqPiece.move(startSq, endSq, this._board, move);
-				console.log(isLegalMove);
 				this._board.getSquareById(move.endSq.getSquare.getId)?.setPiece(null);
 			} else isLegalMove = startSqPiece.move(startSq, endSq, board);
 		} else isLegalMove = startSqPiece.move(startSq, endSq, board);

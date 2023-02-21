@@ -63,7 +63,6 @@ export class Knight extends Piece {
 		if (startSq) {
 			let rank = startSq.getRank;
 			let file = startSq.getFile;
-			let startSqName = startSq.getSquareName;
 
 			let files = [2, 2, 1, 1, -1, -2, -2, -1];
 			let ranks = [1, -1, 2, -2, -2, -1, 1, 2];
@@ -71,14 +70,12 @@ export class Knight extends Piece {
 			for (let i = 0; i < 8; i++) {
 				let nextFile = String.fromCharCode(file.charCodeAt(0) + files[i]);
 				let nextRank = rank + ranks[i];
-				let sq = board.getSquare(`${nextFile}${nextRank}`);
-				if (sq && sq.getSquareName) {
-					let endSq = sq.getSquareName;
-					moves.push({
-						startSq: startSqName,
-						endSq: endSq,
-					});
-				}
+				let endSq = board.getSquare(`${nextFile}${nextRank}`)?.getSquare;
+				if (!endSq) break;
+				moves.push({
+					startSq: startSq,
+					endSq: endSq,
+				});
 			}
 
 			return moves;

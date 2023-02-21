@@ -72,16 +72,13 @@ export class Rook extends Piece {
 						file.charCodeAt(0) + files[i] + j * files[i]
 					);
 					let nextRank = rank + ranks[i] + j * ranks[i];
-					let sq = board.getSquare(`${nextFile}${nextRank}`);
+					let endSq = board.getSquare(`${nextFile}${nextRank}`);
 
-					if (!sq) break;
-					if (sq && sq.getSquare) {
-						let endSq = sq.getSquare;
-						moves.push({
-							startSq: startSq,
-							endSq: endSq,
-						});
-					}
+					if (!endSq) break;
+					moves.push({
+						startSq: startSq,
+						endSq: endSq,
+					});
 				}
 			}
 

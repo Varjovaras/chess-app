@@ -58,7 +58,7 @@ export class Square {
 
 		if (!piece) return null;
 		delete piece['square'];
-		console.log(piece);
+		// console.log(piece);
 		return piece;
 	}
 

@@ -75,15 +75,13 @@ export class Queen extends Piece {
 					file.charCodeAt(0) + k[i] + j * k[i]
 				);
 				let nextRank = rank + t[i] + j * t[i];
-				let sq = board.getSquare(`${nextFile}${nextRank}`);
+				let endSq = board.getSquare(`${nextFile}${nextRank}`);
 
-				if (!sq) break;
-				if (sq && sq.getSquare) {
-					moves.push({
-						startSq: startSq,
-						endSq: sq.getSquare,
-					});
-				}
+				if (!endSq) break;
+				moves.push({
+					startSq: startSq,
+					endSq: endSq,
+				});
 			}
 		}
 		return moves;

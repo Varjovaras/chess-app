@@ -16,3 +16,5 @@ nextfront
 # Added by cargo
 
 /target
+
+./chess-rust/target

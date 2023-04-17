@@ -1,12 +1,12 @@
-import { Board } from './board';
-import { Piece } from './piece';
-import { Queen } from './queen';
-import { Rook } from './rook';
-import { Square } from './square';
-import { Bishop } from './bishop';
-import { King } from './king';
-import { Knight } from './knight';
-import { Pawn } from './pawn';
+import { Board } from './board/board';
+import { Piece } from './pieces/piece';
+import { Queen } from './pieces/queen';
+import { Rook } from './pieces/rook';
+import { Square } from './board/square';
+import { Bishop } from './pieces/bishop';
+import { King } from './pieces/king';
+import { Knight } from './pieces/knight';
+import { Pawn } from './pieces/pawn';
 import { ChessPieces, Color, ColorType, Move } from '../../types/types';
 import { enPassantHelper } from './moveHelpers';
 
@@ -67,23 +67,28 @@ export default class Chess {
 
 	private whiteCheck(startSq: Square, endSq: Square, pieceName?: string) {
 		console.log('Checking if move removes white king from check');
+		// let tempBoard: Square[] = [...this._board.getBoard];
 		let tempBoard: Square[] = [];
-		for (let i = 0; i < 64; i++) {
-			let sq = this._board.getSquareById(i);
-			if (!sq) {
-				throw new Error('No 64 squares');
-			}
-			let tempSq = new Square(
-				sq.getFile,
-				sq.getRank,
-				sq.getSquareName,
-				sq.getColor,
-				sq.getId,
-				sq.getPiece
-			);
-			tempBoard.push(tempSq);
-		}
 
+		// for (let i = 0; i < 64; i++) {
+		// 	let sq = this._board.getSquareById(i);
+		// 	if (!sq) {
+		// 		throw new Error('No 64 squares');
+		// 	}
+		// 	let tempSq = new Square(
+		// 		sq.getFile,
+		// 		sq.getRank,
+		// 		sq.getSquareName,
+		// 		sq.getColor,
+		// 		sq.getId,
+		// 		sq.getPiece
+		// 	);
+		// 	tempBoard.push(tempSq);
+		// }
+
+		
+		tempBoard = Object.assign({}, this._board.getBoard);
+		console.log(tempBoard);
 		let newBoard = new Board();
 		newBoard.setBoard(tempBoard);
 		let startSqTempBoard = newBoard.getSquare(startSq.getSquareName);

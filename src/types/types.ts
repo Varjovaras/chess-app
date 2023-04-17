@@ -1,5 +1,5 @@
-import { Piece } from '../backend/chess/piece';
-import { Square } from '../backend/chess/square';
+import { Piece } from '../backend/chess/pieces/piece';
+import { Square } from '../backend/chess/board/square';
 
 export const Color = {
 	black: 'BLACK',

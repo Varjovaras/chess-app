@@ -1,6 +1,6 @@
-import { knightMoveHelper } from './moveHelpers';
+import { knightMoveHelper } from '../moveHelpers';
 import { Square } from './square';
-import { Color, ColorType } from '../../types/types';
+import { Color, ColorType } from '../../../types/types';
 
 export class Board {
 	private _board: Square[];

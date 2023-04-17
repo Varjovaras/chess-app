@@ -1,17 +1,17 @@
 import { Bishop } from './bishop';
-import { Board } from './board';
+import { Board } from '../board/board';
 import { Knight } from './knight';
 import { Piece } from './piece';
 import { Queen } from './queen';
 import { Rook } from './rook';
-import { Square } from './square';
+import { Square } from '../board/square';
 import {
 	ChessPieces,
 	Color,
 	ColorType,
 	Move,
 	SingleMove,
-} from '../../types/types';
+} from '../../../types/types';
 
 export class Pawn extends Piece {
 	override readonly color: ColorType;

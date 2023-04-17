@@ -1,6 +1,6 @@
 import express from 'express';
 import Chess from '../../chess/chess';
-import { Square } from '../../chess/square';
+import { Square } from '../../chess/board/square';
 // import { stringify } from 'flatted';
 
 const router = express.Router();

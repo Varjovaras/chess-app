@@ -1,6 +1,6 @@
-import { Board } from './board';
-import { Square } from './square';
-import { ColorType, Move, SingleMove } from '../../types/types';
+import { Board } from '../board/board';
+import { Square } from '../board/square';
+import { ColorType, Move, SingleMove } from '../../../types/types';
 
 export class Piece {
 	protected name: string;

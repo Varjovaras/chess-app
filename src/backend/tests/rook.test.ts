@@ -1,5 +1,5 @@
-import { Rook } from '../chess/rook';
-import { Bishop } from '../chess/bishop';
+import { Rook } from '../chess/pieces/rook';
+import { Bishop } from '../chess/pieces/bishop';
 import Chess from '../chess/chess';
 import { Color } from '../../types/types';
 

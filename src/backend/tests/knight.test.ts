@@ -1,6 +1,6 @@
 import { Color } from '../../types/types';
 import Chess from '../chess/chess';
-import { Knight } from '../chess/knight';
+import { Knight } from '../chess/pieces/knight';
 
 const chess = new Chess();
 

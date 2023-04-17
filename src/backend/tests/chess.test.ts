@@ -1,7 +1,7 @@
-import { Rook } from '../chess/rook';
+import { Rook } from '../chess/pieces/rook';
 import Chess from '../chess/chess';
-import { King } from '../chess/king';
-import { Pawn } from '../chess/pawn';
+import { King } from '../chess/pieces/king';
+import { Pawn } from '../chess/pieces/pawn';
 import { Color } from '../../types/types';
 
 const chess = new Chess();

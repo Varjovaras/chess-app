@@ -81,7 +81,6 @@ describe('adding and removing pieces works', () => {
 		chess.move('e2', 'e4');
 		chess.move('e7', 'e5');
 
-		console.log(chess.getBoard.printBoardBlack());
 
 		expect(
 			chess.getSquareFromBoard('e4').getPiece &&

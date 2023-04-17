@@ -83,7 +83,6 @@ describe('pawn tests', () => {
 		chess.move('h3', 'g2');
 		chess.move('b7', 'c8', 'BISHOP');
 		chess.move('g2', 'f1', 'QUEEN');
-		console.log(chess.getBoard.printBoardWhite());
 		expect(
 			chess.getSquareFromBoard('c8').getPiece instanceof Bishop &&
 				chess.getSquareFromBoard('c8').getPiece?.getColor === 'WHITE' &&

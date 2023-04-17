@@ -131,7 +131,6 @@ export class Board {
 	whiteCheck(): boolean {
 		let king = this.getWhiteKing();
 		if (!king) {
-			0;
 			console.log('No white king found');
 			return false;
 		}
@@ -159,9 +158,9 @@ export class Board {
 			) {
 				console.log(
 					'King is in check from square ' +
-						testSq.getSquareName +
-						' by ' +
-						testSqPieceName
+					testSq.getSquareName +
+					' by ' +
+					testSqPieceName
 				);
 				return true;
 			}
@@ -185,9 +184,9 @@ export class Board {
 			) {
 				console.log(
 					'King is in check from square ' +
-						testSq.getSquareName +
-						' by ' +
-						testSqPieceName
+					testSq.getSquareName +
+					' by ' +
+					testSqPieceName
 				);
 				return true;
 			}
@@ -210,9 +209,9 @@ export class Board {
 			) {
 				console.log(
 					'King is in check from square ' +
-						testSq.getSquareName +
-						' by ' +
-						testSqPieceName
+					testSq.getSquareName +
+					' by ' +
+					testSqPieceName
 				);
 				return true;
 			}
@@ -235,9 +234,9 @@ export class Board {
 			) {
 				console.log(
 					'King is in check from square ' +
-						testSq.getSquareName +
-						' by ' +
-						testSqPieceName
+					testSq.getSquareName +
+					' by ' +
+					testSqPieceName
 				);
 				return true;
 			}
@@ -260,9 +259,9 @@ export class Board {
 			) {
 				console.log(
 					'King is in check from square ' +
-						testSq.getSquareName +
-						' by ' +
-						testSqPieceName
+					testSq.getSquareName +
+					' by ' +
+					testSqPieceName
 				);
 
 				return true;
@@ -288,9 +287,9 @@ export class Board {
 			) {
 				console.log(
 					'King is in check from square ' +
-						testSq.getSquareName +
-						' by ' +
-						testSqPieceName
+					testSq.getSquareName +
+					' by ' +
+					testSqPieceName
 				);
 				return true;
 			}
@@ -313,9 +312,9 @@ export class Board {
 			if (this.getSquareById(sqId + 9)?.getPiece?.getFirstLetter() === 'P') {
 				console.log(
 					'King is in check from square ' +
-						this.getSquareById(sqId + 9)?.getSquareName +
-						' by ' +
-						this.getSquareById(sqId + 9)?.getPiece?.getFirstLetter
+					this.getSquareById(sqId + 9)?.getSquareName +
+					' by ' +
+					this.getSquareById(sqId + 9)?.getPiece?.getFirstLetter
 				);
 				return true;
 			}
@@ -323,9 +322,9 @@ export class Board {
 			if (this.getSquareById(sqId + 7)?.getPiece?.getFirstLetter() === 'P') {
 				console.log(
 					'King is in check from square ' +
-						this.getSquareById(sqId + 7)?.getSquareName +
-						' by ' +
-						this.getSquareById(sqId + 7)?.getPiece?.getFirstLetter
+					this.getSquareById(sqId + 7)?.getSquareName +
+					' by ' +
+					this.getSquareById(sqId + 7)?.getPiece?.getFirstLetter
 				);
 				return true;
 			}
@@ -333,18 +332,18 @@ export class Board {
 			if (this.getSquareById(sqId + 9)?.getPiece?.getFirstLetter() === 'P') {
 				console.log(
 					'King is in check from square ' +
-						this.getSquareById(sqId + 9)?.getSquareName +
-						' by ' +
-						this.getSquareById(sqId + 9)?.getPiece?.getFirstLetter
+					this.getSquareById(sqId + 9)?.getSquareName +
+					' by ' +
+					this.getSquareById(sqId + 9)?.getPiece?.getFirstLetter
 				);
 				return true;
 			}
 			if (this.getSquareById(sqId + 7)?.getPiece?.getFirstLetter() === 'P') {
 				console.log(
 					'King is in check from square ' +
-						this.getSquareById(sqId + 7)?.getSquareName +
-						' by ' +
-						this.getSquareById(sqId + 7)?.getPiece!.getFirstLetter
+					this.getSquareById(sqId + 7)?.getSquareName +
+					' by ' +
+					this.getSquareById(sqId + 7)?.getPiece!.getFirstLetter
 				);
 				return true;
 			}
@@ -386,9 +385,9 @@ export class Board {
 			) {
 				console.log(
 					'King is in check from square ' +
-						testSq.getSquareName +
-						' by ' +
-						testSqPieceName
+					testSq.getSquareName +
+					' by ' +
+					testSqPieceName
 				);
 				return true;
 			}
@@ -410,9 +409,9 @@ export class Board {
 			) {
 				console.log(
 					'King is in check from square ' +
-						testSq.getSquareName +
-						' by ' +
-						testSqPieceName
+					testSq.getSquareName +
+					' by ' +
+					testSqPieceName
 				);
 				return true;
 			}
@@ -435,9 +434,9 @@ export class Board {
 			) {
 				console.log(
 					'King is in check from square ' +
-						testSq.getSquareName +
-						' by ' +
-						testSqPieceName
+					testSq.getSquareName +
+					' by ' +
+					testSqPieceName
 				);
 				return true;
 			}
@@ -461,9 +460,9 @@ export class Board {
 			) {
 				console.log(
 					'King is in check from square ' +
-						testSq.getSquareName +
-						' by ' +
-						testSqPieceName
+					testSq.getSquareName +
+					' by ' +
+					testSqPieceName
 				);
 				return true;
 			}
@@ -486,9 +485,9 @@ export class Board {
 			) {
 				console.log(
 					'King is in check from square ' +
-						testSq.getSquareName +
-						' by ' +
-						testSqPieceName
+					testSq.getSquareName +
+					' by ' +
+					testSqPieceName
 				);
 
 				return true;
@@ -515,9 +514,9 @@ export class Board {
 			) {
 				console.log(
 					'King is in check from square ' +
-						testSq.getSquareName +
-						' by ' +
-						testSqPieceName
+					testSq.getSquareName +
+					' by ' +
+					testSqPieceName
 				);
 				return true;
 			}
@@ -541,9 +540,9 @@ export class Board {
 			if (this.getSquareById(sqId - 7)?.getPiece?.getFirstLetter() === 'p') {
 				console.log(
 					'King is in check from square ' +
-						this.getSquareById(sqId - 7)!.getSquareName +
-						' by ' +
-						this.getSquareById(sqId - 7)?.getPiece!.getFirstLetter
+					this.getSquareById(sqId - 7)!.getSquareName +
+					' by ' +
+					this.getSquareById(sqId - 7)?.getPiece!.getFirstLetter
 				);
 				return true;
 			}
@@ -551,9 +550,9 @@ export class Board {
 			if (this.getSquareById(sqId - 9)?.getPiece?.getFirstLetter() === 'p') {
 				console.log(
 					'King is in check from square ' +
-						this.getSquareById(sqId - 9)!.getSquareName +
-						' by ' +
-						this.getSquareById(sqId - 9)?.getPiece!.getFirstLetter
+					this.getSquareById(sqId - 9)!.getSquareName +
+					' by ' +
+					this.getSquareById(sqId - 9)?.getPiece!.getFirstLetter
 				);
 				return true;
 			}
@@ -561,18 +560,18 @@ export class Board {
 			if (this.getSquareById(sqId - 9)?.getPiece?.getFirstLetter() === 'p') {
 				console.log(
 					'King is in check from square ' +
-						this.getSquareById(sqId - 9)!.getSquareName +
-						' by ' +
-						this.getSquareById(sqId - 9)?.getPiece!.getFirstLetter
+					this.getSquareById(sqId - 9)!.getSquareName +
+					' by ' +
+					this.getSquareById(sqId - 9)?.getPiece!.getFirstLetter
 				);
 				return true;
 			}
 			if (this.getSquareById(sqId - 7)?.getPiece?.getFirstLetter() === 'p') {
 				console.log(
 					'King is in check from square ' +
-						this.getSquareById(sqId - 7)!.getSquareName +
-						' by ' +
-						this.getSquareById(sqId - 7)?.getPiece!.getFirstLetter
+					this.getSquareById(sqId - 7)!.getSquareName +
+					' by ' +
+					this.getSquareById(sqId - 7)?.getPiece!.getFirstLetter
 				);
 				return true;
 			}

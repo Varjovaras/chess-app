@@ -6,7 +6,9 @@
 	"scripts": {
 		"frontend": "cd frontend && npm run dev",
 		"installfront": "cd frontend 6& npm i",
-		"test": "jest --verbose --silent",
+		"test3": "jest --verbose --silent",
+		"test": "jest",
+		"test2": "jest --verbose",
 		"pocketbase": "cd chess-frontend && ./pocketbase serve",
 		"chess": "cd src && cd backend && ts-node ./chess/index.ts",
 		"tsc": "cd src/backend && tsc",

@@ -15,9 +15,7 @@ describe('Rook tests', () => {
 	});
 
 	test('Movement up', () => {
-		console.log(chess.getBoard.printBoardWhite());
 		chess.move('e4', 'e8');
-		console.log(chess.getBoard.printBoardWhite());
 
 		expect(
 			chess.getSquareFromBoard('e8').getPiece &&
@@ -35,7 +33,6 @@ describe('Rook tests', () => {
 
 	test('Movement right', () => {
 		chess.move('e4', 'a4');
-		console.log('·');
 		expect(
 			chess.getSquareFromBoard('a4').getPiece &&
 				!chess.getSquareFromBoard('e4').getPiece

@@ -117,6 +117,9 @@ export default class Chess {
 			tempBoard.push(tempSq);
 		}
 
+
+
+
 		let newBoard = new Board();
 		newBoard.setBoard(tempBoard);
 		let startSqTempBoard = newBoard.getSquare(startSq.getSquareName);

@@ -210,10 +210,7 @@ export class Pawn extends Piece {
 			pieceToPromote !== undefined &&
 			color
 		) {
-			console.log('trolled');
-			console.log(color);
 			let promotedPiece = Pawn.promotion(endSq, pieceToPromote, color);
-			console.log(promotedPiece);
 			return promotedPiece;
 		}
 		//normal capture logic
@@ -243,7 +240,7 @@ export class Pawn extends Piece {
 			endSq.getRank - startSq.getRank === 2 &&
 			endSq.getPiece === null &&
 			board.getSquare(`${startSq.getFile}${startSq.getRank + 1}`)?.getPiece ===
-				null
+			null
 		) {
 			console.log('Moved white pawn two squares forward');
 			return true;
@@ -253,7 +250,7 @@ export class Pawn extends Piece {
 			startSq.getRank - endSq.getRank === 2 &&
 			endSq.getPiece === null &&
 			board.getSquare(`${startSq.getFile}${startSq.getRank - 1}`)?.getPiece ===
-				null
+			null
 		) {
 			console.log('Moved black pawn two squares forward');
 			return true;
@@ -359,16 +356,14 @@ export class Pawn extends Piece {
 				{
 					startSq: startSq,
 					endSq: board.getSquare(
-						`${String.fromCharCode(sq.getFile.charCodeAt(0) + 1)}${
-							sq.getRank + 1
+						`${String.fromCharCode(sq.getFile.charCodeAt(0) + 1)}${sq.getRank + 1
 						}`
 					)!,
 				},
 				{
 					startSq: startSq,
 					endSq: board.getSquare(
-						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${
-							sq.getRank + 1
+						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${sq.getRank + 1
 						}`
 					)!,
 				}
@@ -410,16 +405,14 @@ export class Pawn extends Piece {
 				{
 					startSq: startSq,
 					endSq: board.getSquare(
-						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${
-							sq.getRank - 1
+						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${sq.getRank - 1
 						}`
 					)!,
 				},
 				{
 					startSq: startSq,
 					endSq: board.getSquare(
-						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${
-							sq.getRank - 1
+						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${sq.getRank - 1
 						}`
 					)!,
 				}

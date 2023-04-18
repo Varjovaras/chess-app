@@ -3,6 +3,7 @@ import { Bishop } from '../chess/pieces/bishop';
 import Chess from '../chess/chess';
 import { King } from '../chess/pieces/king';
 import { Color } from '../../types/types';
+import { Pawn } from '../chess/pieces/pawn';
 
 const chess = new Chess();
 
@@ -167,13 +168,13 @@ describe('king tests', () => {
 
 	test('Moving if it puts you into check doesnt work', () => {
 		chess.putPieceOnBoard(
-			'a1',
-			new Rook(chess.getSquareFromBoard('a1'), Color.white)
+			'h1',
+			new Bishop(chess.getSquareFromBoard('h1'), Color.white)
 		);
 
 		chess.putPieceOnBoard(
-			'a7',
-			new Rook(chess.getSquareFromBoard('a7'), Color.black)
+			'b7',
+			new Rook(chess.getSquareFromBoard('b7'), Color.black)
 		);
 		chess.move('e4', 'd4');
 		expect(
@@ -181,14 +182,13 @@ describe('king tests', () => {
 			chess.getSquareFromBoard('d4').getPiece
 		).toBeTruthy();
 
-		chess.move('a7', 'b7');
+		chess.move('b7', 'b5');
 
-		console.log(chess.getBoard.printBoardWhite());
-		console.log(chess.getMoves);
+
 		expect(
 			chess.getSquareFromBoard('a8').getPiece &&
-			chess.getSquareFromBoard('a7').getPiece &&
-			!chess.getSquareFromBoard('b7').getPiece
+			chess.getSquareFromBoard('b7').getPiece &&
+			!chess.getSquareFromBoard('b5').getPiece
 		).toBeTruthy();
 	});
 });

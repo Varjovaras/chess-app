@@ -25,16 +25,10 @@ export default class Check {
     }
 
     isCheck(startSq: Square, endSq: Square, pieceName?: string): boolean {
-        return startSq.getPiece!.getColor === 'WHITE'
-            ? this.whiteCheck(startSq, endSq, pieceName)
-            : this.blackCheck(startSq, endSq, pieceName);
+        return this.check(startSq, endSq, pieceName);
     }
 
-    private whiteCheck(
-        startSq: Square,
-        endSq: Square,
-        pieceName?: string
-    ): boolean {
+    private check(startSq: Square, endSq: Square, pieceName?: string): boolean {
         let tempBoard: Square[] = [];
 
         for (let i = 0; i < 64; i++) {
@@ -60,42 +54,42 @@ export default class Check {
         if (!startSqTempBoard || !endSqTempBoard) return false;
         this.fakeMovePiece(startSqTempBoard, endSqTempBoard, newBoard, pieceName);
         // if (newBoard.whiteCheck()) return false;
-        return !newBoard.isWhiteInCheck();
+        return startSq.getPiece?.getColor === "WHITE" ? !newBoard.isWhiteInCheck() : !newBoard.isBlackInCheck()
     }
 
-    private blackCheck(
-        startSq: Square,
-        endSq: Square,
+    // private blackCheck(
+    //     startSq: Square,
+    //     endSq: Square,
 
-        pieceName?: string
-    ): boolean {
-        let tempBoard: Square[] = [];
+    //     pieceName?: string
+    // ): boolean {
+    //     let tempBoard: Square[] = [];
 
-        for (let i = 0; i < 64; i++) {
-            let sq = this._board.getSquareById(i);
-            if (!sq) {
-                throw new Error('No 64 squares');
-            }
-            let tempSq = new Square(
-                sq.getFile,
-                sq.getRank,
-                sq.getSquareName,
-                sq.getColor,
-                sq.getId,
-                sq.getPiece
-            );
-            tempBoard.push(tempSq);
-        }
+    //     for (let i = 0; i < 64; i++) {
+    //         let sq = this._board.getSquareById(i);
+    //         if (!sq) {
+    //             throw new Error('No 64 squares');
+    //         }
+    //         let tempSq = new Square(
+    //             sq.getFile,
+    //             sq.getRank,
+    //             sq.getSquareName,
+    //             sq.getColor,
+    //             sq.getId,
+    //             sq.getPiece
+    //         );
+    //         tempBoard.push(tempSq);
+    //     }
 
-        let newBoard = new Board();
-        newBoard.setBoard(tempBoard);
-        let startSqTempBoard = newBoard.getSquare(startSq.getSquareName);
-        let endSqTempBoard = newBoard.getSquare(endSq.getSquareName);
-        if (!startSqTempBoard || !endSqTempBoard) return false;
-        this.fakeMovePiece(startSqTempBoard, endSqTempBoard, newBoard, pieceName);
-        // if (newBoard.isBlackInCheck()) return false;
-        return !newBoard.isBlackInCheck();
-    }
+    //     let newBoard = new Board();
+    //     newBoard.setBoard(tempBoard);
+    //     let startSqTempBoard = newBoard.getSquare(startSq.getSquareName);
+    //     let endSqTempBoard = newBoard.getSquare(endSq.getSquareName);
+    //     if (!startSqTempBoard || !endSqTempBoard) return false;
+    //     this.fakeMovePiece(startSqTempBoard, endSqTempBoard, newBoard, pieceName);
+    //     // if (newBoard.isBlackInCheck()) return false;
+    //     return !newBoard.isBlackInCheck();
+    // }
 
     private fakeMovePiece(
         startSq: Square,

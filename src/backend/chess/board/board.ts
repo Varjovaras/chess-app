@@ -118,8 +118,7 @@ export class Board {
 		for (const i of this._board) {
 			let piece = i.getPiece;
 			if (piece) {
-				rows[i.getRank - 1] =
-					' ' + piece.getFirstLetter() + ' ' + rows[i.getRank - 1];
+				rows[i.getRank - 1] = ' ' + piece.getFirstLetter() + ' ' + rows[i.getRank - 1];
 			} else {
 				rows[i.getRank - 1] = i.getFile + i.getRank + ' ' + rows[i.getRank - 1];
 			}
@@ -128,7 +127,10 @@ export class Board {
 		return rows.reverse();
 	}
 
-	whiteCheck(): boolean {
+	isWhiteInCheck(): boolean {
+		/*
+		//returns true if in check
+		*/
 		let king = this.getWhiteKing();
 		if (!king) {
 			console.log('No white king found');
@@ -152,15 +154,9 @@ export class Board {
 			let testSqPiece = testSq.getPiece;
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
-			if (
-				(testSqPieceName && testSqPieceName === 'R') ||
-				testSqPieceName === 'Q'
-			) {
+			if ((testSqPieceName && testSqPieceName === 'R') || testSqPieceName === 'Q') {
 				console.log(
-					'King is in check from square ' +
-					testSq.getSquareName +
-					' by ' +
-					testSqPieceName
+					'King is in check from square ' + testSq.getSquareName + ' by ' + testSqPieceName
 				);
 				return true;
 			}
@@ -178,15 +174,9 @@ export class Board {
 			}
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
-			if (
-				(testSqPieceName && testSqPieceName === 'R') ||
-				testSqPieceName === 'Q'
-			) {
+			if ((testSqPieceName && testSqPieceName === 'R') || testSqPieceName === 'Q') {
 				console.log(
-					'King is in check from square ' +
-					testSq.getSquareName +
-					' by ' +
-					testSqPieceName
+					'King is in check from square ' + testSq.getSquareName + ' by ' + testSqPieceName
 				);
 				return true;
 			}
@@ -203,15 +193,9 @@ export class Board {
 			if (!testSqPiece && testSq.getFile === 'h') break;
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
-			if (
-				(testSqPieceName && testSqPieceName === 'B') ||
-				testSqPieceName === 'Q'
-			) {
+			if ((testSqPieceName && testSqPieceName === 'B') || testSqPieceName === 'Q') {
 				console.log(
-					'King is in check from square ' +
-					testSq.getSquareName +
-					' by ' +
-					testSqPieceName
+					'King is in check from square ' + testSq.getSquareName + ' by ' + testSqPieceName
 				);
 				return true;
 			}
@@ -228,15 +212,9 @@ export class Board {
 			if (!testSqPiece && testSq.getFile === 'a') break;
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
-			if (
-				(testSqPieceName && testSqPieceName === 'B') ||
-				testSqPieceName === 'Q'
-			) {
+			if ((testSqPieceName && testSqPieceName === 'B') || testSqPieceName === 'Q') {
 				console.log(
-					'King is in check from square ' +
-					testSq.getSquareName +
-					' by ' +
-					testSqPieceName
+					'King is in check from square ' + testSq.getSquareName + ' by ' + testSqPieceName
 				);
 				return true;
 			}
@@ -253,15 +231,9 @@ export class Board {
 			if (testSq.getFile === 'a' || testSq.getId < 8) break;
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
-			if (
-				(testSqPieceName && testSqPieceName === 'B') ||
-				testSqPieceName === 'Q'
-			) {
+			if ((testSqPieceName && testSqPieceName === 'B') || testSqPieceName === 'Q') {
 				console.log(
-					'King is in check from square ' +
-					testSq.getSquareName +
-					' by ' +
-					testSqPieceName
+					'King is in check from square ' + testSq.getSquareName + ' by ' + testSqPieceName
 				);
 
 				return true;
@@ -281,15 +253,9 @@ export class Board {
 			}
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
-			if (
-				(testSqPieceName && testSqPieceName === 'B') ||
-				testSqPieceName === 'Q'
-			) {
+			if ((testSqPieceName && testSqPieceName === 'B') || testSqPieceName === 'Q') {
 				console.log(
-					'King is in check from square ' +
-					testSq.getSquareName +
-					' by ' +
-					testSqPieceName
+					'King is in check from square ' + testSq.getSquareName + ' by ' + testSqPieceName
 				);
 				return true;
 			}
@@ -352,7 +318,10 @@ export class Board {
 		return false;
 	}
 
-	blackCheck(): boolean {
+	isBlackInCheck(): boolean {
+		/*
+//returns true if in check
+*/
 		let king = this.getBlackKing();
 		if (!king) {
 			console.log('No black king found');
@@ -379,15 +348,9 @@ export class Board {
 			if (!testSqPiece && testSq.getRank === 8) break;
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
-			if (
-				(testSqPieceName && testSqPieceName === 'r') ||
-				testSqPieceName === 'q'
-			) {
+			if ((testSqPieceName && testSqPieceName === 'r') || testSqPieceName === 'q') {
 				console.log(
-					'King is in check from square ' +
-					testSq.getSquareName +
-					' by ' +
-					testSqPieceName
+					'King is in check from square ' + testSq.getSquareName + ' by ' + testSqPieceName
 				);
 				return true;
 			}
@@ -403,15 +366,9 @@ export class Board {
 			if (!testSqPiece && testSq.getRank === 1) break;
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
-			if (
-				(testSqPieceName && testSqPieceName === 'r') ||
-				testSqPieceName === 'q'
-			) {
+			if ((testSqPieceName && testSqPieceName === 'r') || testSqPieceName === 'q') {
 				console.log(
-					'King is in check from square ' +
-					testSq.getSquareName +
-					' by ' +
-					testSqPieceName
+					'King is in check from square ' + testSq.getSquareName + ' by ' + testSqPieceName
 				);
 				return true;
 			}
@@ -428,15 +385,9 @@ export class Board {
 			if (!testSqPiece && testSq.getFile === 'h') break;
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
-			if (
-				(testSqPieceName && testSqPieceName === 'b') ||
-				testSqPieceName === 'q'
-			) {
+			if ((testSqPieceName && testSqPieceName === 'b') || testSqPieceName === 'q') {
 				console.log(
-					'King is in check from square ' +
-					testSq.getSquareName +
-					' by ' +
-					testSqPieceName
+					'King is in check from square ' + testSq.getSquareName + ' by ' + testSqPieceName
 				);
 				return true;
 			}
@@ -454,15 +405,9 @@ export class Board {
 
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
-			if (
-				(testSqPieceName && testSqPieceName === 'b') ||
-				testSqPieceName === 'q'
-			) {
+			if ((testSqPieceName && testSqPieceName === 'b') || testSqPieceName === 'q') {
 				console.log(
-					'King is in check from square ' +
-					testSq.getSquareName +
-					' by ' +
-					testSqPieceName
+					'King is in check from square ' + testSq.getSquareName + ' by ' + testSqPieceName
 				);
 				return true;
 			}
@@ -479,15 +424,9 @@ export class Board {
 			if ((!testSqPiece && testSq.getFile === 'a') || testSq.getId < 8) break;
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
-			if (
-				(testSqPieceName && testSqPieceName === 'b') ||
-				testSqPieceName === 'q'
-			) {
+			if ((testSqPieceName && testSqPieceName === 'b') || testSqPieceName === 'q') {
 				console.log(
-					'King is in check from square ' +
-					testSq.getSquareName +
-					' by ' +
-					testSqPieceName
+					'King is in check from square ' + testSq.getSquareName + ' by ' + testSqPieceName
 				);
 
 				return true;
@@ -508,15 +447,9 @@ export class Board {
 			}
 			if (!testSqPiece) continue;
 			let testSqPieceName = testSqPiece.getFirstLetter();
-			if (
-				(testSqPieceName && testSqPieceName === 'b') ||
-				testSqPieceName === 'q'
-			) {
+			if ((testSqPieceName && testSqPieceName === 'b') || testSqPieceName === 'q') {
 				console.log(
-					'King is in check from square ' +
-					testSq.getSquareName +
-					' by ' +
-					testSqPieceName
+					'King is in check from square ' + testSq.getSquareName + ' by ' + testSqPieceName
 				);
 				return true;
 			}

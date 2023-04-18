@@ -123,7 +123,7 @@ chess.move('d7', 'e7');
 console.log(chess.algebraicNotation());
 console.log(chess.getBoard.printBoardWhite());
 
-console.log(chess.latestMove());
+console.log(chess.getLatestMove());
 console.log(chess.getBoard.printBoardWhite());
 chess.startingPosition();
 
@@ -172,7 +172,7 @@ console.log(chess.getBoard.printBoardWhite());
 
 chess.emptyBoard();
 let board = chess.getBoard;
-console.log(board.blackCheck());
+console.log(board.isBlackInCheck());
 
 console.log('castling kingside');
 chess.fen(Chess.STARTING_POSITION);

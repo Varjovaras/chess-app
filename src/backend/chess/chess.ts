@@ -9,13 +9,15 @@ import { Knight } from './pieces/knight';
 import { Pawn } from './pieces/pawn';
 import { ChessPieces, Color, ColorType, Move } from '../../types/types';
 import { enPassantHelper } from './moveHelpers';
+import Check from './check';
 
 export default class Chess {
 	private _board: Board;
 	private _moves: Move[];
 	private _turnNumber: number;
 
-	static STARTING_POSITION = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+	static STARTING_POSITION =
+		'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 	constructor(moves?: Move[]) {
 		this._moves = moves ? moves : [];
@@ -50,10 +52,10 @@ export default class Chess {
 	}
 
 	checkTurn(): ColorType {
-		return this.getTurnNumber % 2 === 0 ? Color.white : Color.black;
+		return this._turnNumber % 2 === 0 ? Color.white : Color.black;
 	}
 
-	latestMove(): Move | undefined {
+	getLatestMove(): Move | undefined {
 		if (this._moves.length > 0) {
 			return this._moves[this._moves.length - 1];
 		}
@@ -64,73 +66,6 @@ export default class Chess {
 		return this.checkTurn() === Color.white ? 'WHITE' : 'BLACK';
 	}
 
-	private whiteCheck(startSq: Square, endSq: Square, pieceName?: string): void {
-		console.log('Checking if move removes white king from check');
-		let tempBoard: Square[] = [];
-
-		for (let i = 0; i < 64; i++) {
-			let sq = this._board.getSquareById(i);
-			if (!sq) {
-				throw new Error('No 64 squares');
-			}
-			let tempSq = new Square(
-				sq.getFile,
-				sq.getRank,
-				sq.getSquareName,
-				sq.getColor,
-				sq.getId,
-				sq.getPiece
-			);
-			tempBoard.push(tempSq);
-		}
-
-
-		let newBoard = new Board();
-		newBoard.setBoard(tempBoard);
-		let startSqTempBoard = newBoard.getSquare(startSq.getSquareName);
-		let endSqTempBoard = newBoard.getSquare(endSq.getSquareName);
-		if (!startSqTempBoard || !endSqTempBoard) return;
-		this.fakeMovePiece(startSqTempBoard, endSqTempBoard, newBoard, pieceName);
-		if (newBoard.whiteCheck()) return;
-		console.log('White king not in check anymore. Move legal');
-		this.movePiece(startSq, endSq, pieceName);
-	}
-
-
-	private blackCheck(startSq: Square, endSq: Square, pieceName?: string) {
-		console.log('Checking if move removes black king from check');
-		let tempBoard: Square[] = [];
-
-		for (let i = 0; i < 64; i++) {
-			let sq = this._board.getSquareById(i);
-			if (!sq) {
-				throw new Error('No 64 squares');
-			}
-			let tempSq = new Square(
-				sq.getFile,
-				sq.getRank,
-				sq.getSquareName,
-				sq.getColor,
-				sq.getId,
-				sq.getPiece
-			);
-			tempBoard.push(tempSq);
-		}
-
-
-
-
-		let newBoard = new Board();
-		newBoard.setBoard(tempBoard);
-		let startSqTempBoard = newBoard.getSquare(startSq.getSquareName);
-		let endSqTempBoard = newBoard.getSquare(endSq.getSquareName);
-		if (!startSqTempBoard || !endSqTempBoard) return;
-		this.fakeMovePiece(startSqTempBoard, endSqTempBoard, newBoard, pieceName);
-		if (newBoard.blackCheck()) return;
-		console.log('White king not in check anymore. Move legal');
-		this.movePiece(startSq, endSq, pieceName);
-	}
-
 	move(startSquare: string, endSquare: string, pieceName?: string): void {
 		if (startSquare === endSquare) {
 			console.log('Same starting and ending square');
@@ -139,21 +74,15 @@ export default class Chess {
 		let startSq = this._board.getSquare(startSquare);
 		let endSq = this._board.getSquare(endSquare);
 		if (!startSq || !endSq) return;
-		let startSqPieceColor = startSq.getPiece?.getColor;
 
-		if (startSqPieceColor === Color.white) {
-			// if (!this.getBoard.whiteCheck()) {
-			// console.log('White king not in check');
-			this.whiteCheck(startSq, endSq, pieceName);
-			// this.movePiece(startSq, endSq, pieceName);
-			// } else this.whiteCheck(startSq, endSq, pieceName);
-		}
-		else {
-			// if (!this.getBoard.blackCheck()) {
-			// console.log('black king not in check');
-			this.blackCheck(startSq, endSq, pieceName);
-			// } else this.blackCheck(startSq, endSq);
-			// }
+		const check = new Check(
+			this.checkTurn(),
+			this._board,
+			this.getLatestMove()
+		);
+
+		if (check.isCheck(startSq, endSq, pieceName)) {
+			this.movePiece(startSq, endSq, pieceName);
 		}
 	}
 
@@ -166,7 +95,7 @@ export default class Chess {
 			console.log('Wrong players turn');
 			return;
 		}
-		let move = this.latestMove();
+		let move = this.getLatestMove();
 
 		if (startSqPiece instanceof Pawn) {
 			if (
@@ -179,12 +108,17 @@ export default class Chess {
 					endSq?.getRank === 1 &&
 					startSqPiece.getName === ChessPieces.PAWN_BLACK)
 			) {
-				promotedPiece = startSqPiece.promote(startSq, endSq, this._board, pieceName);
+				promotedPiece = startSqPiece.promote(
+					startSq,
+					endSq,
+					this._board,
+					pieceName
+				);
 				endSq.setPiece(promotedPiece);
 				this._moves.push({
 					startSq: startSq,
 					endSq: endSq,
-					startSquarePiece: promotedPiece
+					startSquarePiece: promotedPiece,
 				});
 				this.incrementMoveNumber();
 				startSq.setPiece(null);
@@ -197,53 +131,6 @@ export default class Chess {
 
 		if (isLegalMove) {
 			this.handleMove(startSq, endSq);
-			return;
-		}
-
-		throw new Error(
-			'Starting square is invalid, no piece to be found or ending square is invalid, inputted invalid move or a piece is on the way'
-		);
-	}
-
-	private fakeMovePiece(startSq: Square, endSq: Square, board: Board, pieceName?: string): void {
-		let isLegalMove: boolean = false;
-		let promotedPiece: Piece | boolean = false;
-		let startSqPiece = startSq.getPiece;
-		if (!startSqPiece || !endSq) return;
-		if (startSqPiece.getColor !== this.checkTurn()) {
-			console.log('Wrong players turn');
-			return;
-		}
-		let move = this.latestMove();
-
-		if (startSqPiece instanceof Pawn) {
-			if (
-				(pieceName &&
-					startSq?.getRank === 7 &&
-					endSq?.getRank === 8 &&
-					startSqPiece.getName === ChessPieces.PAWN_WHITE) ||
-				(pieceName &&
-					startSq?.getRank === 2 &&
-					endSq?.getRank === 1 &&
-					startSqPiece.getName === ChessPieces.PAWN_BLACK)
-			) {
-				promotedPiece = startSqPiece.promote(startSq, endSq, board, pieceName);
-			} else if (move && enPassantHelper(startSq, endSq, move)) {
-				isLegalMove = startSqPiece.move(startSq, endSq, this._board, move);
-				this._board.getSquareById(move.endSq.getSquare.getId)?.setPiece(null);
-			} else isLegalMove = startSqPiece.move(startSq, endSq, board);
-		} else isLegalMove = startSqPiece.move(startSq, endSq, board);
-
-		if (promotedPiece instanceof Piece) {
-			endSq.setPiece(promotedPiece);
-			endSq.setSquareForPiece(endSq);
-			this.handleTempPieces(startSq, endSq);
-			startSq.setPiece(null);
-			return;
-		}
-
-		if (isLegalMove) {
-			this.handleTempPieces(startSq, endSq);
 			return;
 		}
 
@@ -266,12 +153,14 @@ export default class Chess {
 	}
 
 	private addMove(startSq: Square, endSq: Square): void {
-		console.log('Adding move: ' + startSq.getSquareName + ' ' + endSq.getSquareName);
+		console.log(
+			'Adding move: ' + startSq.getSquareName + ' ' + endSq.getSquareName
+		);
 		if (startSq.getPiece) {
 			this._moves.push({
 				startSq: startSq,
 				endSq: endSq,
-				startSquarePiece: startSq.getPiece
+				startSquarePiece: startSq.getPiece,
 			});
 		}
 	}
@@ -310,14 +199,6 @@ export default class Chess {
 		}
 	}
 
-	private handleTempPieces(startSq: Square, endSq: Square): void {
-		let startSqPiece = startSq.getPiece;
-		endSq.setPiece(startSqPiece!);
-		let endSquareToPiece = endSq;
-		endSq.setSquareForPiece(endSquareToPiece);
-		startSq.setPiece(null);
-	}
-
 	//initialization or promoting
 	putPieceOnBoard(square: string, piece: Piece): void {
 		let sq = this._board.getSquare(square);
@@ -333,11 +214,14 @@ export default class Chess {
 
 		for (const move of this.getMoves) {
 			let startSqPiece =
-				move.startSq.getPiece && move.startSq.getPiece.getFirstLetter().toLowerCase() !== 'p'
+				move.startSq.getPiece &&
+					move.startSq.getPiece.getFirstLetter().toLowerCase() !== 'p'
 					? move.startSq.getPiece.getFirstLetter()
 					: '';
 
-			let piece = move.endSq.getPiece ? move.endSq.getPiece.getFirstLetter() : '';
+			let piece = move.endSq.getPiece
+				? move.endSq.getPiece.getFirstLetter()
+				: '';
 
 			s =
 				s +

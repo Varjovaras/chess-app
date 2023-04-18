@@ -13,6 +13,11 @@ describe('king tests', () => {
 			'e4',
 			new King(chess.getSquareFromBoard('e4'), Color.white)
 		);
+
+		chess.putPieceOnBoard(
+			'a8',
+			new King(chess.getSquareFromBoard('a8'), Color.black)
+		);
 	});
 
 	test('movement up', () => {
@@ -97,7 +102,6 @@ describe('king tests', () => {
 			!chess.getSquareFromBoard('d5').getPiece
 		).toBeTruthy();
 
-
 		chess.move('e4', 'f4');
 
 		expect(
@@ -147,7 +151,6 @@ describe('king tests', () => {
 			chess.move('e4', 'd5');
 		} catch { }
 
-
 		expect(
 			chess.getSquareFromBoard('e4').getPiece &&
 			chess
@@ -159,6 +162,33 @@ describe('king tests', () => {
 				.getSquareFromBoard('d5')
 				.getPiece?.getFirstLetter()
 				.toUpperCase() === 'B'
+		).toBeTruthy();
+	});
+
+	test('Moving if it puts you into check doesnt work', () => {
+		chess.putPieceOnBoard(
+			'a1',
+			new Rook(chess.getSquareFromBoard('a1'), Color.white)
+		);
+
+		chess.putPieceOnBoard(
+			'a7',
+			new Rook(chess.getSquareFromBoard('a7'), Color.black)
+		);
+		chess.move('e4', 'd4');
+		expect(
+			!chess.getSquareFromBoard('e4').getPiece &&
+			chess.getSquareFromBoard('d4').getPiece
+		).toBeTruthy();
+
+		chess.move('a7', 'b7');
+
+		console.log(chess.getBoard.printBoardWhite());
+		console.log(chess.getMoves);
+		expect(
+			chess.getSquareFromBoard('a8').getPiece &&
+			chess.getSquareFromBoard('a7').getPiece &&
+			!chess.getSquareFromBoard('b7').getPiece
 		).toBeTruthy();
 	});
 });

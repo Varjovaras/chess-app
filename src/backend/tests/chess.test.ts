@@ -61,7 +61,7 @@ describe('adding and removing pieces works', () => {
 		);
 		chess.move('e2', 'e4');
 		expect(
-			chess.getSquareFromBoard('e2').getPiece && chess.getBoard.whiteCheck()
+			chess.getSquareFromBoard('e2').getPiece && chess.getBoard.isWhiteInCheck()
 		).toBeTruthy();
 	});
 
@@ -84,8 +84,8 @@ describe('adding and removing pieces works', () => {
 
 		expect(
 			chess.getSquareFromBoard('e4').getPiece &&
-				chess.getSquareFromBoard('e7').getPiece &&
-				chess.getBoard.blackCheck()
+			chess.getSquareFromBoard('e7').getPiece &&
+			chess.getBoard.isBlackInCheck()
 		).toBeTruthy();
 	});
 });

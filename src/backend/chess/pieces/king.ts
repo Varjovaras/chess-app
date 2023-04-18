@@ -69,9 +69,9 @@ export class King extends Piece {
 			) {
 				console.log(
 					'Castling allowed kingside for white king. Castling king on ' +
-						this.getSquare?.getSquareName +
-						' to ' +
-						endSq.getSquareName
+					this.getSquare?.getSquareName +
+					' to ' +
+					endSq.getSquareName
 				);
 				return true;
 			}
@@ -87,7 +87,7 @@ export class King extends Piece {
 			) {
 				console.log(
 					'Castling allowed kingside for black king. Moving king on ' +
-						this.getSquare?.getSquareName
+					this.getSquare?.getSquareName
 				);
 				return true;
 			}
@@ -114,9 +114,9 @@ export class King extends Piece {
 			) {
 				console.log(
 					'Castling allowed queenside for white king. Castling king on ' +
-						this.getSquare?.getSquareName +
-						' to ' +
-						endSq.getSquareName
+					this.getSquare?.getSquareName +
+					' to ' +
+					endSq.getSquareName
 				);
 				return true;
 			}
@@ -132,7 +132,7 @@ export class King extends Piece {
 			) {
 				console.log(
 					'Castling allowed queenside for black king. Moving king on ' +
-						this.getSquare?.getSquareName
+					this.getSquare?.getSquareName
 				);
 				return true;
 			}

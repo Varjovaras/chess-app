@@ -24,74 +24,22 @@ export default class Check {
         return this._latestMove;
     }
 
-    isCheck(startSq: Square, endSq: Square, pieceName?: string): boolean {
-        return this.check(startSq, endSq, pieceName);
-    }
 
-    private check(startSq: Square, endSq: Square, pieceName?: string): boolean {
-        let tempBoard: Square[] = [];
 
-        for (let i = 0; i < 64; i++) {
-            let sq = this._board.getSquareById(i);
-            if (!sq) {
-                throw new Error('No 64 squares');
-            }
-            let tempSq = new Square(
-                sq.getFile,
-                sq.getRank,
-                sq.getSquareName,
-                sq.getColor,
-                sq.getId,
-                sq.getPiece
-            );
-            tempBoard.push(tempSq);
-        }
+    isPositionCheck(startSq: Square, endSq: Square, pieceName?: string): boolean {
 
-        let newBoard = new Board();
-        newBoard.setBoard(tempBoard);
-        let startSqTempBoard = newBoard.getSquare(startSq.getSquareName);
-        let endSqTempBoard = newBoard.getSquare(endSq.getSquareName);
+
+        let tempBoard: Board = this.makeTemporaryBoard();
+        let startSqTempBoard = tempBoard.getSquare(startSq.getSquareName);
+        let endSqTempBoard = tempBoard.getSquare(endSq.getSquareName);
         if (!startSqTempBoard || !endSqTempBoard) return false;
-        this.fakeMovePiece(startSqTempBoard, endSqTempBoard, newBoard, pieceName);
+        this.movePieceOnTemporaryBoard(startSqTempBoard, endSqTempBoard, tempBoard, pieceName);
         // if (newBoard.whiteCheck()) return false;
-        return startSq.getPiece?.getColor === "WHITE" ? !newBoard.isWhiteInCheck() : !newBoard.isBlackInCheck()
+        return startSq.getPiece?.getColor === "WHITE" ? !tempBoard.isWhiteInCheck() : !tempBoard.isBlackInCheck()
     }
 
-    // private blackCheck(
-    //     startSq: Square,
-    //     endSq: Square,
 
-    //     pieceName?: string
-    // ): boolean {
-    //     let tempBoard: Square[] = [];
-
-    //     for (let i = 0; i < 64; i++) {
-    //         let sq = this._board.getSquareById(i);
-    //         if (!sq) {
-    //             throw new Error('No 64 squares');
-    //         }
-    //         let tempSq = new Square(
-    //             sq.getFile,
-    //             sq.getRank,
-    //             sq.getSquareName,
-    //             sq.getColor,
-    //             sq.getId,
-    //             sq.getPiece
-    //         );
-    //         tempBoard.push(tempSq);
-    //     }
-
-    //     let newBoard = new Board();
-    //     newBoard.setBoard(tempBoard);
-    //     let startSqTempBoard = newBoard.getSquare(startSq.getSquareName);
-    //     let endSqTempBoard = newBoard.getSquare(endSq.getSquareName);
-    //     if (!startSqTempBoard || !endSqTempBoard) return false;
-    //     this.fakeMovePiece(startSqTempBoard, endSqTempBoard, newBoard, pieceName);
-    //     // if (newBoard.isBlackInCheck()) return false;
-    //     return !newBoard.isBlackInCheck();
-    // }
-
-    private fakeMovePiece(
+    private movePieceOnTemporaryBoard(
         startSq: Square,
         endSq: Square,
         board: Board,
@@ -149,5 +97,29 @@ export default class Check {
         let endSquareToPiece = endSq;
         endSq.setSquareForPiece(endSquareToPiece);
         startSq.setPiece(null);
+    }
+
+    private makeTemporaryBoard(): Board {
+        let tempBoard: Square[] = [];
+
+        for (let i = 0; i < 64; i++) {
+            let sq = this._board.getSquareById(i);
+            if (!sq) {
+                throw new Error('No 64 squares');
+            }
+            let tempSq = new Square(
+                sq.getFile,
+                sq.getRank,
+                sq.getSquareName,
+                sq.getColor,
+                sq.getId,
+                sq.getPiece
+            );
+            tempBoard.push(tempSq);
+        }
+
+        let newBoard = new Board();
+        newBoard.setBoard(tempBoard);
+        return newBoard;
     }
 }

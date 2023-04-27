@@ -54,7 +54,7 @@ export class Square {
 	}
 
 	getPieceWithoutSquare() {
-		let piece = this._piece;
+		const piece = this._piece;
 
 		if (!piece) return null;
 		delete piece['square'];
@@ -91,7 +91,7 @@ export class Square {
 	}
 
 	static omitPiece(s: Square) {
-		let sq = s;
+		const sq = s;
 		sq._piece = null;
 		return sq;
 	}

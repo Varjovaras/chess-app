@@ -7,7 +7,7 @@ export class Board {
 	static files: string[] = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
 	constructor() {
-		let board = new Array(64);
+		const board = new Array(64);
 		let firstSquare: ColorType = Color.black;
 		let secondSquare: ColorType = Color.white;
 		let rank = 1;
@@ -15,7 +15,7 @@ export class Board {
 			if (file === 8) {
 				file = 0;
 				rank++;
-				let temp: ColorType = firstSquare;
+				const temp: ColorType = firstSquare;
 				firstSquare = secondSquare;
 				secondSquare = temp;
 			}
@@ -53,22 +53,22 @@ export class Board {
 	}
 
 	getSquare(name: string): Square | null {
-		let sq = this._board.find((s: Square) => s.getSquareName === name);
+		const sq = this._board.find((s: Square) => s.getSquareName === name);
 		return sq ? sq.getSquare : null;
 	}
 
 	getSquareById(id: number): Square | null {
-		let sq = this._board.find((s: Square) => s.getId === id);
+		const sq = this._board.find((s: Square) => s.getId === id);
 		return sq ? sq.getSquare : null;
 	}
 
 	getSquareAndName(name?: string, id?: number): string | void {
 		if (id) {
-			let sq = this.getSquareById(id);
+			const sq = this.getSquareById(id);
 			if (sq) return sq.getSquareName;
 		}
 		if (name) {
-			let sq = this.getSquare(name);
+			const sq = this.getSquare(name);
 			if (sq) return sq.getSquareName;
 		}
 		console.log('No square found by id or name');
@@ -83,10 +83,10 @@ export class Board {
 	}
 
 	printBoardWhite() {
-		let rows = ['', '', '', '', '', '', '', ''];
+		const rows = ['', '', '', '', '', '', '', ''];
 
 		for (const i of this._board) {
-			let piece = i.getPiece;
+			const piece = i.getPiece;
 			if (piece) {
 				rows[i.getRank - 1] += piece.getFirstLetter() + '  ';
 			} else {
@@ -97,7 +97,7 @@ export class Board {
 	}
 
 	getBoardWhite() {
-		let rows: Square[][] = [[], [], [], [], [], [], [], []];
+		const rows: Square[][] = [[], [], [], [], [], [], [], []];
 		let row = 0;
 		let i = 0;
 
@@ -113,10 +113,10 @@ export class Board {
 	}
 
 	printBoardBlack() {
-		let rows = ['', '', '', '', '', '', '', ''];
+		const rows = ['', '', '', '', '', '', '', ''];
 
 		for (const i of this._board) {
-			let piece = i.getPiece;
+			const piece = i.getPiece;
 			if (piece) {
 				rows[i.getRank - 1] =
 					' ' + piece.getFirstLetter() + ' ' + rows[i.getRank - 1];
@@ -132,17 +132,17 @@ export class Board {
 		/*
 		//returns true if in check
 		*/
-		let king = this.getWhiteKing();
+		const king = this.getWhiteKing();
 		if (!king) {
 			console.log('No white king found');
 			return false;
 		}
-		let sq = king.getSquare;
+		const sq = king.getSquare;
 		if (!sq) {
 			console.log('No square for white king found');
 			return false;
 		}
-		let sqId = sq.getId;
+		const sqId = sq.getId;
 		if (!sqId && sqId !== 0) {
 			console.log('No square id for white king found');
 			return false;
@@ -150,11 +150,11 @@ export class Board {
 
 		// upwards
 		for (let i = 1; i < 8; i++) {
-			let testSq = this.getSquareById(sqId + 8 * i);
+			const testSq = this.getSquareById(sqId + 8 * i);
 			if (!testSq) break;
-			let testSqPiece = testSq.getPiece;
+			const testSqPiece = testSq.getPiece;
 			if (!testSqPiece) continue;
-			let testSqPieceName = testSqPiece.getFirstLetter();
+			const testSqPieceName = testSqPiece.getFirstLetter();
 			if (
 				testSqPieceName === 'R' ||
 				testSqPieceName === 'Q'
@@ -173,14 +173,14 @@ export class Board {
 		}
 		// downwards
 		for (let i = 1; i < 8; i++) {
-			let testSq = this.getSquareById(sqId - 8 * i);
+			const testSq = this.getSquareById(sqId - 8 * i);
 			if (!testSq) break;
-			let testSqPiece = testSq.getPiece;
+			const testSqPiece = testSq.getPiece;
 			if (!testSqPiece && testSq.getRank === 1) {
 				break;
 			}
 			if (!testSqPiece) continue;
-			let testSqPieceName = testSqPiece.getFirstLetter();
+			const testSqPieceName = testSqPiece.getFirstLetter();
 			if (
 				testSqPieceName === 'R' ||
 				testSqPieceName === 'Q'
@@ -199,12 +199,12 @@ export class Board {
 		}
 		// up and right
 		for (let i = 1; i < 8; i++) {
-			let testSq = this.getSquareById(sqId + 9 * i);
+			const testSq = this.getSquareById(sqId + 9 * i);
 			if (!testSq) break;
-			let testSqPiece = testSq.getPiece;
+			const testSqPiece = testSq.getPiece;
 			if (!testSqPiece && testSq.getFile === 'h') break;
 			if (!testSqPiece) continue;
-			let testSqPieceName = testSqPiece.getFirstLetter();
+			const testSqPieceName = testSqPiece.getFirstLetter();
 			if (
 				testSqPieceName === 'B' ||
 				testSqPieceName === 'Q'
@@ -223,12 +223,12 @@ export class Board {
 		}
 		// up and left
 		for (let i = 1; i < 8; i++) {
-			let testSq = this.getSquareById(sqId + 7 * i);
+			const testSq = this.getSquareById(sqId + 7 * i);
 			if (!testSq) break;
-			let testSqPiece = testSq.getPiece;
+			const testSqPiece = testSq.getPiece;
 			if (!testSqPiece && testSq.getFile === 'a') break;
 			if (!testSqPiece) continue;
-			let testSqPieceName = testSqPiece.getFirstLetter();
+			const testSqPieceName = testSqPiece.getFirstLetter();
 			if (
 				testSqPieceName === 'B' ||
 				testSqPieceName === 'Q'
@@ -247,12 +247,12 @@ export class Board {
 		}
 		// down and left
 		for (let i = 1; i < 8; i++) {
-			let testSq = this.getSquareById(sqId - 9 * i);
+			const testSq = this.getSquareById(sqId - 9 * i);
 			if (!testSq) break;
-			let testSqPiece = testSq.getPiece;
+			const testSqPiece = testSq.getPiece;
 			if (testSq.getFile === 'a' || testSq.getId < 8) break;
 			if (!testSqPiece) continue;
-			let testSqPieceName = testSqPiece.getFirstLetter();
+			const testSqPieceName = testSqPiece.getFirstLetter();
 			if (
 				testSqPieceName === 'B' ||
 				testSqPieceName === 'Q'
@@ -273,14 +273,14 @@ export class Board {
 		// down and right
 		// console.log('down and right');
 		for (let i = 1; i < 8; i++) {
-			let testSq = this.getSquareById(sqId - 7 * i);
+			const testSq = this.getSquareById(sqId - 7 * i);
 			if (!testSq) break;
-			let testSqPiece = testSq.getPiece;
+			const testSqPiece = testSq.getPiece;
 			if ((!testSqPiece && testSq.getId < 8) || testSq.getFile === 'h') {
 				break;
 			}
 			if (!testSqPiece) continue;
-			let testSqPieceName = testSqPiece.getFirstLetter();
+			const testSqPieceName = testSqPiece.getFirstLetter();
 			if (
 				testSqPieceName === 'B' ||
 				testSqPieceName === 'Q'
@@ -299,9 +299,9 @@ export class Board {
 		}
 
 		//horse things
-		let knightSquares = knightMoveHelper(sq, this);
+		const knightSquares = knightMoveHelper(sq, this);
 		knightSquares.forEach((k) => {
-			let sq = this.getSquareById(k);
+			const sq = this.getSquareById(k);
 			if (sq && sq.getPiece && sq.getPiece.getFirstLetter() === 'N') {
 				return true;
 			}
@@ -357,18 +357,18 @@ export class Board {
 //returns true if in check
 */
 
-		let king = this.getBlackKing();
+		const king = this.getBlackKing();
 		if (!king) {
 			console.log('No black king found');
 			return false;
 		}
-		let sq = king.getSquare;
+		const sq = king.getSquare;
 		if (!sq) {
 			console.log('No square for black king found');
 			return false;
 		}
 
-		let sqId = this.getSquareById(sq.getId)?.getId;
+		const sqId = this.getSquareById(sq.getId)?.getId;
 
 		if (!sqId && sqId !== 0) {
 			console.log('No square id for black king found');
@@ -377,12 +377,12 @@ export class Board {
 
 		// upwards
 		for (let i = 1; i < 8; i++) {
-			let testSq = this.getSquareById(sqId + 8 * i);
+			const testSq = this.getSquareById(sqId + 8 * i);
 			if (!testSq) break;
-			let testSqPiece = testSq.getPiece;
+			const testSqPiece = testSq.getPiece;
 			if (!testSqPiece && testSq.getRank === 8) break;
 			if (!testSqPiece) continue;
-			let testSqPieceName = testSqPiece.getFirstLetter();
+			const testSqPieceName = testSqPiece.getFirstLetter();
 			if (
 				testSqPieceName === 'r' ||
 				testSqPieceName === 'q'
@@ -401,12 +401,12 @@ export class Board {
 		}
 		// downwards
 		for (let i = 1; i < 8; i++) {
-			let testSq = this.getSquareById(sqId - 8 * i);
+			const testSq = this.getSquareById(sqId - 8 * i);
 			if (!testSq) break;
-			let testSqPiece = testSq.getPiece;
+			const testSqPiece = testSq.getPiece;
 			if (!testSqPiece && testSq.getRank === 1) break;
 			if (!testSqPiece) continue;
-			let testSqPieceName = testSqPiece.getFirstLetter();
+			const testSqPieceName = testSqPiece.getFirstLetter();
 			if (
 				testSqPieceName === 'r' ||
 				testSqPieceName === 'q'
@@ -426,12 +426,12 @@ export class Board {
 		// up and right
 		// console.log('up and right');
 		for (let i = 1; i < 8; i++) {
-			let testSq = this.getSquareById(sqId + 9 * i);
+			const testSq = this.getSquareById(sqId + 9 * i);
 			if (!testSq) break;
-			let testSqPiece = testSq.getPiece;
+			const testSqPiece = testSq.getPiece;
 			if (!testSqPiece && testSq.getFile === 'h') break;
 			if (!testSqPiece) continue;
-			let testSqPieceName = testSqPiece.getFirstLetter();
+			const testSqPieceName = testSqPiece.getFirstLetter();
 			if (
 				testSqPieceName === 'b' ||
 				testSqPieceName === 'q'
@@ -451,13 +451,13 @@ export class Board {
 		// up and left
 		// console.log('up and left');
 		for (let i = 1; i < 8; i++) {
-			let testSq = this.getSquareById(sqId + 7 * i);
+			const testSq = this.getSquareById(sqId + 7 * i);
 			if (!testSq) break;
-			let testSqPiece = testSq.getPiece;
+			const testSqPiece = testSq.getPiece;
 			if (!testSqPiece && testSq.getFile === 'a') break;
 
 			if (!testSqPiece) continue;
-			let testSqPieceName = testSqPiece.getFirstLetter();
+			const testSqPieceName = testSqPiece.getFirstLetter();
 			if (
 				testSqPieceName === 'b' ||
 				testSqPieceName === 'q'
@@ -477,12 +477,12 @@ export class Board {
 		// down and left
 		// console.log('down and left');
 		for (let i = 1; i < 8; i++) {
-			let testSq = this.getSquareById(sqId - 9 * i);
+			const testSq = this.getSquareById(sqId - 9 * i);
 			if (!testSq) break;
-			let testSqPiece = testSq.getPiece;
+			const testSqPiece = testSq.getPiece;
 			if ((!testSqPiece && testSq.getFile === 'a') || testSq.getId < 8) break;
 			if (!testSqPiece) continue;
-			let testSqPieceName = testSqPiece.getFirstLetter();
+			const testSqPieceName = testSqPiece.getFirstLetter();
 			if (
 				testSqPieceName === 'b' ||
 				testSqPieceName === 'q'
@@ -504,12 +504,11 @@ export class Board {
 		// down and right
 		// console.log('down and right');
 		for (let i = 1; i < 8; i++) {
-			console.log(i);
-			let testSq = this.getSquareById(sqId - 7 * i);
+			const testSq = this.getSquareById(sqId - 7 * i);
 			console.log(testSq?.getSquareName);
 
 			if (!testSq) break;
-			let testSqPiece = testSq.getPiece;
+			const testSqPiece = testSq.getPiece;
 			if (
 				(!testSqPiece && testSq.getId < 8) ||
 				(!testSqPiece && testSq.getFile === 'h')
@@ -517,7 +516,7 @@ export class Board {
 				break;
 			}
 			if (!testSqPiece) continue;
-			let testSqPieceName = testSqPiece.getFirstLetter();
+			const testSqPieceName = testSqPiece.getFirstLetter();
 			if (
 				testSqPieceName === 'b' ||
 				testSqPieceName === 'q'
@@ -537,9 +536,9 @@ export class Board {
 		}
 
 		//horse things
-		let knightSquares = knightMoveHelper(sq, this);
+		const knightSquares = knightMoveHelper(sq, this);
 		knightSquares.forEach((k) => {
-			let sq = this.getSquareById(k);
+			const sq = this.getSquareById(k);
 			if (sq && sq.getPiece && sq.getPiece.getFirstLetter() === 'n') {
 				return true;
 			}

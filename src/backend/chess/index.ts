@@ -9,12 +9,12 @@ import { Color } from '../../types/types';
 
 const chess = new Chess();
 chess.putPieceOnBoard(
-	'e2',
-	new Pawn(chess.getBoard.getSquare('e2')!, Color.white)
+    'e2',
+    new Pawn(chess.getBoard.getSquare('e2')!, Color.white)
 );
 chess.putPieceOnBoard(
-	'd7',
-	new Pawn(chess.getBoard.getSquare('d7')!, Color.black)
+    'd7',
+    new Pawn(chess.getBoard.getSquare('d7')!, Color.black)
 );
 console.log(chess.getBoard.printBoardWhite());
 chess.move('e2', 'e4');
@@ -29,7 +29,6 @@ chess.fen(Chess.STARTING_POSITION);
 chess.move('e2', 'e4');
 chess.move('d7', 'd5');
 console.log(chess.getBoard.getSquare('e4'));
-console.log('blyat');
 chess.move('e4', 'd5');
 chess.move('g8', 'f6');
 chess.move('g1', 'e2');
@@ -71,12 +70,12 @@ chess.move('c6', 'a4');
 // // // //rook test
 chess.emptyBoard();
 chess.putPieceOnBoard(
-	'a1',
-	new Rook(chess.getBoard.getSquare('a1')!, Color.white)
+    'a1',
+    new Rook(chess.getBoard.getSquare('a1')!, Color.white)
 );
 chess.putPieceOnBoard(
-	'd8',
-	new Rook(chess.getBoard.getSquare('a1')!, Color.black)
+    'd8',
+    new Rook(chess.getBoard.getSquare('a1')!, Color.black)
 );
 chess.move('a1', 'h1');
 chess.move('d8', 'd1');
@@ -85,20 +84,20 @@ chess.move('h1', 'd1');
 // // //queen testing
 chess.emptyBoard();
 chess.putPieceOnBoard(
-	'a1',
-	new Queen(chess.getBoard.getSquare('a1')!, Color.white)
+    'a1',
+    new Queen(chess.getBoard.getSquare('a1')!, Color.white)
 );
 chess.putPieceOnBoard(
-	'a1',
-	new Queen(chess.getBoard.getSquare('a1')!, Color.white)
+    'a1',
+    new Queen(chess.getBoard.getSquare('a1')!, Color.white)
 );
 chess.putPieceOnBoard(
-	'a7',
-	new Queen(chess.getBoard.getSquare('a7')!, Color.black)
+    'a7',
+    new Queen(chess.getBoard.getSquare('a7')!, Color.black)
 );
 chess.putPieceOnBoard(
-	'd8',
-	new Queen(chess.getBoard.getSquare('d8')!, Color.black)
+    'd8',
+    new Queen(chess.getBoard.getSquare('d8')!, Color.black)
 );
 chess.move('a1', 'h1');
 chess.move('d8', 'd1');
@@ -108,12 +107,12 @@ chess.move('d1', 'f3');
 // // //king testing
 chess.emptyBoard();
 chess.putPieceOnBoard(
-	'e1',
-	new King(chess.getBoard.getSquare('e1')!, Color.white)
+    'e1',
+    new King(chess.getBoard.getSquare('e1')!, Color.white)
 );
 chess.putPieceOnBoard(
-	'e8',
-	new King(chess.getBoard.getSquare('e8')!, Color.black)
+    'e8',
+    new King(chess.getBoard.getSquare('e8')!, Color.black)
 );
 chess.move('e1', 'e2');
 chess.move('e8', 'd7');
@@ -129,15 +128,15 @@ chess.startingPosition();
 
 //get
 console.log(
-	chess.getBoard.getSquare(
-		`${String.fromCharCode(
-			chess.getBoard.getSquare('e2')!.getFile.charCodeAt(0) + 1
-		)}${chess.getBoard.getSquare('e2')!.getRank + 1}`
-	)
+    chess.getBoard.getSquare(
+        `${String.fromCharCode(
+            chess.getBoard.getSquare('e2')!.getFile.charCodeAt(0) + 1
+        )}${chess.getBoard.getSquare('e2')!.getRank + 1}`
+    )
 );
 
 console.log(
-	chess.getBoard.getSquare('a2')!.getPiece?.possibleMoves(chess.getBoard)
+    chess.getBoard.getSquare('a2')!.getPiece?.possibleMoves(chess.getBoard)
 );
 console.log(chess.getBoard.printBoardWhite());
 chess.move('a2', 'a4');
@@ -171,7 +170,7 @@ chess.move('g2', 'g3');
 console.log(chess.getBoard.printBoardWhite());
 
 chess.emptyBoard();
-let board = chess.getBoard;
+const board = chess.getBoard;
 console.log(board.isBlackInCheck());
 
 console.log('castling kingside');

@@ -1,7 +1,7 @@
-import {Queen} from '../chess/pieces/queen';
-import {Bishop} from '../chess/pieces/bishop';
+import { Queen } from '../chess/pieces/queen';
+import { Bishop } from '../chess/pieces/bishop';
 import Chess from '../chess/chess';
-import {Color} from '../../types/types';
+import { Color } from '../../types/types';
 
 const chess = new Chess();
 

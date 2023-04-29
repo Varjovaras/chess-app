@@ -1,7 +1,7 @@
-import {Board} from '../board/board';
-import {Piece} from './piece';
-import {Square} from '../board/square';
-import {ChessPieces, Color, ColorType, SingleMove} from '../../../types/types';
+import { Board } from '../board/board';
+import { Piece } from './piece';
+import { Square } from '../board/square';
+import { ChessPieces, Color, ColorType, MoveSquares } from '../../../types/types';
 
 export class Knight extends Piece {
     override readonly color: ColorType;
@@ -45,20 +45,20 @@ export class Knight extends Piece {
     static knightMoves(startSq: Square, endSq: Square): boolean {
         return (
             (Math.abs(
-                    Board.findFileIndex(startSq.getFile) -
-                    Board.findFileIndex(endSq.getFile)
-                ) === 1 &&
+                Board.findFileIndex(startSq.getFile) -
+                Board.findFileIndex(endSq.getFile)
+            ) === 1 &&
                 Math.abs(startSq.getRank - endSq.getRank) === 2) ||
             (Math.abs(
-                    Board.findFileIndex(startSq.getFile) -
-                    Board.findFileIndex(endSq.getFile)
-                ) === 2 &&
+                Board.findFileIndex(startSq.getFile) -
+                Board.findFileIndex(endSq.getFile)
+            ) === 2 &&
                 Math.abs(startSq.getRank - endSq.getRank) === 1)
         );
     }
 
-    override possibleMoves(board: Board): SingleMove[] {
-        const moves: SingleMove[] = [];
+    override possibleMoves(board: Board): MoveSquares[] {
+        const moves: MoveSquares[] = [];
         const startSq = this.square;
         if (startSq) {
             const rank = startSq.getRank;

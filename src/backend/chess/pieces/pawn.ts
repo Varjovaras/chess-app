@@ -1,11 +1,11 @@
-import {Bishop} from './bishop';
-import {Board} from '../board/board';
-import {Knight} from './knight';
-import {Piece} from './piece';
-import {Queen} from './queen';
-import {Rook} from './rook';
-import {Square} from '../board/square';
-import {ChessPieces, Color, ColorType, Move, SingleMove,} from '../../../types/types';
+import { Bishop } from './bishop';
+import { Board } from '../board/board';
+import { Knight } from './knight';
+import { Piece } from './piece';
+import { Queen } from './queen';
+import { Rook } from './rook';
+import { Square } from '../board/square';
+import { ChessPieces, Color, ColorType, MovePiece, MoveSquares, } from '../../../types/types';
 
 
 export class Pawn extends Piece {
@@ -22,7 +22,7 @@ export class Pawn extends Piece {
         startSq: Square,
         endSq: Square,
         board: Board,
-        move?: Move
+        move?: MovePiece
     ): boolean {
         if (this.color === Color.white) {
             const bool = Pawn.moveWhite(startSq, endSq, board, undefined, move);
@@ -60,7 +60,7 @@ export class Pawn extends Piece {
         endSq: Square,
         board: Board,
         pieceToPromote?: string,
-        move?: Move
+        move?: MovePiece
     ): boolean | Piece {
         if (startSq.getRank === 8) {
             console.log('How is white pawn on rank 8???');
@@ -109,7 +109,7 @@ export class Pawn extends Piece {
         endSq: Square,
         board: Board,
         pieceToPromote?: string,
-        move?: Move
+        move?: MovePiece
     ): boolean | Piece {
         if (startSq.getRank === 1) {
             console.log('How is black pawn on rank 8???');
@@ -159,7 +159,7 @@ export class Pawn extends Piece {
         startSq: Square,
         endSq: Square,
         pieceToPromote?: string,
-        move?: Move
+        move?: MovePiece
     ): boolean | Piece {
         if (!Piece.capturable(startSq, endSq)) {
             return false;
@@ -281,7 +281,7 @@ export class Pawn extends Piece {
         }
     }
 
-    static enPassant(move: Move, EpStartSqRank: number): boolean {
+    static enPassant(move: MovePiece, EpStartSqRank: number): boolean {
         if (
             (EpStartSqRank === 5 &&
                 move.startSq.getRank === 7 &&
@@ -306,7 +306,7 @@ export class Pawn extends Piece {
         );
     }
 
-    override possibleMoves(board: Board): SingleMove[] {
+    override possibleMoves(board: Board): MoveSquares[] {
         const startSq = this.getSquare;
         if (startSq) {
             if (this.getColor === Color.white) {
@@ -317,8 +317,8 @@ export class Pawn extends Piece {
         } else throw new Error('Pawn doesnt have a square');
     }
 
-    static possibleWhiteMoves(sq: Square, board: Board): SingleMove[] {
-        const moves: SingleMove[] = [];
+    static possibleWhiteMoves(sq: Square, board: Board): MoveSquares[] {
+        const moves: MoveSquares[] = [];
         const startSq = sq.getSquare;
         if (sq.getRank === 1) {
             throw new Error('How is the white pawn on the first rank?');
@@ -366,8 +366,8 @@ export class Pawn extends Piece {
         return moves;
     }
 
-    static possibleBlackMoves(sq: Square, board: Board): SingleMove[] {
-        const moves: SingleMove[] = [];
+    static possibleBlackMoves(sq: Square, board: Board): MoveSquares[] {
+        const moves: MoveSquares[] = [];
         const startSq = sq.getSquare;
         if (sq.getRank === 8) {
             throw new Error('How is the black pawn on the 8th rank?');

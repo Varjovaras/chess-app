@@ -1,7 +1,7 @@
-import {Board} from '../board/board';
-import {Piece} from './piece';
-import type {Square} from '../board/square';
-import {ChessPieces, Color, ColorType, SingleMove} from '../../../types/types';
+import { Board } from '../board/board';
+import { Piece } from './piece';
+import type { Square } from '../board/square';
+import { ChessPieces, Color, ColorType, MoveSquares } from '../../../types/types';
 
 export class Queen extends Piece {
     override readonly color: ColorType;
@@ -42,8 +42,8 @@ export class Queen extends Piece {
         } else return false;
     }
 
-    override possibleMoves(board: Board): SingleMove[] {
-        let moves: SingleMove[] = [];
+    override possibleMoves(board: Board): MoveSquares[] {
+        let moves: MoveSquares[] = [];
         const startSq = this.square;
         if (startSq) {
             const rookMoveFiles = [1, -1, 0, 0];
@@ -66,7 +66,7 @@ export class Queen extends Piece {
         board: Board,
         startSq: Square
     ) {
-        const moves: SingleMove[] = [];
+        const moves: MoveSquares[] = [];
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 7; j++) {
                 const rank = startSq.getRank;

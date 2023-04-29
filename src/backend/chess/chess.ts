@@ -7,22 +7,24 @@ import { Bishop } from "./pieces/bishop";
 import { King } from "./pieces/king";
 import { Knight } from "./pieces/knight";
 import { Pawn } from "./pieces/pawn";
-import { ChessPieces, Color, ColorType, Move } from "../../types/types";
+import { ChessPieces, Color, ColorType, MovePiece } from "../../types/types";
 import { enPassantHelper } from "./moveHelpers";
-import Check from "./check";
+import Move from "./check";
 
 export default class Chess {
     private _board: Board;
-    private _moves: Move[];
+    private _moves: MovePiece[];
     private _turnNumber: number;
+    private _gameOver: boolean;
 
     static STARTING_POSITION =
         "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-    constructor(moves?: Move[]) {
+    constructor(moves?: MovePiece[]) {
         this._moves = moves ? moves : [];
         this._turnNumber = 0;
         this._board = new Board();
+        this._gameOver = false;
     }
 
     get getBoard() {
@@ -55,7 +57,7 @@ export default class Chess {
         return this._turnNumber % 2 === 0 ? Color.white : Color.black;
     }
 
-    getLatestMove(): Move | undefined {
+    getLatestMove(): MovePiece | undefined {
         if (this._moves.length > 0) {
             return this._moves[this._moves.length - 1];
         }
@@ -67,6 +69,8 @@ export default class Chess {
     }
 
     move(startSquare: string, endSquare: string, pieceName?: string): void {
+        if (this._gameOver) return;
+
         if (startSquare === endSquare) {
             console.log("Same starting and ending square");
             throw new Error("Didn't move the piece");
@@ -75,15 +79,20 @@ export default class Chess {
         const endSq = this._board.getSquare(endSquare);
         if (!startSq || !endSq) return;
 
-        const check = new Check(
+        const check = new Move(
             this.checkTurn(),
             this._board,
             this.getLatestMove()
         );
 
 
-        if (check.isPositionCheck(startSq, endSq, pieceName)) {
+        if (!check.isPositionCheck(startSq, endSq, pieceName)) {
+            if (check.getCheckmate) {
+                this._gameOver = true;
+                console.log("Game over")
+            }
             this.handlePieceMove(startSq, endSq, pieceName);
+
         }
     }
 

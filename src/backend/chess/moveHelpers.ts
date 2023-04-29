@@ -1,6 +1,6 @@
-import {Board} from './board/board';
-import {Square} from './board/square';
-import {Move, SingleMove} from '../../types/types';
+import { Board } from './board/board';
+import { Square } from './board/square';
+import { MovePiece, MoveSquares } from '../../types/types';
 
 export const knightMoveHelper = (sq: Square, board: Board): number[] => {
     const endSquares: number[] = [];
@@ -23,7 +23,7 @@ export const knightMoveHelper = (sq: Square, board: Board): number[] => {
 export const enPassantHelper = (
     startSq: Square,
     endSq: Square,
-    move?: Move
+    move?: MovePiece
 ): boolean => {
     return !!(
         (startSq.getPiece?.getFirstLetter() === 'p' &&
@@ -45,8 +45,8 @@ export const enPassantHelper = (
     );
 };
 
-export const fileAndRankChecker = (startSq: Square, files: number[], ranks: number[], board: Board): SingleMove[] => {
-    const moves: SingleMove[] = [];
+export const fileAndRankChecker = (startSq: Square, files: number[], ranks: number[], board: Board): MoveSquares[] => {
+    const moves: MoveSquares[] = [];
     const rank = startSq.getRank;
     const file = startSq.getFile;
 

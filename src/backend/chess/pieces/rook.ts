@@ -1,8 +1,8 @@
-import {Board} from '../board/board';
-import {Piece} from './piece';
-import {Square} from '../board/square';
-import {ChessPieces, Color, ColorType, SingleMove} from '../../../types/types';
-import {fileAndRankChecker} from "../moveHelpers";
+import { Board } from '../board/board';
+import { Piece } from './piece';
+import { Square } from '../board/square';
+import { ChessPieces, Color, ColorType, MoveSquares } from '../../../types/types';
+import { fileAndRankChecker } from "../moveHelpers";
 
 export class Rook extends Piece {
     override readonly color: ColorType;
@@ -58,8 +58,8 @@ export class Rook extends Piece {
         return isMoveSuccessful;
     }
 
-    override possibleMoves(board: Board): SingleMove[] {
-        let moves: SingleMove[] = [];
+    override possibleMoves(board: Board): MoveSquares[] {
+        let moves: MoveSquares[] = [];
         const startSq = this.square;
         if (startSq) {
             const files = [1, -1, 0, 0];

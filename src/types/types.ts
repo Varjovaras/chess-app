@@ -27,14 +27,15 @@ export const ChessPieces = {
 
 export type ChessPieceType = ObjectValues<typeof ChessPieces>;
 
-export type Move = {
+export type MovePiece = {
 	startSq: Square;
 	endSq: Square;
 	startSquarePiece: Piece;
 	promotion?: Piece | null;
 };
 
-export type SingleMove = {
+export type MoveSquares = {
 	startSq: Square;
 	endSq: Square;
 };
+

@@ -1,6 +1,6 @@
-import {Board} from '../board/board';
-import {Square} from '../board/square';
-import {ColorType, Move, SingleMove} from '../../../types/types';
+import { Board } from '../board/board';
+import { Square } from '../board/square';
+import { ColorType, MovePiece, MoveSquares } from '../../../types/types';
 
 export class Piece {
     protected name: string;
@@ -26,7 +26,7 @@ export class Piece {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    move(_startSq: Square, _endSq: Square, _board: Board, _move?: Move | undefined): boolean {
+    move(_startSq: Square, _endSq: Square, _board: Board, _move?: MovePiece | undefined): boolean {
         return false;
     }
 
@@ -38,7 +38,7 @@ export class Piece {
         this.square = sq;
     }
 
-    static capturable(startSq: Square, endSq: Square, move?: Move): boolean {
+    static capturable(startSq: Square, endSq: Square, move?: MovePiece): boolean {
         // console.log('capturable ' + endSq.getSquareName);
         const startSqPiece = startSq.getPiece;
         let endSqPiece = endSq.getPiece;
@@ -59,7 +59,7 @@ export class Piece {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    possibleMoves(_board: Board): SingleMove[] {
+    possibleMoves(_board: Board): MoveSquares[] {
         console.log('Piece without type has no possible moves');
         return [];
     }

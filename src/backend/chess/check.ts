@@ -1,19 +1,21 @@
-import { ChessPieces, ColorType, Move } from '../../types/types';
+import { ChessPieces, ColorType, MovePiece } from '../../types/types';
 import { Board } from './board/board';
 import { Square } from './board/square';
 import { enPassantHelper } from './moveHelpers';
 import { Pawn } from './pieces/pawn';
 import { Piece } from './pieces/piece';
 
-export default class Check {
+export default class Move {
     private _board: Board;
     private _turnColor: ColorType;
-    private _latestMove?: Move;
+    private _latestMove?: MovePiece;
+    private _checkmate: boolean;
 
-    constructor(turn: ColorType, board: Board, move?: Move) {
+    constructor(turn: ColorType, board: Board, move?: MovePiece) {
         this._turnColor = turn;
         this._board = board;
         this._latestMove = move;
+        this._checkmate = false;
     }
 
     get getTurnColor() {
@@ -28,20 +30,39 @@ export default class Check {
         return this._board;
     }
 
+    get getCheckmate() {
+        return this._checkmate;
+    }
+
+
     isPositionCheck(startSq: Square, endSq: Square, pieceName?: string): boolean {
         const tempBoard: Board = this.makeTemporaryBoard();
         const startSqTempBoard = tempBoard.getSquare(startSq.getSquareName);
         const endSqTempBoard = tempBoard.getSquare(endSq.getSquareName);
         if (!startSqTempBoard || !endSqTempBoard) return false;
+
         this.movePieceOnTemporaryBoard(
             startSqTempBoard,
             endSqTempBoard,
             tempBoard,
             pieceName
         );
+
+        if (this.isPositionCheckmate(
+            //tempBoard
+        )) this._checkmate = true;
+
         return startSq.getPiece?.getColor === 'WHITE'
-            ? !tempBoard.isWhiteInCheck()
-            : !tempBoard.isBlackInCheck();
+            ? tempBoard.isWhiteInCheck()
+            : tempBoard.isBlackInCheck();
+    }
+
+    isPositionCheckmate(
+        // tempBoard: Board
+    ): boolean {
+
+        return false;
+        //
     }
 
     private movePieceOnTemporaryBoard(
@@ -126,7 +147,5 @@ export default class Check {
         return newBoard;
     }
 
-    isPositionCheckmate() {
-        //
-    }
+
 }

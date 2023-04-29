@@ -24,20 +24,25 @@ export default class Check {
         return this._latestMove;
     }
 
-
-
-    isPositionCheck(startSq: Square, endSq: Square, pieceName?: string): boolean {
-
-
-        let tempBoard: Board = this.makeTemporaryBoard();
-        let startSqTempBoard = tempBoard.getSquare(startSq.getSquareName);
-        let endSqTempBoard = tempBoard.getSquare(endSq.getSquareName);
-        if (!startSqTempBoard || !endSqTempBoard) return false;
-        this.movePieceOnTemporaryBoard(startSqTempBoard, endSqTempBoard, tempBoard, pieceName);
-        // if (newBoard.whiteCheck()) return false;
-        return startSq.getPiece?.getColor === "WHITE" ? !tempBoard.isWhiteInCheck() : !tempBoard.isBlackInCheck()
+    get getBoard() {
+        return this._board;
     }
 
+    isPositionCheck(startSq: Square, endSq: Square, pieceName?: string): boolean {
+        const tempBoard: Board = this.makeTemporaryBoard();
+        const startSqTempBoard = tempBoard.getSquare(startSq.getSquareName);
+        const endSqTempBoard = tempBoard.getSquare(endSq.getSquareName);
+        if (!startSqTempBoard || !endSqTempBoard) return false;
+        this.movePieceOnTemporaryBoard(
+            startSqTempBoard,
+            endSqTempBoard,
+            tempBoard,
+            pieceName
+        );
+        return startSq.getPiece?.getColor === 'WHITE'
+            ? !tempBoard.isWhiteInCheck()
+            : !tempBoard.isBlackInCheck();
+    }
 
     private movePieceOnTemporaryBoard(
         startSq: Square,
@@ -45,15 +50,15 @@ export default class Check {
         board: Board,
         pieceName?: string
     ): void {
-        let isLegalMove: boolean = false;
+        let isLegalMove = false;
         let promotedPiece: Piece | boolean = false;
-        let startSqPiece = startSq.getPiece;
+        const startSqPiece = startSq.getPiece;
         if (!startSqPiece || !endSq) return;
         if (startSqPiece.getColor !== this.getTurnColor) {
             console.log('Wrong players turn');
             return;
         }
-        let move = this.getLatestMove;
+        const move = this.getLatestMove;
 
         if (startSqPiece instanceof Pawn) {
             if (
@@ -85,29 +90,27 @@ export default class Check {
             this.handleTempPieces(startSq, endSq);
             return;
         }
-
-        throw new Error(
-            'Starting square is invalid, no piece to be found or ending square is invalid, inputted invalid move or a piece is on the way'
-        );
+        console.log('fakemoveError');
+        throw new Error(' fakemoveError');
     }
 
     private handleTempPieces(startSq: Square, endSq: Square): void {
-        let startSqPiece = startSq.getPiece;
+        const startSqPiece = startSq.getPiece;
         endSq.setPiece(startSqPiece!);
-        let endSquareToPiece = endSq;
+        const endSquareToPiece = endSq;
         endSq.setSquareForPiece(endSquareToPiece);
         startSq.setPiece(null);
     }
 
     private makeTemporaryBoard(): Board {
-        let tempBoard: Square[] = [];
+        const tempBoard: Square[] = [];
 
         for (let i = 0; i < 64; i++) {
-            let sq = this._board.getSquareById(i);
+            const sq = this._board.getSquareById(i);
             if (!sq) {
                 throw new Error('No 64 squares');
             }
-            let tempSq = new Square(
+            const tempSq = new Square(
                 sq.getFile,
                 sq.getRank,
                 sq.getSquareName,
@@ -118,8 +121,12 @@ export default class Check {
             tempBoard.push(tempSq);
         }
 
-        let newBoard = new Board();
+        const newBoard = new Board();
         newBoard.setBoard(tempBoard);
         return newBoard;
+    }
+
+    isPositionCheckmate() {
+        //
     }
 }

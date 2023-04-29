@@ -45,8 +45,10 @@ export const enPassantHelper = (
     );
 };
 
-export const fileAndRankChecker(rank: number, file: string, files: number[], ranks: number[]) {
+export const fileAndRankChecker = (startSq: Square, files: number[], ranks: number[], board: Board): SingleMove[] => {
     const moves: SingleMove[] = [];
+    const rank = startSq.getRank;
+    const file = startSq.getFile;
 
     for (let i = 0; i < 4; i++) {
         for (let j = 0; j < 7; j++) {
@@ -63,4 +65,5 @@ export const fileAndRankChecker(rank: number, file: string, files: number[], ran
             });
         }
     }
+    return moves;
 };

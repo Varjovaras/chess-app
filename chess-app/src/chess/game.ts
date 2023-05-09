@@ -1,4 +1,4 @@
-import readline from 'readline';
+// import readline from 'readline';
 import Chess from './chess';
 
 export class Game {
@@ -9,6 +9,8 @@ export class Game {
 		this.chess = chess;
 		this.gameOver = false;
 	}
+
+
 
 	async playTerminal() {
 		this.chess.startingPosition();

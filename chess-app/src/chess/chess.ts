@@ -330,7 +330,7 @@ export default class Chess {
 
 		for (const move of this.getMoves) {
 			let startSqPiece =
-				move.startSq.getPiece && move.startSq.getPiece.getFirstLetter().toLowerCase() !== 'p'
+				move.startSq.getPiece && move.startSq.getPiece.getFirstLetter()!.toLowerCase() !== 'p'
 					? move.startSq.getPiece.getFirstLetter()
 					: '';
 
@@ -339,7 +339,7 @@ export default class Chess {
 			s =
 				s +
 				`${startSqPiece}${move.startSq.getSquareName} ${move.endSq.getSquareName
-				}${piece.toUpperCase()}`;
+				}${piece!.toUpperCase()}`;
 
 			returnArray = returnArray.concat(s);
 			s = '';
@@ -350,7 +350,7 @@ export default class Chess {
 
 	fen(fen: string): void {
 		let tokens = fen.split(/\s+/);
-		let pieces = tokens[0].split('/');
+		let pieces = tokens[0]!.split('/');
 
 		//initialize
 		this._moves = [];
@@ -364,11 +364,11 @@ export default class Chess {
 	private analyzeFen(pieces: string[]) {
 		for (let i = 0; i < 8; i++) {
 			let str = pieces[i];
-			if (str.length !== 8) {
+			if (str!.length !== 8) {
 				//todo non starting position
 			} else if (str !== '8') {
 				//if str is 8 it's an empty row
-				this.fenHelper(i, str);
+				this.fenHelper(i, str!);
 			}
 		}
 	}
@@ -380,7 +380,7 @@ export default class Chess {
 		for (let j = i * 8, k = 0; j < i * 8 + 8; j++, k++) {
 			let sq = this._board.getSquareById(j);
 			if (sq) {
-				let piece = Chess.fenPieces(str[k], sq);
+				let piece = Chess.fenPieces(str[k]!, sq);
 
 				if (piece !== null) {
 					this.putPieceOnBoard(sq.getSquareName, piece);

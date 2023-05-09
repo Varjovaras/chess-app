@@ -31,7 +31,7 @@ export class Game {
 			console.log(`Trying ${input}`);
 			let split = input.toLowerCase().split(' ');
 			try {
-				this.chess.move(split[0], split[1]);
+				this.chess.move(split[0]!, split[1]!);
 				rl.close();
 				return new Promise((resolve) => rl.on('close', resolve));
 			} catch {

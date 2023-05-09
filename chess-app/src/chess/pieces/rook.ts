@@ -1,7 +1,7 @@
 import { Board } from '../board/board';
 import { Piece } from './piece';
 import { Square } from '../board/square';
-import { ChessPieces, Color, ColorType, SingleMove } from '../../../types/types';
+import { ChessPieces, Color, ColorType, SingleMove } from '../../types/types';
 
 export class Rook extends Piece {
 	override readonly color: ColorType;
@@ -69,9 +69,9 @@ export class Rook extends Piece {
 			for (let i = 0; i < 4; i++) {
 				for (let j = 0; j < 7; j++) {
 					let nextFile = String.fromCharCode(
-						file.charCodeAt(0) + files[i] + j * files[i]
+						file.charCodeAt(0) + files[i]! + j * files[i]!
 					);
-					let nextRank = rank + ranks[i] + j * ranks[i];
+					let nextRank = rank + ranks[i]! + j * ranks[i]!;
 					let endSq = board.getSquare(`${nextFile}${nextRank}`);
 
 					if (!endSq) break;

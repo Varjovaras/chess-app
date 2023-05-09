@@ -1,6 +1,6 @@
 import { Board } from './board/board';
 import { Square } from './board/square';
-import { Move } from '../../types/types';
+import { Move } from '../types/types';
 
 export const knightMoveHelper = (sq: Square, board: Board): number[] => {
 	let endSquares: number[] = [];
@@ -10,8 +10,8 @@ export const knightMoveHelper = (sq: Square, board: Board): number[] => {
 	let file = sq.getFile;
 	let rank = sq.getRank;
 	for (let i = 0; i < 8; i++) {
-		let nextFile = String.fromCharCode(file.charCodeAt(0) + files[i]);
-		let nextRank = rank + ranks[i];
+		let nextFile = String.fromCharCode(file.charCodeAt(0) + files[i]!);
+		let nextRank = rank + ranks[i]!;
 		let sq = board.getSquare(`${nextFile}${nextRank}`);
 		if (sq && sq.getSquareName) {
 			endSquares.push(sq.getSquare.getId);

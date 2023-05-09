@@ -1,7 +1,7 @@
 import { Board } from '../board/board';
 import { Piece } from './piece';
 import { Square } from '../board/square';
-import { ChessPieces, Color, ColorType, SingleMove } from '../../../types/types';
+import { ChessPieces, Color, ColorType, SingleMove } from '../../types/types';
 
 export class Knight extends Piece {
 	override readonly color: ColorType;
@@ -46,12 +46,12 @@ export class Knight extends Piece {
 		return (
 			(Math.abs(
 				Board.findFileIndex(startSq.getFile) -
-					Board.findFileIndex(endSq.getFile)
+				Board.findFileIndex(endSq.getFile)
 			) === 1 &&
 				Math.abs(startSq.getRank - endSq.getRank) === 2) ||
 			(Math.abs(
 				Board.findFileIndex(startSq.getFile) -
-					Board.findFileIndex(endSq.getFile)
+				Board.findFileIndex(endSq.getFile)
 			) === 2 &&
 				Math.abs(startSq.getRank - endSq.getRank) === 1)
 		);
@@ -68,8 +68,8 @@ export class Knight extends Piece {
 			let ranks = [1, -1, 2, -2, -2, -1, 1, 2];
 
 			for (let i = 0; i < 8; i++) {
-				let nextFile = String.fromCharCode(file.charCodeAt(0) + files[i]);
-				let nextRank = rank + ranks[i];
+				let nextFile = String.fromCharCode(file.charCodeAt(0) + files[i]!);
+				let nextRank = rank + ranks[i]!;
 				let endSq = board.getSquare(`${nextFile}${nextRank}`)?.getSquare;
 				if (!endSq) break;
 				moves.push({

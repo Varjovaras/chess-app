@@ -11,7 +11,7 @@ import {
 	ColorType,
 	Move,
 	SingleMove,
-} from '../../../types/types';
+} from '../../types/types';
 
 export class Pawn extends Piece {
 	override readonly color: ColorType;
@@ -243,7 +243,7 @@ export class Pawn extends Piece {
 			endSq.getRank - startSq.getRank === 2 &&
 			endSq.getPiece === null &&
 			board.getSquare(`${startSq.getFile}${startSq.getRank + 1}`)?.getPiece ===
-				null
+			null
 		) {
 			console.log('Moved white pawn two squares forward');
 			return true;
@@ -253,7 +253,7 @@ export class Pawn extends Piece {
 			startSq.getRank - endSq.getRank === 2 &&
 			endSq.getPiece === null &&
 			board.getSquare(`${startSq.getFile}${startSq.getRank - 1}`)?.getPiece ===
-				null
+			null
 		) {
 			console.log('Moved black pawn two squares forward');
 			return true;
@@ -359,16 +359,14 @@ export class Pawn extends Piece {
 				{
 					startSq: startSq,
 					endSq: board.getSquare(
-						`${String.fromCharCode(sq.getFile.charCodeAt(0) + 1)}${
-							sq.getRank + 1
+						`${String.fromCharCode(sq.getFile.charCodeAt(0) + 1)}${sq.getRank + 1
 						}`
 					)!,
 				},
 				{
 					startSq: startSq,
 					endSq: board.getSquare(
-						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${
-							sq.getRank + 1
+						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${sq.getRank + 1
 						}`
 					)!,
 				}
@@ -410,16 +408,14 @@ export class Pawn extends Piece {
 				{
 					startSq: startSq,
 					endSq: board.getSquare(
-						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${
-							sq.getRank - 1
+						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${sq.getRank - 1
 						}`
 					)!,
 				},
 				{
 					startSq: startSq,
 					endSq: board.getSquare(
-						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${
-							sq.getRank - 1
+						`${String.fromCharCode(sq.getFile.charCodeAt(0) - 1)}${sq.getRank - 1
 						}`
 					)!,
 				}

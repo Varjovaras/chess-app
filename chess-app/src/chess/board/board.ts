@@ -1,6 +1,6 @@
 import { knightMoveHelper } from '../moveHelpers';
 import { Square } from './square';
-import { Color, ColorType } from '../../../types/types';
+import { Color, ColorType } from '../../types/types';
 
 export class Board {
 	private _board: Square[];
@@ -22,7 +22,7 @@ export class Board {
 
 			if (i % 2 === 0) {
 				board[i] = new Square(
-					Board.files[file],
+					Board.files[file]!,
 					rank,
 
 					`${Board.files[file]}${rank}`,
@@ -32,7 +32,7 @@ export class Board {
 				);
 			} else {
 				board[i] = new Square(
-					Board.files[file],
+					Board.files[file]!,
 					rank,
 					`${Board.files[file]}${rank}`,
 					secondSquare,
@@ -102,7 +102,7 @@ export class Board {
 		let i = 0;
 
 		for (const sq of this._board) {
-			rows[row][i] = sq;
+			rows[row]![i] = sq;
 			if (i === 7) {
 				i = 0;
 				row++;

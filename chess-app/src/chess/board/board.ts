@@ -1,4 +1,4 @@
-import { knightMoveHelper } from "../moveHelpers";
+import MoveHelper from "../moveHelpers";
 import { Square } from "./square";
 import { Color, ColorType } from "../../types/types";
 
@@ -128,7 +128,7 @@ export class Board {
     return rows.reverse();
   }
 
-  whiteCheck(): boolean {
+  isWhiteKingInCheck(): boolean {
     let king = this.getWhiteKing();
     if (!king) {
       console.log("No white king found");
@@ -299,7 +299,7 @@ export class Board {
     }
 
     //horse things
-    let knightSquares = knightMoveHelper(sq, this);
+    let knightSquares = MoveHelper.knightMoveHelper(sq, this);
     knightSquares.forEach((k) => {
       let sq = this.getSquareById(k);
       if (sq && sq.getPiece && sq.getPiece.getFirstLetter() === "N") {
@@ -352,7 +352,7 @@ export class Board {
     return false;
   }
 
-  blackCheck(): boolean {
+  isBlackKingInCheck(): boolean {
     let king = this.getBlackKing();
     if (!king) {
       console.log("No black king found");
@@ -527,7 +527,7 @@ export class Board {
     }
 
     //horse things
-    let knightSquares = knightMoveHelper(sq, this);
+    let knightSquares = MoveHelper.knightMoveHelper(sq, this);
     knightSquares.forEach((k) => {
       let sq = this.getSquareById(k);
       if (sq && sq.getPiece && sq.getPiece.getFirstLetter() === "n") {

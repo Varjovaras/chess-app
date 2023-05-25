@@ -150,13 +150,11 @@ describe("king tests", () => {
       chess.getSquareFromBoard("e4").getPiece &&
         chess
           .getSquareFromBoard("e4")
-          .getPiece?.getFirstLetter()!
-          .toUpperCase() === "K" &&
+          .getPiece?.getFirstLetter!.toUpperCase() === "K" &&
         chess.getSquareFromBoard("d5").getPiece &&
         chess
           .getSquareFromBoard("d5")
-          .getPiece?.getFirstLetter()!
-          .toUpperCase() === "B"
+          .getPiece?.getFirstLetter!.toUpperCase() === "B"
     ).toBeTruthy();
   });
 
@@ -179,13 +177,11 @@ describe("king tests", () => {
       chess.getSquareFromBoard("e4").getPiece &&
         chess
           .getSquareFromBoard("e4")
-          .getPiece?.getFirstLetter()!
-          .toUpperCase() === "K" &&
+          .getPiece?.getFirstLetter!.toUpperCase() === "K" &&
         chess.getSquareFromBoard("d5").getPiece &&
         chess
           .getSquareFromBoard("d5")
-          .getPiece?.getFirstLetter()!
-          .toUpperCase() === "B"
+          .getPiece?.getFirstLetter!.toUpperCase() === "B"
     ).toBeTruthy();
   });
 
@@ -210,8 +206,7 @@ describe("king tests", () => {
       chess.getSquareFromBoard("f3").getPiece &&
         chess
           .getSquareFromBoard("f3")
-          .getPiece?.getFirstLetter()!
-          .toUpperCase() === "N" &&
+          .getPiece?.getFirstLetter!.toUpperCase() === "N" &&
         chess.getSquareFromBoard("e1").getPiece &&
         chess.getSquareFromBoard("h1").getPiece
     ).toBeTruthy();
@@ -255,13 +250,11 @@ describe("king tests", () => {
       chess.getSquareFromBoard("h3").getPiece &&
         chess
           .getSquareFromBoard("h3")
-          .getPiece?.getFirstLetter()!
-          .toUpperCase() === "N" &&
+          .getPiece?.getFirstLetter!.toUpperCase() === "N" &&
         chess.getSquareFromBoard("f8").getPiece &&
         chess
           .getSquareFromBoard("f8")
-          .getPiece?.getFirstLetter()!
-          .toUpperCase() === "R" &&
+          .getPiece?.getFirstLetter!.toUpperCase() === "R" &&
         chess.getSquareFromBoard("e1").getPiece &&
         chess.getSquareFromBoard("h1").getPiece
     ).toBeTruthy();
@@ -297,8 +290,7 @@ describe("king tests", () => {
       chess.getSquareFromBoard("h3").getPiece &&
         chess
           .getSquareFromBoard("h3")
-          .getPiece?.getFirstLetter()!
-          .toUpperCase() === "N" &&
+          .getPiece?.getFirstLetter!.toUpperCase() === "N" &&
         chess.getSquareFromBoard("e1").getPiece &&
         chess.getSquareFromBoard("h1").getPiece
     ).toBeTruthy();

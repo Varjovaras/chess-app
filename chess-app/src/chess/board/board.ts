@@ -88,7 +88,7 @@ export class Board {
     for (const i of this._board) {
       let piece = i.getPiece;
       if (piece) {
-        rows[i.getRank - 1] += piece.getFirstLetter() + "  ";
+        rows[i.getRank - 1] += piece.getFirstLetter + "  ";
       } else {
         rows[i.getRank - 1] += i.getFile + i.getRank + " ";
       }
@@ -119,7 +119,7 @@ export class Board {
       let piece = i.getPiece;
       if (piece) {
         rows[i.getRank - 1] =
-          " " + piece.getFirstLetter() + " " + rows[i.getRank - 1];
+          " " + piece.getFirstLetter + " " + rows[i.getRank - 1];
       } else {
         rows[i.getRank - 1] = i.getFile + i.getRank + " " + rows[i.getRank - 1];
       }
@@ -151,7 +151,7 @@ export class Board {
       if (!testSq) break;
       let testSqPiece = testSq.getPiece;
       if (!testSqPiece) continue;
-      let testSqPieceName = testSqPiece.getFirstLetter();
+      let testSqPieceName = testSqPiece.getFirstLetter;
       if (
         (testSqPieceName && testSqPieceName === "R") ||
         testSqPieceName === "Q"
@@ -177,7 +177,7 @@ export class Board {
         break;
       }
       if (!testSqPiece) continue;
-      let testSqPieceName = testSqPiece.getFirstLetter();
+      let testSqPieceName = testSqPiece.getFirstLetter;
       if (
         (testSqPieceName && testSqPieceName === "R") ||
         testSqPieceName === "Q"
@@ -202,7 +202,7 @@ export class Board {
       let testSqPiece = testSq.getPiece;
       if (!testSqPiece && testSq.getFile === "h") break;
       if (!testSqPiece) continue;
-      let testSqPieceName = testSqPiece.getFirstLetter();
+      let testSqPieceName = testSqPiece.getFirstLetter;
       if (
         (testSqPieceName && testSqPieceName === "B") ||
         testSqPieceName === "Q"
@@ -227,7 +227,7 @@ export class Board {
       let testSqPiece = testSq.getPiece;
       if (!testSqPiece && testSq.getFile === "a") break;
       if (!testSqPiece) continue;
-      let testSqPieceName = testSqPiece.getFirstLetter();
+      let testSqPieceName = testSqPiece.getFirstLetter;
       if (
         (testSqPieceName && testSqPieceName === "B") ||
         testSqPieceName === "Q"
@@ -252,7 +252,7 @@ export class Board {
       let testSqPiece = testSq.getPiece;
       if (testSq.getFile === "a" || testSq.getId < 8) break;
       if (!testSqPiece) continue;
-      let testSqPieceName = testSqPiece.getFirstLetter();
+      let testSqPieceName = testSqPiece.getFirstLetter;
       if (
         (testSqPieceName && testSqPieceName === "B") ||
         testSqPieceName === "Q"
@@ -280,7 +280,7 @@ export class Board {
         break;
       }
       if (!testSqPiece) continue;
-      let testSqPieceName = testSqPiece.getFirstLetter();
+      let testSqPieceName = testSqPiece.getFirstLetter;
       if (
         (testSqPieceName && testSqPieceName === "B") ||
         testSqPieceName === "Q"
@@ -302,14 +302,14 @@ export class Board {
     let knightSquares = MoveHelper.knightMoveHelper(sq, this);
     knightSquares.forEach((k) => {
       let sq = this.getSquareById(k);
-      if (sq && sq.getPiece && sq.getPiece.getFirstLetter() === "N") {
+      if (sq && sq.getPiece && sq.getPiece.getFirstLetter === "N") {
         return true;
       }
     });
 
     //pawn things
     if (sq.getFile === "a") {
-      if (this.getSquareById(sqId + 9)?.getPiece?.getFirstLetter() === "P") {
+      if (this.getSquareById(sqId + 9)?.getPiece?.getFirstLetter === "P") {
         console.log(
           "King is in check from square " +
             this.getSquareById(sqId + 9)?.getSquareName +
@@ -319,7 +319,7 @@ export class Board {
         return true;
       }
     } else if (sq.getFile === "h") {
-      if (this.getSquareById(sqId + 7)?.getPiece?.getFirstLetter() === "P") {
+      if (this.getSquareById(sqId + 7)?.getPiece?.getFirstLetter === "P") {
         console.log(
           "King is in check from square " +
             this.getSquareById(sqId + 7)?.getSquareName +
@@ -329,7 +329,7 @@ export class Board {
         return true;
       }
     } else {
-      if (this.getSquareById(sqId + 9)?.getPiece?.getFirstLetter() === "P") {
+      if (this.getSquareById(sqId + 9)?.getPiece?.getFirstLetter === "P") {
         console.log(
           "King is in check from square " +
             this.getSquareById(sqId + 9)?.getSquareName +
@@ -338,7 +338,7 @@ export class Board {
         );
         return true;
       }
-      if (this.getSquareById(sqId + 7)?.getPiece?.getFirstLetter() === "P") {
+      if (this.getSquareById(sqId + 7)?.getPiece?.getFirstLetter === "P") {
         console.log(
           "King is in check from square " +
             this.getSquareById(sqId + 7)?.getSquareName +
@@ -378,7 +378,7 @@ export class Board {
       let testSqPiece = testSq.getPiece;
       if (!testSqPiece && testSq.getRank === 8) break;
       if (!testSqPiece) continue;
-      let testSqPieceName = testSqPiece.getFirstLetter();
+      let testSqPieceName = testSqPiece.getFirstLetter;
       if (
         (testSqPieceName && testSqPieceName === "r") ||
         testSqPieceName === "q"
@@ -402,7 +402,7 @@ export class Board {
       let testSqPiece = testSq.getPiece;
       if (!testSqPiece && testSq.getRank === 1) break;
       if (!testSqPiece) continue;
-      let testSqPieceName = testSqPiece.getFirstLetter();
+      let testSqPieceName = testSqPiece.getFirstLetter;
       if (
         (testSqPieceName && testSqPieceName === "r") ||
         testSqPieceName === "q"
@@ -427,7 +427,7 @@ export class Board {
       let testSqPiece = testSq.getPiece;
       if (!testSqPiece && testSq.getFile === "h") break;
       if (!testSqPiece) continue;
-      let testSqPieceName = testSqPiece.getFirstLetter();
+      let testSqPieceName = testSqPiece.getFirstLetter;
       if (
         (testSqPieceName && testSqPieceName === "b") ||
         testSqPieceName === "q"
@@ -453,7 +453,7 @@ export class Board {
       if (!testSqPiece && testSq.getFile === "a") break;
 
       if (!testSqPiece) continue;
-      let testSqPieceName = testSqPiece.getFirstLetter();
+      let testSqPieceName = testSqPiece.getFirstLetter;
       if (
         (testSqPieceName && testSqPieceName === "b") ||
         testSqPieceName === "q"
@@ -478,7 +478,7 @@ export class Board {
       let testSqPiece = testSq.getPiece;
       if ((!testSqPiece && testSq.getFile === "a") || testSq.getId < 8) break;
       if (!testSqPiece) continue;
-      let testSqPieceName = testSqPiece.getFirstLetter();
+      let testSqPieceName = testSqPiece.getFirstLetter;
       if (
         (testSqPieceName && testSqPieceName === "b") ||
         testSqPieceName === "q"
@@ -507,7 +507,7 @@ export class Board {
         break;
       }
       if (!testSqPiece) continue;
-      let testSqPieceName = testSqPiece.getFirstLetter();
+      let testSqPieceName = testSqPiece.getFirstLetter;
       if (
         (testSqPieceName && testSqPieceName === "b") ||
         testSqPieceName === "q"
@@ -530,14 +530,14 @@ export class Board {
     let knightSquares = MoveHelper.knightMoveHelper(sq, this);
     knightSquares.forEach((k) => {
       let sq = this.getSquareById(k);
-      if (sq && sq.getPiece && sq.getPiece.getFirstLetter() === "n") {
+      if (sq && sq.getPiece && sq.getPiece.getFirstLetter === "n") {
         return true;
       }
     });
 
     //pawn things
     if (sq.getFile === "a") {
-      if (this.getSquareById(sqId - 7)?.getPiece?.getFirstLetter() === "p") {
+      if (this.getSquareById(sqId - 7)?.getPiece?.getFirstLetter === "p") {
         console.log(
           "King is in check from square " +
             this.getSquareById(sqId - 7)!.getSquareName +
@@ -547,7 +547,7 @@ export class Board {
         return true;
       }
     } else if (sq.getFile === "h") {
-      if (this.getSquareById(sqId - 9)?.getPiece?.getFirstLetter() === "p") {
+      if (this.getSquareById(sqId - 9)?.getPiece?.getFirstLetter === "p") {
         console.log(
           "King is in check from square " +
             this.getSquareById(sqId - 9)!.getSquareName +
@@ -557,7 +557,7 @@ export class Board {
         return true;
       }
     } else {
-      if (this.getSquareById(sqId - 9)?.getPiece?.getFirstLetter() === "p") {
+      if (this.getSquareById(sqId - 9)?.getPiece?.getFirstLetter === "p") {
         console.log(
           "King is in check from square " +
             this.getSquareById(sqId - 9)!.getSquareName +
@@ -566,7 +566,7 @@ export class Board {
         );
         return true;
       }
-      if (this.getSquareById(sqId - 7)?.getPiece?.getFirstLetter() === "p") {
+      if (this.getSquareById(sqId - 7)?.getPiece?.getFirstLetter === "p") {
         console.log(
           "King is in check from square " +
             this.getSquareById(sqId - 7)!.getSquareName +

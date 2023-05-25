@@ -283,13 +283,11 @@ export default class Chess {
     for (const move of this.getMoves) {
       let startSqPiece =
         move.startSq.getPiece &&
-        move.startSq.getPiece.getFirstLetter()!.toLowerCase() !== "p"
-          ? move.startSq.getPiece.getFirstLetter()
+        move.startSq.getPiece.getFirstLetter!.toLowerCase() !== "p"
+          ? move.startSq.getPiece.getFirstLetter
           : "";
 
-      let piece = move.endSq.getPiece
-        ? move.endSq.getPiece.getFirstLetter()
-        : "";
+      let piece = move.endSq.getPiece ? move.endSq.getPiece.getFirstLetter : "";
 
       s =
         s +

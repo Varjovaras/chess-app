@@ -27,21 +27,21 @@ export default class MoveHelper {
     move?: MovePiece
   ): boolean => {
     return !!(
-      (startSq.getPiece?.getFirstLetter() === "p" &&
+      (startSq.getPiece?.getFirstLetter === "p" &&
         startSq.getRank === 5 &&
         endSq.getRank === 6 &&
         startSq.getFile !== endSq.getFile &&
         move &&
         move.endSq.getRank === 5 &&
-        move.startSquarePiece.getFirstLetter() === "P" &&
+        move.startSquarePiece.getFirstLetter === "P" &&
         move.startSq.getFile === endSq.getFile) ||
-      (startSq.getPiece?.getFirstLetter() === "P" &&
+      (startSq.getPiece?.getFirstLetter === "P" &&
         startSq.getRank === 4 &&
         endSq.getRank === 3 &&
         startSq.getFile !== endSq.getFile &&
         move &&
         move.endSq.getRank === 4 &&
-        move.startSquarePiece.getFirstLetter() === "p" &&
+        move.startSquarePiece.getFirstLetter === "p" &&
         move.endSq.getFile === endSq.getFile)
     );
   };
@@ -57,6 +57,9 @@ export default class MoveHelper {
     startSq: Square,
     board: Board
   ): boolean => {
+    if (!startSq.getPiece || !startSq.getPiece.getFirstLetter)
+      throw new Error("White startsq has no piece while castling");
+
     //up and left
     let index = 7;
     let startSqIndex = startSq.getId + 8;
@@ -64,18 +67,18 @@ export default class MoveHelper {
       let sq = board.getSquareById(startSqIndex);
       if (!sq) break;
 
-      if (sq.getPiece !== null) {
+      if (sq.getPiece) {
         if (
-          sq.getPiece!.getColor !== startSq.getPiece!.getColor &&
-          (startSq.getPiece!.getFirstLetter()!.toUpperCase() === "Q" ||
-            startSq.getPiece!.getFirstLetter()!.toUpperCase() === "B")
+          sq.getPiece.getColor !== startSq.getPiece.getColor &&
+          (startSq.getPiece.getFirstLetter.toUpperCase() === "Q" ||
+            startSq.getPiece.getFirstLetter.toUpperCase() === "B")
         ) {
           console.log("Piece blocking castling on " + sq.getSquareName);
           return false;
         }
         console.log(
           "Piece " +
-            sq.getSquare.getPiece!.getFirstLetter() +
+            sq.getSquare.getPiece!.getFirstLetter +
             " found, but not blocking check on " +
             sq.getSquareName
         );
@@ -91,18 +94,18 @@ export default class MoveHelper {
       if (!sq) break;
 
       console.log(sq.getSquareName);
-      if (sq.getPiece !== null) {
+      if (sq.getPiece) {
         if (
-          sq.getPiece!.getColor !== startSq.getPiece!.getColor &&
-          (startSq.getPiece!.getFirstLetter()!.toUpperCase() === "Q" ||
-            startSq.getPiece!.getFirstLetter()!.toUpperCase() === "B")
+          sq.getPiece.getColor !== startSq.getPiece.getColor &&
+          (startSq.getPiece.getFirstLetter.toUpperCase() === "Q" ||
+            startSq.getPiece.getFirstLetter.toUpperCase() === "B")
         ) {
           console.log("Piece blocking castling on " + sq.getSquareName);
           return false;
         }
         console.log(
           "Piece " +
-            sq.getSquare.getPiece!.getFirstLetter() +
+            sq.getSquare.getPiece!.getFirstLetter +
             " found, but not blocking castling on " +
             sq.getSquareName
         );
@@ -117,11 +120,11 @@ export default class MoveHelper {
     for (let i = 0; i < 7; i++, startSqIndex += index) {
       let sq = board.getSquareById(startSqIndex);
       if (!sq) break;
-      if (sq.getPiece !== null) {
+      if (sq.getPiece) {
         if (
-          sq.getPiece!.getColor !== startSq.getPiece!.getColor &&
-          (sq.getPiece!.getFirstLetter()!.toUpperCase() === "Q" ||
-            sq.getPiece!.getFirstLetter()!.toUpperCase() === "R")
+          sq.getPiece.getColor !== startSq.getPiece.getColor &&
+          (sq.getPiece.getFirstLetter!.toUpperCase() === "Q" ||
+            sq.getPiece.getFirstLetter!.toUpperCase() === "R")
         ) {
           console.log("Piece blocking castling on " + sq.getSquareName);
           return false;
@@ -138,7 +141,7 @@ export default class MoveHelper {
       if (!sq) break;
       if (
         sq.getPiece &&
-        sq.getPiece.getFirstLetter()!.toUpperCase() === "N" &&
+        sq.getPiece.getFirstLetter!.toUpperCase() === "N" &&
         sq.getPiece.getColor === "BLACK"
       ) {
         console.log("Knight blocking castling on " + sq.getSquareName);
@@ -154,6 +157,9 @@ export default class MoveHelper {
     startSq: Square,
     board: Board
   ): boolean => {
+    if (!startSq.getPiece || !startSq.getPiece.getFirstLetter)
+      throw new Error("Black startsq has no piece while castling");
+
     //down and left
     let index = -9;
     let startSqIndex = startSq.getId - 8;
@@ -162,18 +168,18 @@ export default class MoveHelper {
       if (!sq) break;
       console.log(sq.getSquareName);
 
-      if (sq.getPiece !== null) {
+      if (sq.getPiece) {
         if (
-          sq.getPiece!.getColor !== startSq.getPiece!.getColor &&
-          (startSq.getPiece!.getFirstLetter()!.toUpperCase() === "Q" ||
-            startSq.getPiece!.getFirstLetter()!.toUpperCase() === "B")
+          sq.getPiece.getColor !== startSq.getPiece.getColor &&
+          (startSq.getPiece.getFirstLetter.toUpperCase() === "Q" ||
+            startSq.getPiece.getFirstLetter.toUpperCase() === "B")
         ) {
           console.log("Piece blocking castling on " + sq.getSquareName);
           return false;
         }
         console.log(
           "Piece " +
-            sq.getSquare.getPiece!.getFirstLetter() +
+            sq.getSquare.getPiece!.getFirstLetter +
             " found, but not blocking check on " +
             sq.getSquareName
         );
@@ -187,18 +193,18 @@ export default class MoveHelper {
     for (let i = 0; i < 2; i++, startSqIndex += index) {
       let sq = board.getSquareById(startSqIndex);
       if (!sq) break;
-      if (sq.getPiece !== null) {
+      if (sq.getPiece) {
         if (
-          sq.getPiece!.getColor !== startSq.getPiece!.getColor &&
-          (startSq.getPiece!.getFirstLetter()!.toUpperCase() === "Q" ||
-            startSq.getPiece!.getFirstLetter()!.toUpperCase() === "B")
+          sq.getPiece.getColor !== startSq.getPiece.getColor &&
+          (startSq.getPiece.getFirstLetter.toUpperCase() === "Q" ||
+            startSq.getPiece.getFirstLetter.toUpperCase() === "B")
         ) {
           console.log("Piece blocking castling on " + sq.getSquareName);
           return false;
         }
         console.log(
           "Piece " +
-            sq.getSquare.getPiece!.getFirstLetter() +
+            sq.getSquare.getPiece!.getFirstLetter +
             " found, but not blocking castling on " +
             sq.getSquareName
         );
@@ -213,11 +219,11 @@ export default class MoveHelper {
     for (let i = 0; i < 7; i++, startSqIndex += index) {
       let sq = board.getSquareById(startSqIndex);
       if (!sq) break;
-      if (sq.getPiece !== null) {
+      if (sq.getPiece) {
         if (
-          sq.getPiece!.getColor !== startSq.getPiece!.getColor &&
-          (sq.getPiece!.getFirstLetter()!.toUpperCase() === "Q" ||
-            sq.getPiece!.getFirstLetter()!.toUpperCase() === "R")
+          sq.getPiece.getColor !== startSq.getPiece.getColor &&
+          (sq.getPiece.getFirstLetter!.toUpperCase() === "Q" ||
+            sq.getPiece.getFirstLetter!.toUpperCase() === "R")
         ) {
           console.log("Piece blocking castling on " + sq.getSquareName);
           return false;
@@ -234,7 +240,7 @@ export default class MoveHelper {
       if (!sq) break;
       if (
         sq.getPiece &&
-        sq.getPiece.getFirstLetter()!.toUpperCase() === "N" &&
+        sq.getPiece.getFirstLetter!.toUpperCase() === "N" &&
         sq.getPiece.getColor === "BLACK"
       ) {
         console.log("Knight blocking castling on " + sq.getSquareName);

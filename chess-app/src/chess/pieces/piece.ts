@@ -8,7 +8,7 @@ export class Piece {
   protected square?: Square;
 
   constructor(square?: Square, color?: ColorType) {
-    this.name = "";
+    this.name = "a";
     this.square = square;
     this.color = color;
   }
@@ -25,6 +25,10 @@ export class Piece {
     return this.square;
   }
 
+  get getFirstLetter() {
+    return this.getName[0];
+  }
+
   move(
     _startSq: Square,
     _endSq: Square,
@@ -32,10 +36,6 @@ export class Piece {
     _move?: MovePiece | undefined
   ): boolean {
     return false;
-  }
-
-  getFirstLetter() {
-    return this.name[0];
   }
 
   setSquare(sq: Square) {

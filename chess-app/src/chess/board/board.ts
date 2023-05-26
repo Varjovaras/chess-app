@@ -300,12 +300,17 @@ export class Board {
 
     //horse things
     let knightSquares = MoveHelper.knightMoveHelper(sq, this);
-    knightSquares.forEach((k) => {
-      let sq = this.getSquareById(k);
+
+    for (let i = 0; i < knightSquares.length; i++) {
+      if (!knightSquares[i]) break;
+      let sq = this.getSquareById(knightSquares[i]!);
       if (sq && sq.getPiece && sq.getPiece.getFirstLetter === "N") {
+        console.log(
+          "White king is in check from " + sq.getSquareName + " by a knight"
+        );
         return true;
       }
-    });
+    }
 
     //pawn things
     if (sq.getFile === "a") {
@@ -528,12 +533,16 @@ export class Board {
 
     //horse things
     let knightSquares = MoveHelper.knightMoveHelper(sq, this);
-    knightSquares.forEach((k) => {
-      let sq = this.getSquareById(k);
-      if (sq && sq.getPiece && sq.getPiece.getFirstLetter === "n") {
+    for (let i = 0; i < knightSquares.length; i++) {
+      if (!knightSquares[i]) break;
+      let sq = this.getSquareById(knightSquares[i]!);
+      if (sq && sq.getPiece && sq.getPiece.getFirstLetter === "N") {
+        console.log(
+          "Black king is in check from " + sq.getSquareName + " by a knight"
+        );
         return true;
       }
-    });
+    }
 
     //pawn things
     if (sq.getFile === "a") {

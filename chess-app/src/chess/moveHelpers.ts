@@ -14,7 +14,7 @@ export default class MoveHelper {
       let nextFile = String.fromCharCode(file.charCodeAt(0) + files[i]!);
       let nextRank = rank + ranks[i]!;
       let sq = board.getSquare(`${nextFile}${nextRank}`);
-      if (sq && sq.getSquareName) {
+      if (sq?.getSquareName) {
         endSquares.push(sq.getSquare.getId);
       }
     }
@@ -46,11 +46,18 @@ export default class MoveHelper {
     );
   };
 
-  static castlingKingSideHelper = (startSq: Square, board: Board): boolean => {
+  static castlingKingsideHelper = (startSq: Square, board: Board): boolean => {
     let color = startSq.getPiece!.getColor;
     return color === "WHITE"
       ? MoveHelper.piecesBlockingWhiteKingsideCastling(startSq, board)
       : MoveHelper.piecesBlockingBlackKingsideCastling(startSq, board);
+  };
+
+  static castlingQueensideHelper = (startSq: Square, board: Board): boolean => {
+    let color = startSq.getPiece!.getColor;
+    return color === "WHITE"
+      ? MoveHelper.piecesBlockingWhiteQueensideCastling(startSq, board)
+      : MoveHelper.piecesBlockingBlackQueensideCastling(startSq, board);
   };
 
   static piecesBlockingWhiteKingsideCastling = (
@@ -89,7 +96,7 @@ export default class MoveHelper {
     //up and right
     index = 9;
     startSqIndex = startSq.getId + 10;
-    for (let i = 0; i < 3; i++, startSqIndex += index) {
+    for (let i = 0; i < 2; i++, startSqIndex += index) {
       let sq = board.getSquareById(startSqIndex);
       if (!sq) break;
 
@@ -234,6 +241,202 @@ export default class MoveHelper {
 
     //knights
     let knightSquares = ["d7", "e6", "g6", "h2"];
+
+    for (const knightSquare in knightSquares) {
+      const sq = board.getSquare(knightSquare);
+      if (!sq) break;
+      if (
+        sq.getPiece &&
+        sq.getPiece.getFirstLetter!.toUpperCase() === "N" &&
+        sq.getPiece.getColor === "BLACK"
+      ) {
+        console.log("Knight blocking castling on " + sq.getSquareName);
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  static piecesBlockingWhiteQueensideCastling = (
+    startSq: Square,
+    board: Board
+  ): boolean => {
+    if (!startSq.getPiece || !startSq.getPiece.getFirstLetter)
+      throw new Error("White startsq has no piece while castling");
+
+    //up and left
+    let index = 7;
+    let startSqIndex = startSq.getId + 8;
+    for (let i = 0; i < 3; i++, startSqIndex += index) {
+      let sq = board.getSquareById(startSqIndex);
+      if (!sq) break;
+
+      if (sq.getPiece) {
+        if (
+          sq.getPiece.getColor !== startSq.getPiece.getColor &&
+          (startSq.getPiece.getFirstLetter.toUpperCase() === "Q" ||
+            startSq.getPiece.getFirstLetter.toUpperCase() === "B")
+        ) {
+          console.log("Piece blocking castling on " + sq.getSquareName);
+          return false;
+        }
+        console.log(
+          "Piece " +
+            sq.getSquare.getPiece!.getFirstLetter +
+            " found, but not blocking check on " +
+            sq.getSquareName
+        );
+        break;
+      }
+    }
+
+    //up and right
+    index = 9;
+    startSqIndex = startSq.getId + 10;
+    for (let i = 0; i < 4; i++, startSqIndex += index) {
+      let sq = board.getSquareById(startSqIndex);
+      if (!sq) break;
+
+      if (sq.getPiece) {
+        if (
+          sq.getPiece.getColor !== startSq.getPiece.getColor &&
+          (startSq.getPiece.getFirstLetter.toUpperCase() === "Q" ||
+            startSq.getPiece.getFirstLetter.toUpperCase() === "B")
+        ) {
+          console.log("Piece blocking castling on " + sq.getSquareName);
+          return false;
+        }
+        console.log(
+          "Piece " +
+            sq.getSquare.getPiece!.getFirstLetter +
+            " found, but not blocking castling on " +
+            sq.getSquareName
+        );
+        break;
+      }
+    }
+
+    //up
+    index = 8;
+    startSqIndex = startSq.getId + 9;
+
+    for (let i = 0; i < 7; i++, startSqIndex += index) {
+      let sq = board.getSquareById(startSqIndex);
+      if (!sq) break;
+      if (sq.getPiece) {
+        if (
+          sq.getPiece.getColor !== startSq.getPiece.getColor &&
+          (sq.getPiece.getFirstLetter!.toUpperCase() === "Q" ||
+            sq.getPiece.getFirstLetter!.toUpperCase() === "R")
+        ) {
+          console.log("Piece blocking castling on " + sq.getSquareName);
+          return false;
+        }
+        break;
+      }
+    }
+
+    //knights
+    let knightSquares = ["b2", "c3", "e3", "f2"];
+
+    for (const knightSquare in knightSquares) {
+      const sq = board.getSquare(knightSquare);
+      if (!sq) break;
+      if (
+        sq.getPiece &&
+        sq.getPiece.getFirstLetter!.toUpperCase() === "N" &&
+        sq.getPiece.getColor === "BLACK"
+      ) {
+        console.log("Knight blocking castling on " + sq.getSquareName);
+        return false;
+      }
+    }
+
+    console.log("castling allowed");
+    return true;
+  };
+
+  static piecesBlockingBlackQueensideCastling = (
+    startSq: Square,
+    board: Board
+  ): boolean => {
+    if (!startSq.getPiece || !startSq.getPiece.getFirstLetter)
+      throw new Error("Black startsq has no piece while castling");
+
+    //down and left
+    let index = -9;
+    let startSqIndex = startSq.getId - 10;
+    for (let i = 0; i < 3; i++, startSqIndex += index) {
+      let sq = board.getSquareById(startSqIndex);
+      if (!sq) break;
+
+      if (sq.getPiece) {
+        if (
+          sq.getPiece.getColor !== startSq.getPiece.getColor &&
+          (startSq.getPiece.getFirstLetter.toUpperCase() === "Q" ||
+            startSq.getPiece.getFirstLetter.toUpperCase() === "B")
+        ) {
+          console.log("Piece blocking castling on " + sq.getSquareName);
+          return false;
+        }
+        console.log(
+          "Piece " +
+            sq.getSquare.getPiece!.getFirstLetter +
+            " found, but not blocking check on " +
+            sq.getSquareName
+        );
+        break;
+      }
+    }
+
+    //down and right
+    index = -7;
+    startSqIndex = startSq.getId - 8;
+    for (let i = 0; i < 4; i++, startSqIndex += index) {
+      let sq = board.getSquareById(startSqIndex);
+      if (!sq) break;
+      if (sq.getPiece) {
+        if (
+          sq.getPiece.getColor !== startSq.getPiece.getColor &&
+          (startSq.getPiece.getFirstLetter.toUpperCase() === "Q" ||
+            startSq.getPiece.getFirstLetter.toUpperCase() === "B")
+        ) {
+          console.log("Piece blocking castling on " + sq.getSquareName);
+          return false;
+        }
+        console.log(
+          "Piece " +
+            sq.getSquare.getPiece!.getFirstLetter +
+            " found, but not blocking castling on " +
+            sq.getSquareName
+        );
+        break;
+      }
+    }
+
+    //up
+    index = -8;
+    startSqIndex = startSq.getId - 9;
+
+    for (let i = 0; i < 7; i++, startSqIndex += index) {
+      let sq = board.getSquareById(startSqIndex);
+      if (!sq) break;
+      if (sq.getPiece) {
+        if (
+          sq.getPiece.getColor !== startSq.getPiece.getColor &&
+          (sq.getPiece.getFirstLetter!.toUpperCase() === "Q" ||
+            sq.getPiece.getFirstLetter!.toUpperCase() === "R")
+        ) {
+          console.log("Piece blocking castling on " + sq.getSquareName);
+          return false;
+        }
+        break;
+      }
+    }
+
+    //knights
+    let knightSquares = ["b7", "c6", "e6", "f7"];
 
     for (const knightSquare in knightSquares) {
       const sq = board.getSquare(knightSquare);

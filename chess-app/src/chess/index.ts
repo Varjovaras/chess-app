@@ -33,6 +33,8 @@ console.log("blyat");
 chess.move("e4", "d5");
 chess.move("g8", "f6");
 chess.move("g1", "e2");
+console.log(chess.getBoard.printBoardWhite());
+
 chess.move("c7", "c5");
 chess.move("d5", "c6");
 chess.move("g7", "g5");
@@ -243,6 +245,7 @@ console.log(chess.getBoard.getBoardWhite());
 console.log(chess.getBoard.getSquare("d8"));
 
 console.log(chess.getBoard);
+
 console.log(chess.getSquareFromBoard("f8").getId);
 console.log(chess.getSquareFromBoard("e7").getId);
 console.log(chess.getSquareFromBoard("g7").getId);

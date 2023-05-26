@@ -74,21 +74,52 @@ export default class Chess {
     }
     let startSq = this._board.getSquare(startSquare);
     let endSq = this._board.getSquare(endSquare);
-    if (!startSq || !endSq) return;
-    let startSqPieceColor = startSq.getPiece?.getColor;
+    if (!startSq || !endSq) {
+      throw new Error(
+        "No starting square or ending square while making a move"
+      );
+    }
+    if (!startSq.getPiece) {
+      console.log("No piece on the starting square");
+      return;
+    }
     const inCheck: boolean =
-      startSq.getPiece?.getColor === "WHITE"
+      startSq.getPiece!.getColor === "WHITE"
         ? this._board.isWhiteKingInCheck()
         : this._board.isBlackKingInCheck();
 
     if (inCheck) {
+      const king =
+        startSq.getPiece!.getColor === "WHITE"
+          ? this._board.getWhiteKing()
+          : this._board.getBlackKing();
+      if (
+        king instanceof King &&
+        startSq.getPiece!.getFirstLetter!.toUpperCase() === "K" &&
+        startSq.getSquareName === "e1" &&
+        king.isCastlingAllowed() &&
+        (endSq.getFile === "c" || endSq.getFile === "b")
+      ) {
+        console.log("White king cannot castle if in check");
+        return;
+      } else if (
+        king instanceof King &&
+        startSq.getPiece!.getFirstLetter!.toUpperCase() === "K" &&
+        startSq.getSquareName === "e8" &&
+        king.isCastlingAllowed() &&
+        (endSq.getFile === "c" || endSq.getFile === "b")
+      ) {
+        console.log("Black king cannot castle if in check");
+        return;
+      }
+
       const move = new Check(
         this.checkTurn(),
         this._board,
         this.getLatestMove()
       );
       const check = move.doesMovingRemoveCheck(startSq, endSq, pieceName);
-      if (move.doesMovingRemoveCheck(startSq, endSq, pieceName)) {
+      if (check) {
         this.movePiece(startSq, endSq, pieceName);
       }
     } else this.movePiece(startSq, endSq, pieceName);
@@ -139,58 +170,6 @@ export default class Chess {
 
     if (isLegalMove) {
       this.handleMove(startSq, endSq);
-      return;
-    }
-
-    throw new Error(
-      "Starting square is invalid, no piece to be found or ending square is invalid, inputted invalid move or a piece is on the way"
-    );
-  }
-
-  private fakeMovePiece(
-    startSq: Square,
-    endSq: Square,
-    board: Board,
-    pieceName?: string
-  ): void {
-    let isLegalMove: boolean = false;
-    let promotedPiece: Piece | boolean = false;
-    let startSqPiece = startSq.getPiece;
-    if (!startSqPiece || !endSq) return;
-    if (startSqPiece.getColor !== this.checkTurn()) {
-      console.log("Wrong players turn");
-      return;
-    }
-    let move = this.getLatestMove();
-
-    if (startSqPiece instanceof Pawn) {
-      if (
-        (pieceName &&
-          startSq?.getRank === 7 &&
-          endSq?.getRank === 8 &&
-          startSqPiece.getName === ChessPieces.PAWN_WHITE) ||
-        (pieceName &&
-          startSq?.getRank === 2 &&
-          endSq?.getRank === 1 &&
-          startSqPiece.getName === ChessPieces.PAWN_BLACK)
-      ) {
-        promotedPiece = startSqPiece.promote(startSq, endSq, board, pieceName);
-      } else if (move && MoveHelper.enPassantHelper(startSq, endSq, move)) {
-        isLegalMove = startSqPiece.move(startSq, endSq, this._board, move);
-        this._board.getSquareById(move.endSq.getSquare.getId)?.setPiece(null);
-      } else isLegalMove = startSqPiece.move(startSq, endSq, board);
-    } else isLegalMove = startSqPiece.move(startSq, endSq, board);
-
-    if (promotedPiece instanceof Piece) {
-      endSq.setPiece(promotedPiece);
-      endSq.setSquareForPiece(endSq);
-      this.handleTempPieces(startSq, endSq);
-      startSq.setPiece(null);
-      return;
-    }
-
-    if (isLegalMove) {
-      this.handleTempPieces(startSq, endSq);
       return;
     }
 

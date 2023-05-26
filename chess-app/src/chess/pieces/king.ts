@@ -53,12 +53,14 @@ export class King extends Piece {
     console.log("Testing if castling allowed");
     if (!this.castlingAllowed) return false;
     if (endSq.getFile === "g") {
-      if (MoveHelper.castlingKingSideHelper(startSq, board)) {
+      if (MoveHelper.castlingKingsideHelper(startSq, board)) {
         return this.kingSideCastling(startSq, endSq, board);
       } else return false;
-    } else if (endSq.getFile === "c")
-      return this.queenSideCastling(startSq, endSq, board);
-    else return false;
+    } else if (endSq.getFile === "c") {
+      if (MoveHelper.castlingQueensideHelper(startSq, board)) {
+        return this.queenSideCastling(startSq, endSq, board);
+      } else return false;
+    } else return false;
   }
 
   private kingSideCastling(

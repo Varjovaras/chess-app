@@ -317,4 +317,87 @@ describe("king tests", () => {
         !chess.getSquareFromBoard("f8").getPiece
     ).toBeTruthy();
   });
+
+  test("castling queenside works", () => {
+    chess.startingPosition();
+    chess.move("d2", "d4");
+    chess.move("d7", "d5");
+    chess.move("d1", "d3");
+    chess.move("d8", "d6");
+    chess.move("c1", "e3");
+    chess.move("c8", "e6");
+    chess.move("b1", "c3");
+    chess.move("b8", "c6");
+    chess.move("e1", "c1");
+    chess.move("e8", "c8");
+
+    console.log(chess.getBoard.printBoardWhite());
+
+    expect(
+      chess.getSquareFromBoard("c1").getPiece &&
+        chess
+          .getSquareFromBoard("c1")
+          .getPiece!.getFirstLetter!.toUpperCase() === "K" &&
+        chess
+          .getSquareFromBoard("d1")
+          .getPiece!.getFirstLetter!.toUpperCase() === "R" &&
+        chess.getSquareFromBoard("c8").getPiece! &&
+        chess
+          .getSquareFromBoard("c8")
+          .getPiece!.getFirstLetter!.toUpperCase() === "K" &&
+        chess
+          .getSquareFromBoard("d8")
+          .getPiece!.getFirstLetter!.toUpperCase() === "R"
+    ).toBeTruthy();
+    try {
+      chess.move("e1", "g1");
+    } catch {}
+  });
+
+  test("cannot castle queenside through check", () => {
+    chess.startingPosition();
+    chess.move("d2", "d4");
+    chess.move("d7", "d5");
+    chess.move("c2", "c4");
+    chess.move("d5", "c4");
+    chess.move("b1", "c3");
+    chess.move("d8", "d4");
+    chess.move("d1", "d4");
+    chess.move("b8", "c6");
+    chess.move("c1", "h6");
+    chess.move("c8", "h3");
+    chess.move("a2", "a3");
+    try {
+      chess.move("e8", "c8");
+    } catch {}
+
+    expect(
+      chess.getSquareFromBoard("e8").getPiece &&
+        chess
+          .getSquareFromBoard("e8")
+          .getPiece!.getFirstLetter!.toUpperCase() === "K" &&
+        chess
+          .getSquareFromBoard("a8")
+          .getPiece!.getFirstLetter!.toUpperCase() === "R"
+    ).toBeTruthy();
+
+    chess.move("c6", "b4");
+    chess.move("a3", "a4");
+    chess.move("b4", "d3");
+
+    try {
+      chess.move("e1", "c1");
+    } catch {}
+    console.log(chess.getBoard.printBoardWhite());
+
+    expect(
+      chess.getSquareFromBoard("e1").getPiece &&
+        chess
+          .getSquareFromBoard("e1")
+          .getPiece!.getFirstLetter!.toUpperCase() === "K" &&
+        chess
+          .getSquareFromBoard("a1")
+          .getPiece!.getFirstLetter!.toUpperCase() === "R"
+    ).toBeTruthy();
+  });
 });

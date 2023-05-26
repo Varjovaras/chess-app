@@ -304,7 +304,7 @@ export class Board {
     for (let i = 0; i < knightSquares.length; i++) {
       if (!knightSquares[i]) break;
       let sq = this.getSquareById(knightSquares[i]!);
-      if (sq && sq.getPiece && sq.getPiece.getFirstLetter === "N") {
+      if (sq?.getPiece?.getFirstLetter === "N") {
         console.log(
           "White king is in check from " + sq.getSquareName + " by a knight"
         );
@@ -536,7 +536,7 @@ export class Board {
     for (let i = 0; i < knightSquares.length; i++) {
       if (!knightSquares[i]) break;
       let sq = this.getSquareById(knightSquares[i]!);
-      if (sq && sq.getPiece && sq.getPiece.getFirstLetter === "N") {
+      if (sq?.getPiece?.getFirstLetter === "n") {
         console.log(
           "Black king is in check from " + sq.getSquareName + " by a knight"
         );

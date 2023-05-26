@@ -84,45 +84,33 @@ export default class Chess {
       return;
     }
     const inCheck: boolean =
-      startSq.getPiece!.getColor === "WHITE"
+      startSq.getPiece.getColor === "WHITE"
         ? this._board.isWhiteKingInCheck()
         : this._board.isBlackKingInCheck();
 
-    if (inCheck) {
-      const king =
-        startSq.getPiece!.getColor === "WHITE"
-          ? this._board.getWhiteKing()
-          : this._board.getBlackKing();
-      if (
-        king instanceof King &&
-        startSq.getPiece!.getFirstLetter!.toUpperCase() === "K" &&
-        startSq.getSquareName === "e1" &&
-        king.isCastlingAllowed() &&
-        (endSq.getFile === "c" || endSq.getFile === "b")
-      ) {
-        console.log("White king cannot castle if in check");
-        return;
-      } else if (
-        king instanceof King &&
-        startSq.getPiece!.getFirstLetter!.toUpperCase() === "K" &&
-        startSq.getSquareName === "e8" &&
-        king.isCastlingAllowed() &&
-        (endSq.getFile === "c" || endSq.getFile === "b")
-      ) {
-        console.log("Black king cannot castle if in check");
-        return;
-      }
+    if (inCheck) this.checkHelper(startSq, endSq);
+    else this.movePiece(startSq, endSq, pieceName);
+  }
 
-      const move = new Check(
-        this.checkTurn(),
-        this._board,
-        this.getLatestMove()
-      );
-      const check = move.doesMovingRemoveCheck(startSq, endSq, pieceName);
-      if (check) {
-        this.movePiece(startSq, endSq, pieceName);
-      }
-    } else this.movePiece(startSq, endSq, pieceName);
+  checkHelper(startSq: Square, endSq: Square, pieceName?: string) {
+    if (!startSq.getPiece || !endSq) return;
+    const piece = startSq.getPiece;
+    if (piece instanceof King) {
+      piece.castlingCheckHelper(startSq, endSq, this._board);
+    }
+    const check = new Check(
+      this.checkTurn(),
+      this._board,
+      this.getLatestMove()
+    );
+    const notInCheckAnymore = check.afterMoveAreYouInCheck(
+      startSq,
+      endSq,
+      pieceName
+    );
+    if (notInCheckAnymore) {
+      this.movePiece(startSq, endSq, pieceName);
+    }
   }
 
   private movePiece(startSq: Square, endSq: Square, pieceName?: string): void {
@@ -135,6 +123,22 @@ export default class Chess {
       return;
     }
     let move = this.getLatestMove();
+
+    const check = new Check(
+      this.checkTurn(),
+      this._board,
+      this.getLatestMove()
+    );
+    const areYouInCheckAfterMove = check.afterMoveAreYouInCheck(
+      startSq,
+      endSq,
+      pieceName
+    );
+
+    if (!areYouInCheckAfterMove) {
+      console.log("Move puts you into check. Abandoning move");
+      return;
+    }
 
     if (startSqPiece instanceof Pawn) {
       if (

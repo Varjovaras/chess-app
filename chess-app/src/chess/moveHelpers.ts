@@ -64,7 +64,7 @@ export default class MoveHelper {
     startSq: Square,
     board: Board
   ): boolean => {
-    if (!startSq.getPiece || !startSq.getPiece.getFirstLetter)
+    if (!startSq.getPiece?.getFirstLetter)
       throw new Error("White startsq has no piece while castling");
 
     //up and left
@@ -164,7 +164,7 @@ export default class MoveHelper {
     startSq: Square,
     board: Board
   ): boolean => {
-    if (!startSq.getPiece || !startSq.getPiece.getFirstLetter)
+    if (!startSq.getPiece?.getFirstLetter)
       throw new Error("Black startsq has no piece while castling");
 
     //down and left
@@ -262,7 +262,7 @@ export default class MoveHelper {
     startSq: Square,
     board: Board
   ): boolean => {
-    if (!startSq.getPiece || !startSq.getPiece.getFirstLetter)
+    if (!startSq.getPiece?.getFirstLetter)
       throw new Error("White startsq has no piece while castling");
 
     //up and left
@@ -361,7 +361,7 @@ export default class MoveHelper {
     startSq: Square,
     board: Board
   ): boolean => {
-    if (!startSq.getPiece || !startSq.getPiece.getFirstLetter)
+    if (!startSq.getPiece?.getFirstLetter)
       throw new Error("Black startsq has no piece while castling");
 
     //down and left

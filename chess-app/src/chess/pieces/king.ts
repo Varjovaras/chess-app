@@ -153,6 +153,32 @@ export class King extends Piece {
     return false;
   }
 
+  castlingCheckHelper(startSq: Square, endSq: Square, board: Board) {
+    if (!startSq?.getPiece || !endSq) return false;
+    const king =
+      startSq.getPiece.getColor === "WHITE"
+        ? board.getWhiteKing()
+        : board.getBlackKing();
+    if (
+      startSq.getPiece.getFirstLetter!.toUpperCase() === "K" &&
+      startSq.getSquareName === "e1" &&
+      this.isCastlingAllowed() &&
+      (endSq.getFile === "c" || endSq.getFile === "b")
+    ) {
+      console.log("White king cannot castle if in check");
+      return false;
+    } else if (
+      startSq.getPiece.getFirstLetter!.toUpperCase() === "K" &&
+      startSq.getSquareName === "e8" &&
+      this.isCastlingAllowed() &&
+      (endSq.getFile === "c" || endSq.getFile === "b")
+    ) {
+      console.log("Black king cannot castle if in check");
+      return false;
+    }
+    return true;
+  }
+
   static kingMoves(startSq: Square, endSq: Square, board: Board): boolean {
     const fileDiff = Math.abs(
       Board.findFileIndex(startSq.getFile) - Board.findFileIndex(endSq.getFile)

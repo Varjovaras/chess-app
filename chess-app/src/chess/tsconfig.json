@@ -1,8 +1,8 @@
 {
   "ts-node": {
     "swc": true
-  },
-  "compilerOptions": {
-    "module": "CommonJS"
   }
+  // "compilerOptions": {
+  //   "module": "CommonJS"
+  // }
 }

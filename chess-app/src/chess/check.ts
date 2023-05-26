@@ -28,33 +28,14 @@ export default class Check {
     return this._board;
   }
 
-  doesMovingRemoveCheck(
+  afterMoveAreYouInCheck(
     startSq: Square,
     endSq: Square,
     pieceName?: string
   ): boolean {
-    const tempBoard: Board = this.makeTemporaryBoard();
-    const startSqTempBoard = tempBoard.getSquare(startSq.getSquareName);
-    const endSqTempBoard = tempBoard.getSquare(endSq.getSquareName);
-    if (!startSqTempBoard || !endSqTempBoard) return false;
-
-    this.movePieceOnTemporaryBoard(
-      startSqTempBoard,
-      endSqTempBoard,
-      tempBoard,
-      pieceName
-    );
-
-    return startSq.getPiece?.getColor === "WHITE"
-      ? !tempBoard.isWhiteKingInCheck()
-      : !tempBoard.isBlackKingInCheck();
-  }
-
-  doesMovePutYouIntoCheck(
-    startSq: Square,
-    endSq: Square,
-    pieceName?: string
-  ): boolean {
+    /**
+     * returns true if in check after doing the move
+     */
     const tempBoard: Board = this.makeTemporaryBoard();
     const startSqTempBoard = tempBoard.getSquare(startSq.getSquareName);
     const endSqTempBoard = tempBoard.getSquare(endSq.getSquareName);

@@ -53,17 +53,17 @@ export class Piece {
     }
 
     if (startSqPiece?.color === endSqPiece?.color && endSqPiece !== null) {
-      console.log("Cannot capture own piece or capture on an empty square");
+      // console.log("Cannot capture own piece or capture on an empty square");
       return false;
     }
-    console.log(
-      `${startSqPiece?.getName} on square ${startSq.getSquareName} is able to capture ${endSqPiece?.getName} on ${endSq.getSquareName}`
-    );
+    // console.log(
+    //   `${startSqPiece?.getName} on square ${startSq.getSquareName} is able to capture ${endSqPiece?.getName} on ${endSq.getSquareName}`
+    // );
     return true;
   }
 
   possibleMoves(_board: Board): MoveSquares[] {
-    console.log("Piece without type has no possible moves");
+    // console.log("Piece without type has no possible moves");
     return [];
   }
 
@@ -113,18 +113,18 @@ export class Piece {
       if (sq === endSq) break;
       else if (!sq) return false;
       else if (sq.getPiece !== null) {
-        console.log("Piece on the way");
+        // console.log("Piece on the way");
         return false;
       }
     }
-    console.log("No diagonal pieces on the way");
+    // console.log("No diagonal pieces on the way");
     return true;
   }
 
   //for rook and queen
   //left and right movement
   static horizontalMove(startSq: Square, endSq: Square, board: Board): boolean {
-    console.log("horizontal move by " + startSq.getPiece?.getName);
+    // console.log("horizontal move by " + startSq.getPiece?.getName);
     let index = startSq.getFile < endSq.getFile ? 1 : -1;
     let startSqIndex = startSq.getId + index;
     let horizontalDiff = Math.abs(endSq.getId - startSq.getId);
@@ -135,7 +135,7 @@ export class Piece {
       else if (sq === endSq) break;
       else if (!sq) return false;
       else if (sq.getPiece !== null) {
-        console.log("Piece on the way");
+        // console.log("Piece on the way");
         return false;
       }
     }
@@ -144,7 +144,7 @@ export class Piece {
   //for rook and queen
   //up and down movement
   static verticalMove(startSq: Square, endSq: Square, board: Board): boolean {
-    console.log("vertical move by " + startSq.getPiece?.getName);
+    // console.log("vertical move by " + startSq.getPiece?.getName);§
     let index = startSq.getId < endSq.getId ? 8 : -8;
     let startSqIndex = startSq.getId + index;
     let verticalDiff = Math.abs(endSq.getRank - startSq.getRank);
@@ -155,7 +155,7 @@ export class Piece {
       if (!sq) return false;
       else if (sq === endSq) break;
       else if (sq.getPiece !== null) {
-        console.log("Piece on the way");
+        // console.log("Piece on the way");
         return false;
       }
     }

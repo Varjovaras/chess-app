@@ -8,6 +8,7 @@ import { Pawn } from "./pieces/pawn";
 import { Color } from "../types/types";
 
 const chess = new Chess();
+chess.startingPosition();
 chess.putPieceOnBoard(
   "e2",
   new Pawn(chess.getBoard.getSquare("e2")!, Color.white)
@@ -17,8 +18,9 @@ chess.putPieceOnBoard(
   new Pawn(chess.getBoard.getSquare("d7")!, Color.black)
 );
 console.log(chess.getBoard.printBoardWhite());
-chess.move("e2", "e4");
-chess.move("d7", "d5");
+
+console.log(chess.getBoard.printBoardWhite());
+
 chess.move("e4", "d5");
 
 chess.fen(Chess.STARTING_POSITION);
@@ -29,7 +31,6 @@ chess.fen(Chess.STARTING_POSITION);
 chess.move("e2", "e4");
 chess.move("d7", "d5");
 console.log(chess.getBoard.getSquare("e4"));
-console.log("blyat");
 chess.move("e4", "d5");
 chess.move("g8", "f6");
 chess.move("g1", "e2");
@@ -122,11 +123,11 @@ chess.move("e8", "d7");
 chess.move("e2", "f3");
 chess.move("d7", "e7");
 
-console.log(chess.algebraicNotation());
-console.log(chess.getBoard.printBoardWhite());
+// console.log(chess.algebraicNotation());
+// console.log(chess.getBoard.printBoardWhite());
 
-console.log(chess.getLatestMove());
-console.log(chess.getBoard.printBoardWhite());
+// console.log(chess.getLatestMove());
+// console.log(chess.getBoard.printBoardWhite());
 chess.startingPosition();
 
 //get
@@ -138,10 +139,10 @@ console.log(
   )
 );
 
-console.log(
-  chess.getBoard.getSquare("a2")!.getPiece?.possibleMoves(chess.getBoard)
-);
-console.log(chess.getBoard.printBoardWhite());
+// console.log(
+//   chess.getBoard.getSquare("a2")!.getPiece?.possibleMoves(chess.getBoard)
+// );
+// console.log(chess.getBoard.printBoardWhite());
 chess.move("a2", "a4");
 
 chess.move("d7", "d5");
@@ -151,7 +152,7 @@ const knight = new Knight(chess.getBoard.getSquare("a1")!, Color.black);
 chess.putPieceOnBoard("a1", knight);
 const queen = new Queen(chess.getBoard.getSquare("a6")!, Color.black);
 
-console.log(queen.possibleMoves(chess.getBoard));
+// console.log(queen.possibleMoves(chess.getBoard));
 chess.emptyBoard();
 const king = new King(chess.getBoard.getSquare("c2")!, Color.white);
 chess.putPieceOnBoard("c2", king);
@@ -159,7 +160,7 @@ console.log(chess.getBoard.getSquare("a6"));
 console.log(chess.getBoard.getSquareById(21));
 console.log(chess.getBoard.getSquareById(28));
 chess.emptyBoard();
-console.log(chess.getBoard.printBoardWhite());
+// console.log(chess.getBoard.printBoardWhite());
 
 chess.fen(Chess.STARTING_POSITION);
 
@@ -170,7 +171,7 @@ chess.move("d8", "h4");
 chess.move("a2", "a4");
 chess.move("g7", "g6");
 chess.move("g2", "g3");
-console.log(chess.getBoard.printBoardWhite());
+// console.log(chess.getBoard.printBoardWhite());
 
 chess.emptyBoard();
 let board = chess.getBoard;
@@ -187,7 +188,7 @@ chess.move("g8", "f6");
 chess.move("e1", "g1");
 chess.move("e8", "g8");
 
-console.log(chess.getBoard.printBoardWhite());
+// console.log(chess.getBoard.printBoardWhite());
 
 //castling queenside
 chess.fen(Chess.STARTING_POSITION);
@@ -202,19 +203,6 @@ chess.move("d8", "d7");
 
 chess.move("e1", "c1");
 chess.move("e8", "c8");
-console.log(chess.getBoard.printBoardWhite());
-chess.fen(Chess.STARTING_POSITION);
-chess.move("d2", "d4");
-chess.move("d7", "d5");
-chess.move("b1", "c3");
-chess.move("b8", "c6");
-chess.move("c1", "f4");
-chess.move("c8", "f5");
-chess.move("d1", "d2");
-chess.move("d8", "d7");
-
-chess.move("e1", "c1");
-chess.move("e8", "c8");
 // console.log(chess.getBoard.printBoardWhite());
 chess.fen(Chess.STARTING_POSITION);
 chess.move("d2", "d4");
@@ -241,14 +229,32 @@ chess.move("d8", "d7");
 
 chess.move("e1", "c1");
 chess.move("e8", "c8");
-console.log(chess.getBoard.getBoardWhite());
-console.log(chess.getBoard.getSquare("d8"));
+// console.log(chess.getBoard.printBoardWhite());
+chess.fen(Chess.STARTING_POSITION);
+chess.move("d2", "d4");
+chess.move("d7", "d5");
+chess.move("b1", "c3");
+chess.move("b8", "c6");
+chess.move("c1", "f4");
+chess.move("c8", "f5");
+chess.move("d1", "d2");
+chess.move("d8", "d7");
 
-console.log(chess.getBoard);
+chess.move("e1", "c1");
+
+chess.move("e8", "c8");
+
+// console.log(chess.getBoard.getBoardWhite());
+// console.log(chess.getBoard.getSquare("d8"));
 
 console.log(chess.getSquareFromBoard("f8").getId);
 console.log(chess.getSquareFromBoard("e7").getId);
 console.log(chess.getSquareFromBoard("g7").getId);
+
+chess.startingPosition();
+// console.log(
+//   Checkmate.isPositionCheckmate(chess.getBoard, chess.getLatestMove())
+// );
 
 // console.log(chess.getSquareFromBoard("g2").getId);
 

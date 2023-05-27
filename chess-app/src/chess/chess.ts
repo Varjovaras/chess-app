@@ -8,13 +8,15 @@ import { King } from "./pieces/king";
 import { Knight } from "./pieces/knight";
 import { Pawn } from "./pieces/pawn";
 import { ChessPieces, Color, ColorType, MovePiece } from "../types/types";
-import MoveHelper from "./moveHelpers";
-import Check from "./check";
+import MoveHelper from "./move/moveHelpers";
+import Check from "./move/check";
+import Checkmate from "./move/checkmate";
 
 export default class Chess {
   private _board: Board;
   private _moves: MovePiece[];
   private _turnNumber: number;
+  private _checkmate: boolean;
 
   static STARTING_POSITION =
     "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -23,6 +25,7 @@ export default class Chess {
     this._moves = moves ? moves : [];
     this._turnNumber = 0;
     this._board = new Board();
+    this._checkmate = false;
   }
 
   get getBoard() {
@@ -35,6 +38,10 @@ export default class Chess {
 
   get getTurnNumber() {
     return this._turnNumber;
+  }
+
+  get getCheckmate() {
+    return this._checkmate;
   }
 
   private incrementMoveNumber() {
@@ -68,6 +75,10 @@ export default class Chess {
 
   //start function for move
   move(startSquare: string, endSquare: string, pieceName?: string): void {
+    if (this.getCheckmate) {
+      console.log("Game is over");
+      return;
+    }
     if (startSquare === endSquare) {
       console.log("Same starting and ending square");
       throw new Error("Didn't move the piece");
@@ -98,16 +109,14 @@ export default class Chess {
     if (piece instanceof King) {
       piece.castlingCheckHelper(startSq, endSq, this._board);
     }
+    const latestMove = this.getLatestMove;
+    if (!latestMove) return;
     const check = new Check(
       this.checkTurn(),
       this._board,
       this.getLatestMove()
     );
-    const notInCheckAnymore = check.afterMoveAreYouInCheck(
-      startSq,
-      endSq,
-      pieceName
-    );
+    const notInCheckAnymore = check.inCheckAfterMove(startSq, endSq, pieceName);
     if (notInCheckAnymore) {
       this.movePiece(startSq, endSq, pieceName);
     }
@@ -129,14 +138,15 @@ export default class Chess {
       this._board,
       this.getLatestMove()
     );
-    const areYouInCheckAfterMove = check.afterMoveAreYouInCheck(
+
+    const areYouInCheckAfterMove = !check.inCheckAfterMove(
       startSq,
       endSq,
       pieceName
     );
 
-    if (!areYouInCheckAfterMove) {
-      console.log("Move puts you into check. Abandoning move");
+    if (areYouInCheckAfterMove) {
+      // console.log("Move puts you into check. Abandoning move");
       return;
     }
 
@@ -196,9 +206,9 @@ export default class Chess {
   }
 
   private addMove(startSq: Square, endSq: Square): void {
-    console.log(
-      "Adding move: " + startSq.getSquareName + " " + endSq.getSquareName
-    );
+    // console.log(
+    //   "Adding move: " + startSq.getSquareName + " " + endSq.getSquareName
+    // );
     if (startSq.getPiece) {
       this._moves.push({
         startSq: startSq,
@@ -234,20 +244,16 @@ export default class Chess {
 
   private handlePieces(startSq: Square, endSq: Square): void {
     let startSqPiece = startSq.getPiece;
-    if (startSqPiece) {
-      endSq.setPiece(startSqPiece);
-      let endSquareToPiece = endSq;
-      endSq.setSquareForPiece(endSquareToPiece);
-      startSq.setPiece(null);
-    }
-  }
-
-  private handleTempPieces(startSq: Square, endSq: Square): void {
-    let startSqPiece = startSq.getPiece;
-    endSq.setPiece(startSqPiece!);
+    if (!startSqPiece) return;
+    endSq.setPiece(startSqPiece);
     let endSquareToPiece = endSq;
     endSq.setSquareForPiece(endSquareToPiece);
     startSq.setPiece(null);
+    if (this._board.isWhiteKingInCheck() || this._board.isBlackKingInCheck()) {
+      const latestMove = this.getLatestMove();
+      if (!latestMove) return;
+      this._checkmate = Checkmate.isPositionCheckmate(this._board, latestMove);
+    }
   }
 
   //initialization or promoting
@@ -372,6 +378,7 @@ export default class Chess {
   }
 
   startingPosition(): void {
+    this._checkmate = false;
     this.fen(Chess.STARTING_POSITION);
   }
 }

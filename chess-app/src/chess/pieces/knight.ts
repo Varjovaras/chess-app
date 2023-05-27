@@ -16,7 +16,7 @@ export class Knight extends Piece {
 
   override move(startSq: Square, endSq: Square): boolean {
     if (startSq.getColor === endSq.getColor) {
-      console.log("Knight cannot move to same color square");
+      // console.log("Knight cannot move to same color square");
       return false;
     } else if (
       startSq.getPiece &&
@@ -37,7 +37,7 @@ export class Knight extends Piece {
     if (Piece.capturable(startSq, endSq)) {
       return true;
     } else {
-      console.log("Capturing with knight failed");
+      // console.log("Capturing with knight failed");
       return false;
     }
   }

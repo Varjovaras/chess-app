@@ -3,7 +3,7 @@ import { Piece } from "./piece";
 import { Rook } from "./rook";
 import { Square } from "../board/square";
 import { ChessPieces, Color, ColorType } from "../../types/types";
-import MoveHelper from "../moveHelpers";
+import MoveHelper from "../move/moveHelpers";
 
 export class King extends Piece {
   override readonly color: ColorType;
@@ -50,7 +50,7 @@ export class King extends Piece {
   }
 
   castling(startSq: Square, endSq: Square, board: Board): boolean {
-    console.log("Testing if castling allowed");
+    // console.log("Testing if castling allowed");
     if (!this.castlingAllowed) return false;
     if (endSq.getFile === "g") {
       if (MoveHelper.castlingKingsideHelper(startSq, board)) {
@@ -79,28 +79,28 @@ export class King extends Piece {
         !board.getSquare("f1")?.getPiece ||
         !board.getSquare("g1")?.getPiece
       ) {
-        console.log(
-          "Castling allowed kingside for white king. Castling king on " +
-            this.getSquare?.getSquareName +
-            " to " +
-            endSq.getSquareName
-        );
+        // console.log(
+        //   "Castling allowed kingside for white king. Castling king on " +
+        //     this.getSquare?.getSquareName +
+        //     " to " +
+        //     endSq.getSquareName
+        // );
         return true;
       }
     } else if (startSq.getRank === 8) {
       const rook = board.getSquare("h8")?.getPiece;
       if (!rook || !(rook instanceof Rook) || !rook.isCastlingAllowed()) {
-        console.log("no rook, piece on h8 is not a rook or the rook has moved");
+        // console.log("no rook, piece on h8 is not a rook or the rook has moved");
         return false;
       }
       if (
         !board.getSquare("f8")?.getPiece &&
         !board.getSquare("g8")?.getPiece
       ) {
-        console.log(
-          "Castling allowed kingside for black king. Moving king on " +
-            this.getSquare?.getSquareName
-        );
+        // console.log(
+        //   "Castling allowed kingside for black king. Moving king on " +
+        //     this.getSquare?.getSquareName
+        // );
         return true;
       }
     }
@@ -124,28 +124,28 @@ export class King extends Piece {
         !board.getSquare("d1")?.getPiece ||
         !board.getSquare("c1")?.getPiece
       ) {
-        console.log(
-          "Castling allowed queenside for white king. Castling king on " +
-            this.getSquare?.getSquareName +
-            " to " +
-            endSq.getSquareName
-        );
+        // console.log(
+        //   "Castling allowed queenside for white king. Castling king on " +
+        //     this.getSquare?.getSquareName +
+        //     " to " +
+        //     endSq.getSquareName
+        // );
         return true;
       }
     } else if (startSq.getRank === 8) {
       const rook = board.getSquare("a8")?.getPiece;
       if (!rook || !(rook instanceof Rook) || !rook.isCastlingAllowed()) {
-        console.log("no rook, piece on a8 is not a rook or the rook has moved");
+        // console.log("no rook, piece on a8 is not a rook or the rook has moved");
         return false;
       }
       if (
         !board.getSquare("d8")?.getPiece &&
         !board.getSquare("c8")?.getPiece
       ) {
-        console.log(
-          "Castling allowed queenside for black king. Moving king on " +
-            this.getSquare?.getSquareName
-        );
+        // console.log(
+        //   "Castling allowed queenside for black king. Moving king on " +
+        //     this.getSquare?.getSquareName
+        // );
         return true;
       }
     }

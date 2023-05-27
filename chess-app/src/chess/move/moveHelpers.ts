@@ -1,6 +1,6 @@
-import { Board } from "./board/board";
-import { Square } from "./board/square";
-import { MovePiece } from "../types/types";
+import { Board } from "../board/board";
+import { Square } from "../board/square";
+import { MovePiece } from "../../types/types";
 
 export default class MoveHelper {
   static knightMoveHelper = (sq: Square, board: Board): number[] => {
@@ -83,12 +83,12 @@ export default class MoveHelper {
           console.log("Piece blocking castling on " + sq.getSquareName);
           return false;
         }
-        console.log(
-          "Piece " +
-            sq.getSquare.getPiece!.getFirstLetter +
-            " found, but not blocking check on " +
-            sq.getSquareName
-        );
+        // console.log(
+        //   "Piece " +
+        //     sq.getSquare.getPiece!.getFirstLetter +
+        //     " found, but not blocking check on " +
+        //     sq.getSquareName
+        // );
         break;
       }
     }
@@ -100,22 +100,21 @@ export default class MoveHelper {
       let sq = board.getSquareById(startSqIndex);
       if (!sq) break;
 
-      console.log(sq.getSquareName);
       if (sq.getPiece) {
         if (
           sq.getPiece.getColor !== startSq.getPiece.getColor &&
           (startSq.getPiece.getFirstLetter.toUpperCase() === "Q" ||
             startSq.getPiece.getFirstLetter.toUpperCase() === "B")
         ) {
-          console.log("Piece blocking castling on " + sq.getSquareName);
+          // console.log("Piece blocking castling on " + sq.getSquareName);
           return false;
         }
-        console.log(
-          "Piece " +
-            sq.getSquare.getPiece!.getFirstLetter +
-            " found, but not blocking castling on " +
-            sq.getSquareName
-        );
+        // console.log(
+        //   "Piece " +
+        //     sq.getSquare.getPiece!.getFirstLetter +
+        //     " found, but not blocking castling on " +
+        //     sq.getSquareName
+        // );
         break;
       }
     }
@@ -156,7 +155,7 @@ export default class MoveHelper {
       }
     }
 
-    console.log("castling allowed");
+    // console.log("castling allowed");
     return true;
   };
 
@@ -181,15 +180,15 @@ export default class MoveHelper {
           (startSq.getPiece.getFirstLetter.toUpperCase() === "Q" ||
             startSq.getPiece.getFirstLetter.toUpperCase() === "B")
         ) {
-          console.log("Piece blocking castling on " + sq.getSquareName);
+          // console.log("Piece blocking castling on " + sq.getSquareName);
           return false;
         }
-        console.log(
-          "Piece " +
-            sq.getSquare.getPiece!.getFirstLetter +
-            " found, but not blocking check on " +
-            sq.getSquareName
-        );
+        // console.log(
+        //   "Piece " +
+        //     sq.getSquare.getPiece!.getFirstLetter +
+        //     " found, but not blocking check on " +
+        //     sq.getSquareName
+        // );
         break;
       }
     }
@@ -206,15 +205,15 @@ export default class MoveHelper {
           (startSq.getPiece.getFirstLetter.toUpperCase() === "Q" ||
             startSq.getPiece.getFirstLetter.toUpperCase() === "B")
         ) {
-          console.log("Piece blocking castling on " + sq.getSquareName);
+          // console.log("Piece blocking castling on " + sq.getSquareName);
           return false;
         }
-        console.log(
-          "Piece " +
-            sq.getSquare.getPiece!.getFirstLetter +
-            " found, but not blocking castling on " +
-            sq.getSquareName
-        );
+        // console.log(
+        //   "Piece " +
+        //     sq.getSquare.getPiece!.getFirstLetter +
+        //     " found, but not blocking castling on " +
+        //     sq.getSquareName
+        // );
         break;
       }
     }
@@ -278,15 +277,15 @@ export default class MoveHelper {
           (startSq.getPiece.getFirstLetter.toUpperCase() === "Q" ||
             startSq.getPiece.getFirstLetter.toUpperCase() === "B")
         ) {
-          console.log("Piece blocking castling on " + sq.getSquareName);
+          // console.log("Piece blocking castling on " + sq.getSquareName);
           return false;
         }
-        console.log(
-          "Piece " +
-            sq.getSquare.getPiece!.getFirstLetter +
-            " found, but not blocking check on " +
-            sq.getSquareName
-        );
+        // console.log(
+        //   "Piece " +
+        //     sq.getSquare.getPiece!.getFirstLetter +
+        //     " found, but not blocking check on " +
+        //     sq.getSquareName
+        // );
         break;
       }
     }
@@ -304,15 +303,15 @@ export default class MoveHelper {
           (startSq.getPiece.getFirstLetter.toUpperCase() === "Q" ||
             startSq.getPiece.getFirstLetter.toUpperCase() === "B")
         ) {
-          console.log("Piece blocking castling on " + sq.getSquareName);
+          // console.log("Piece blocking castling on " + sq.getSquareName);
           return false;
         }
-        console.log(
-          "Piece " +
-            sq.getSquare.getPiece!.getFirstLetter +
-            " found, but not blocking castling on " +
-            sq.getSquareName
-        );
+        // console.log(
+        //   "Piece " +
+        //     sq.getSquare.getPiece!.getFirstLetter +
+        //     " found, but not blocking castling on " +
+        //     sq.getSquareName
+        // );
         break;
       }
     }
@@ -353,7 +352,7 @@ export default class MoveHelper {
       }
     }
 
-    console.log("castling allowed");
+    // console.log("castling allowed");
     return true;
   };
 
@@ -377,15 +376,15 @@ export default class MoveHelper {
           (startSq.getPiece.getFirstLetter.toUpperCase() === "Q" ||
             startSq.getPiece.getFirstLetter.toUpperCase() === "B")
         ) {
-          console.log("Piece blocking castling on " + sq.getSquareName);
+          // console.log("Piece blocking castling on " + sq.getSquareName);
           return false;
         }
-        console.log(
-          "Piece " +
-            sq.getSquare.getPiece!.getFirstLetter +
-            " found, but not blocking check on " +
-            sq.getSquareName
-        );
+        // console.log(
+        //   "Piece " +
+        //     sq.getSquare.getPiece!.getFirstLetter +
+        //     " found, but not blocking check on " +
+        //     sq.getSquareName
+        // );
         break;
       }
     }
@@ -402,15 +401,15 @@ export default class MoveHelper {
           (startSq.getPiece.getFirstLetter.toUpperCase() === "Q" ||
             startSq.getPiece.getFirstLetter.toUpperCase() === "B")
         ) {
-          console.log("Piece blocking castling on " + sq.getSquareName);
+          // console.log("Piece blocking castling on " + sq.getSquareName);
           return false;
         }
-        console.log(
-          "Piece " +
-            sq.getSquare.getPiece!.getFirstLetter +
-            " found, but not blocking castling on " +
-            sq.getSquareName
-        );
+        // console.log(
+        //   "Piece " +
+        //     sq.getSquare.getPiece!.getFirstLetter +
+        //     " found, but not blocking castling on " +
+        //     sq.getSquareName
+        // );
         break;
       }
     }

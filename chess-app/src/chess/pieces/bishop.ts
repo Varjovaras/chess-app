@@ -18,7 +18,7 @@ export class Bishop extends Piece {
 
   override move(startSq: Square, endSq: Square, board: Board): boolean {
     if (startSq.getColor !== endSq.getColor) {
-      console.log("Bishop cannot move to a different color square");
+      // console.log("Bishop cannot move to a different color square");
       return false;
     }
 
@@ -27,7 +27,7 @@ export class Bishop extends Piece {
       if (Piece.capturable(startSq, endSq)) {
         return Piece.isDiagonal(startSq, endSq, board);
       } else {
-        console.log("Capturing with bishop failed");
+        // console.log("Capturing with bishop failed");
         return false;
       }
     }

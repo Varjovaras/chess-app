@@ -4,7 +4,7 @@ import { King } from "../pieces/king";
 import { Pawn } from "../pieces/pawn";
 import { Color } from "../../types/types";
 
-const chess = new Chess();
+let chess = new Chess();
 
 describe("board works", () => {
   beforeEach(() => {

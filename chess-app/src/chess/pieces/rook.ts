@@ -34,7 +34,7 @@ export class Rook extends Piece {
       if (Piece.capturable(startSq, endSq)) {
         return this.rookMoveHelper(startSq, endSq, board, isHorizontal);
       } else {
-        console.log("Capturing with rook failed");
+        // console.log("Capturing with rook failed");
         return false;
       }
     }

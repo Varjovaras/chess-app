@@ -4,6 +4,7 @@ import Chess from "../chess";
 import { Color } from "../../types/types";
 
 const chess = new Chess();
+
 describe("pawn tests", () => {
   beforeEach(() => {
     chess.startingPosition();

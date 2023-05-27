@@ -21,7 +21,7 @@ export class Queen extends Piece {
       if (Piece.capturable(startSq, endSq)) {
         return Queen.queenMoves(startSq, endSq, board);
       } else {
-        console.log("Capturing with queen failed");
+        // console.log("Capturing with queen failed");
         return false;
       }
     }

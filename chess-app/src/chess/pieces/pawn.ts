@@ -44,17 +44,17 @@ export class Pawn extends Piece {
     if (this.color === Color.white) {
       let returnPiece = Pawn.moveWhite(startSq, endSq, board, piece);
       if (!(returnPiece instanceof Piece)) {
-        throw new Error("Error promoting");
+        throw new Error("Error promoting white pawn");
       } else {
-        console.log("White promotion successful");
+        // console.log("White promotion successful");
         return returnPiece;
       }
     } else {
       let returnPiece = Pawn.moveBlack(startSq, endSq, board, piece);
       if (!(returnPiece instanceof Piece)) {
-        throw new Error("Error promoting");
+        throw new Error("Error promoting black pawn");
       } else {
-        console.log("Black promotion successful");
+        // console.log("Black promotion successful");
         return returnPiece;
       }
     }
@@ -101,7 +101,7 @@ export class Pawn extends Piece {
 
     //move one square forwards
     else if (endSq.getRank - startSq.getRank === 1 && endSq.getPiece === null) {
-      console.log("Moved pawn one square forward");
+      // console.log("Moved pawn one square forward");
       return true;
     }
 
@@ -144,7 +144,7 @@ export class Pawn extends Piece {
         if (pieceToPromote) {
           return Pawn.promotion(endSq, pieceToPromote, Color.black);
         } else {
-          console.log("No piece to promote to");
+          // console.log("No piece to promote to");
           return false;
         }
       }
@@ -152,7 +152,7 @@ export class Pawn extends Piece {
 
     //move one square forwards
     else if (startSq.getRank - endSq.getRank === 1 && endSq.getPiece === null) {
-      console.log("Moved pawn one square forward");
+      // console.log("Moved pawn one square forward");
       return true;
     }
 
@@ -199,7 +199,7 @@ export class Pawn extends Piece {
     //check if it's a promotion
     //enpassant is checked before this cause endSq.piece is null on enpassant
     if (endSq.getPiece === null) {
-      console.log("Pawns can't go diagonally without capturing a piece");
+      // console.log("Pawns can't go diagonally without capturing a piece");
       return false;
     }
     //check if it's a promotion
@@ -210,15 +210,12 @@ export class Pawn extends Piece {
       pieceToPromote !== undefined &&
       color
     ) {
-      console.log("trolled");
-      console.log(color);
       let promotedPiece = Pawn.promotion(endSq, pieceToPromote, color);
-      console.log(promotedPiece);
       return promotedPiece;
     }
     //normal capture logic
     else if (Math.abs(startSq.getRank - endSq.getRank) === 1 && diagonalMove) {
-      console.log("Captured a piece with pawn on " + endSq.getSquareName);
+      // console.log("Captured a piece with pawn on " + endSq.getSquareName);
       return true;
     }
     console.log("Error capturing with pawn");
@@ -235,7 +232,7 @@ export class Pawn extends Piece {
       Math.abs(startSq.getRank - endSq.getRank) === 1 &&
       endSq.getPiece === null
     ) {
-      console.log("Moved pawn one square forward");
+      // console.log("Moved pawn one square forward");
       return true;
     }
     //white pawn two squares forwards
@@ -245,7 +242,7 @@ export class Pawn extends Piece {
       board.getSquare(`${startSq.getFile}${startSq.getRank + 1}`)?.getPiece ===
         null
     ) {
-      console.log("Moved white pawn two squares forward");
+      // console.log("Moved white pawn two squares forward");
       return true;
     }
     //black pawn two squares forwards
@@ -255,10 +252,10 @@ export class Pawn extends Piece {
       board.getSquare(`${startSq.getFile}${startSq.getRank - 1}`)?.getPiece ===
         null
     ) {
-      console.log("Moved black pawn two squares forward");
+      // console.log("Moved black pawn two squares forward");
       return true;
     } else {
-      console.log("Error moving the pawn from starting square");
+      // console.log("Error moving the pawn from starting square");
       return false;
     }
   }
@@ -299,10 +296,10 @@ export class Pawn extends Piece {
         move.startSq.getRank === 2 &&
         move.endSq.getRank === 4)
     ) {
-      console.log("En passant successful");
+      // console.log("En passant successful");
       return true;
     } else {
-      console.log("En passant unsuccessful");
+      // console.log("En passant unsuccessful");
       return false;
     }
   }

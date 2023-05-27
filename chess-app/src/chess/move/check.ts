@@ -1,5 +1,4 @@
-import { late } from "zod";
-import { ColorType, MovePiece, ChessPieces } from "../../types/types";
+import { ColorType, MovePiece } from "../../types/types";
 import { Board } from "../board/board";
 import { Square } from "../board/square";
 import TemporaryBoard from "../board/temporaryBoard";

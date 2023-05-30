@@ -7,10 +7,14 @@ import Piece from "~/components/Piece";
 
 const chess = new Chess();
 chess.startingPosition();
+chess.move("f2", "f3");
+chess.move("e7", "e5");
+chess.move("g2", "g4");
+chess.move("d8", "h4");
+chess.move("a2", "a4");
 
 const Home: NextPage = () => {
   const [board, setBoard] = useState(chess.getBoard.getBoard);
-  console.log(chess.getBoard.printBoardWhite());
   return (
     <>
       <Head>
@@ -23,6 +27,11 @@ const Home: NextPage = () => {
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             <span className="text-cyan-400">Chess app</span>
           </h1>
+          {chess.getCheckmate ? (
+            <h1 className="text-red-500">game over</h1>
+          ) : (
+            <></>
+          )}
           <div className="grid grid-cols-8  sm:grid-cols-8">
             {board.map((sq) =>
               sq.getColor === "WHITE" ? (
@@ -30,11 +39,11 @@ const Home: NextPage = () => {
                   className="h-14 w-14 bg-gray-500 text-center hover:text-base"
                   key={sq.getId}
                 >
-                  <Piece sq={sq} key={sq.getId} />
+                  {sq.getPiece ? <Piece sq={sq} key={sq.getId} /> : <></>}
                 </div>
               ) : (
                 <div className="h-14 w-14 bg-gray-300" key={sq.getId}>
-                  <Piece sq={sq} key={sq.getId} />
+                  {sq.getPiece ? <Piece sq={sq} key={sq.getId} /> : <></>}
                 </div>
               )
             )}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
 import { Square } from "~/chess/board/square";
@@ -9,12 +9,16 @@ type Props = {
 
 const Piece = (props: Props) => {
   const sq = props.sq;
-  const piece = pieceHelper(sq);
+  const [piece, setPiece] = useState("./no_image.svg");
+  useEffect(() => {
+    console.log(pieceHelper(sq));
+    return setPiece(pieceHelper(sq));
+  }, []);
 
   return (
     <div className="content-end" key={sq.getId}>
-      {piece ? (
-        <Image src={piece} width={100} height={100} alt="piece" />
+      {piece !== undefined ? (
+        <Image src={piece} width={100} height={100} alt={piece} />
       ) : (
         <></>
       )}
@@ -27,8 +31,7 @@ export default Piece;
 
 const pieceHelper = (sq: Square) => {
   const piece = sq.getPiece;
-  if (!piece) return;
-  switch (piece.getName) {
+  switch (piece!.getName) {
     case "pawn":
       return "./pieces/white_pawn.svg";
     case "PAWN":
@@ -53,7 +56,5 @@ const pieceHelper = (sq: Square) => {
       return "./pieces/white_rook.svg";
     case "ROOK":
       return "./pieces/black_rook.svg";
-    default:
-      return undefined;
   }
 };

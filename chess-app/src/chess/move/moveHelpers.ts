@@ -172,7 +172,6 @@ export default class MoveHelper {
     for (let i = 0; i < 5; i++, startSqIndex += index) {
       let sq = board.getSquareById(startSqIndex);
       if (!sq) break;
-      console.log(sq.getSquareName);
 
       if (sq.getPiece) {
         if (

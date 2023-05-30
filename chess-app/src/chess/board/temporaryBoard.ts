@@ -35,7 +35,6 @@ export default class TemporaryBoard {
     endSq: Square,
     board: Board,
     turnColor: ColorType,
-
     latestMove?: MovePiece,
     pieceName?: string
   ): void {

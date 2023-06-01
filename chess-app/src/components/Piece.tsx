@@ -11,9 +11,12 @@ const Piece = (props: Props) => {
   const sq = props.sq;
   const [piece, setPiece] = useState("./no_image.svg");
   useEffect(() => {
-    console.log(pieceHelper(sq));
-    return setPiece(pieceHelper(sq));
-  }, []);
+    const piece = pieceHelper(sq);
+
+    if (piece) {
+      return setPiece(piece);
+    }
+  }, [sq]);
 
   return (
     <div className="content-end" key={sq.getId}>

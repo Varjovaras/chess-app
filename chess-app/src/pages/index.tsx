@@ -1,20 +1,28 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
-import { useState } from "react";
+import { FormEventHandler, useState } from "react";
 import Chess from "~/chess/chess";
-import Piece from "~/components/Piece";
+import Board from "~/components/Board";
+import ChessForm from "~/components/ChessForm";
 
 const chess = new Chess();
 chess.startingPosition();
-chess.move("f2", "f3");
-chess.move("e7", "e5");
-chess.move("g2", "g4");
-chess.move("d8", "h4");
-chess.move("a2", "a4");
+// chess.move("f2", "f3");
+// chess.move("e7", "e5");
+// chess.move("g2", "g4");
+// chess.move("d8", "h4");
+// chess.move("a2", "a4");
 
 const Home: NextPage = () => {
   const [board, setBoard] = useState(chess.getBoard.getBoard);
+  const [startSq, setStartSq] = useState("");
+  const [endSq, setEndSq] = useState("");
+
+  board.reverse();
+
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    chess.move(startSq, endSq);
+  };
   return (
     <>
       <Head>
@@ -32,41 +40,18 @@ const Home: NextPage = () => {
           ) : (
             <></>
           )}
-          <div className="grid grid-cols-8  sm:grid-cols-8">
-            {board.map((sq) =>
-              sq.getColor === "WHITE" ? (
-                <div
-                  className="h-14 w-14 bg-gray-500 text-center hover:text-base"
-                  key={sq.getId}
-                >
-                  {sq.getPiece ? <Piece sq={sq} key={sq.getId} /> : <></>}
-                </div>
-              ) : (
-                <div className="h-14 w-14 bg-gray-300" key={sq.getId}>
-                  {sq.getPiece ? <Piece sq={sq} key={sq.getId} /> : <></>}
-                </div>
-              )
-            )}
-          </div>
+
+          <Board board={board} />
+
+          <ChessForm chess={chess} />
           {/* <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/usage/first-steps"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">First Steps →</h3>
-              <div className="text-lg">
-                Just the basics - Everything you need to know to set up your
-                database and authentication.
-              </div>
-            </Link> */}
-          <Link
             className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
             href="https://create.t3.gg/en/introduction"
             target="_blank"
           >
             <h3 className="text-2xl font-bold">About me →</h3>
             <div className="text-lg">Learn more about me</div>
-          </Link>
+          </Link> */}
         </div>
       </main>
     </>

@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { FormEventHandler, useState } from "react";
+import { useState } from "react";
 import Chess from "~/chess/chess";
 import Board from "~/components/Board";
 import ChessForm from "~/components/ChessForm";
@@ -18,11 +18,28 @@ const Home: NextPage = () => {
   const [startSq, setStartSq] = useState("");
   const [endSq, setEndSq] = useState("");
 
-  board.reverse();
-
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
-    chess.move(startSq, endSq);
+  const handleStartSqChange: React.ChangeEventHandler<HTMLInputElement> = (
+    e
+  ) => {
+    console.log(e.target.value);
+    setStartSq(e.target.value);
   };
+  const handleEndSqChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    console.log(e.target.value);
+    setEndSq(e.target.value);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(e);
+    try {
+      chess.move(startSq, endSq);
+    } catch {}
+    setBoard(chess.getBoard.getBoard);
+    setStartSq("");
+    setEndSq("");
+  };
+
   return (
     <>
       <Head>
@@ -43,7 +60,11 @@ const Home: NextPage = () => {
 
           <Board board={board} />
 
-          <ChessForm chess={chess} />
+          <ChessForm
+            handleStartSqChange={handleStartSqChange}
+            handleEndSqChange={handleEndSqChange}
+            handleSubmit={handleSubmit}
+          />
           {/* <Link
             className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
             href="https://create.t3.gg/en/introduction"

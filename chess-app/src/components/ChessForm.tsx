@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import { start } from "repl";
-import Chess from "~/chess/chess";
-
 interface Props {
-  chess: Chess;
-  handleSubmit: React.FormEventHandler<HTMLFormElement>;
+  handleStartSqChange: React.ChangeEventHandler<HTMLInputElement>;
+  handleEndSqChange: React.ChangeEventHandler<HTMLInputElement>;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
-const ChessForm = ({ chess, handleSubmit }: { chess: Chess }) => {
+const ChessForm = ({
+  handleStartSqChange,
+  handleEndSqChange,
+  handleSubmit,
+}: Props) => {
   return (
     <div className="w-full max-w-xs">
       <form
@@ -24,7 +25,7 @@ const ChessForm = ({ chess, handleSubmit }: { chess: Chess }) => {
             name="startSq"
             type="text"
             placeholder="Starting square"
-            onChange={(event) => setStartSq(event.target.value)}
+            onChange={handleStartSqChange}
           />
         </div>
         <div className="mb-6">
@@ -37,13 +38,13 @@ const ChessForm = ({ chess, handleSubmit }: { chess: Chess }) => {
             id="endSq"
             type="text"
             placeholder="Ending square"
-            onChange={(event) => setEndSq(event.target.value)}
+            onChange={handleEndSqChange}
           />
         </div>
         <div className="flex items-center justify-between">
           <button
-            className="focus:shadow-outline w-full rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
-            type="button"
+            className="items-venter focus:shadow-outline  w-full  rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+            type="submit"
           >
             Enter move
           </button>
@@ -52,9 +53,9 @@ const ChessForm = ({ chess, handleSubmit }: { chess: Chess }) => {
       <p className="text-center text-xs text-gray-500">
         &copy;2023 Kristjan Rajaniemi
       </p>
-      <div>
+      {/* <div>
         {startSq} {endSq}
-      </div>
+      </div> */}
     </div>
   );
 };

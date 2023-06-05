@@ -5,9 +5,7 @@ import Square from "./Square";
 type Props = {};
 
 const Board = ({ board }: { board: Sq[] }) => {
-  console.log(board);
   board.reverse();
-  console.log(board);
 
   return (
     <div className="grid grid-cols-8  sm:grid-cols-8">

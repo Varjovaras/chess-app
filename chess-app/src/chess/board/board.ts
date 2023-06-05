@@ -48,6 +48,21 @@ export class Board {
     return this._board;
   }
 
+  get getBoardToFront() {
+    let fakeBoard = this._board;
+    let boardToFront: Square[] = [];
+    let tempBoard: Square[] = [];
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        tempBoard.push(fakeBoard[i * 8 + j]);
+      }
+      tempBoard.reverse();
+      boardToFront = boardToFront.concat(tempBoard);
+      tempBoard = [];
+    }
+    return boardToFront.reverse();
+  }
+
   setBoard(board: Square[]) {
     this._board = board;
   }

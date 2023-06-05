@@ -14,7 +14,7 @@ chess.startingPosition();
 // chess.move("a2", "a4");
 
 const Home: NextPage = () => {
-  const [board, setBoard] = useState(chess.getBoard.getBoard);
+  const [board, setBoard] = useState(chess.getBoard.getBoardToFront);
   const [startSq, setStartSq] = useState("");
   const [endSq, setEndSq] = useState("");
 
@@ -35,7 +35,7 @@ const Home: NextPage = () => {
     try {
       chess.move(startSq, endSq);
     } catch {}
-    setBoard(chess.getBoard.getBoard);
+    setBoard(chess.getBoard.getBoardToFront);
     setStartSq("");
     setEndSq("");
   };

@@ -2,11 +2,7 @@ import React from "react";
 import { Square as Sq } from "~/chess/board/square";
 import Square from "./Square";
 
-type Props = {};
-
 const Board = ({ board }: { board: Sq[] }) => {
-  board.reverse();
-
   return (
     <div className="grid grid-cols-8  sm:grid-cols-8">
       {board.map((sq) =>

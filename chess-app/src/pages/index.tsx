@@ -7,35 +7,38 @@ import ChessForm from "~/components/ChessForm";
 
 const chess = new Chess();
 chess.startingPosition();
-// chess.move("f2", "f3");
-// chess.move("e7", "e5");
-// chess.move("g2", "g4");
+chess.move("e2", "e4");
+chess.move("d7", "d5");
+chess.move("e4", "d5");
 // chess.move("d8", "h4");
 // chess.move("a2", "a4");
 
 const Home: NextPage = () => {
-  const [board, setBoard] = useState(chess.getBoard.getBoardToFront);
+  const [board, setBoard] = useState(chess.getBoard.getBoard);
   const [startSq, setStartSq] = useState("");
   const [endSq, setEndSq] = useState("");
 
   const handleStartSqChange: React.ChangeEventHandler<HTMLInputElement> = (
     e
   ) => {
-    console.log(e.target.value);
     setStartSq(e.target.value);
   };
+
   const handleEndSqChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    console.log(e.target.value);
     setEndSq(e.target.value);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(e);
+    // console.log(e);
     try {
       chess.move(startSq, endSq);
-    } catch {}
-    setBoard(chess.getBoard.getBoardToFront);
+    } catch {
+      console.log("error");
+      return;
+    }
+    setBoard(chess.getBoard.getBoard);
+    // setBoard(chess.getBoard.getBoardToFront);
     setStartSq("");
     setEndSq("");
   };
@@ -57,6 +60,7 @@ const Home: NextPage = () => {
           ) : (
             <></>
           )}
+          <div>capturing not working :D</div>
 
           <Board board={board} />
 

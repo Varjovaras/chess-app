@@ -49,7 +49,7 @@ export class Board {
   }
 
   get getBoardToFront() {
-    let fakeBoard = this._board;
+    let fakeBoard: Square[] = this._board;
     let boardToFront: Square[] = [];
     let tempBoard: Square[] = [];
     for (let i = 0; i < 8; i++) {

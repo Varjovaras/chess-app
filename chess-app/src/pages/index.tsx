@@ -8,15 +8,21 @@ import ChessForm from "~/components/ChessForm";
 const chess = new Chess();
 chess.startingPosition();
 chess.move("e2", "e4");
-chess.move("d7", "d5");
-chess.move("e4", "d5");
+// chess.move("d7", "d5");
+// chess.move("e4", "d5");
 // chess.move("d8", "h4");
 // chess.move("a2", "a4");
 
+/**
+ *
+ * kun piece vaihtuu toiseksi, ei square tai piece päivity
+ */
 const Home: NextPage = () => {
-  const [board, setBoard] = useState(chess.getBoard.getBoard);
+  const [board, setBoard] = useState(chess.getBoard.getBoardToFront);
   const [startSq, setStartSq] = useState("");
   const [endSq, setEndSq] = useState("");
+
+  console.log(chess.getBoard.getSquare("d5"));
 
   const handleStartSqChange: React.ChangeEventHandler<HTMLInputElement> = (
     e
@@ -38,9 +44,7 @@ const Home: NextPage = () => {
       return;
     }
     setBoard(chess.getBoard.getBoard);
-    // setBoard(chess.getBoard.getBoardToFront);
-    setStartSq("");
-    setEndSq("");
+    setBoard(chess.getBoard.getBoardToFront);
   };
 
   return (

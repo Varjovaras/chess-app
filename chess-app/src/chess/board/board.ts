@@ -68,7 +68,9 @@ export class Board {
   }
 
   getSquare(name: string): Square | null {
-    let sq = this._board.find((s: Square) => s.getSquareName === name);
+    let sq = this._board.find(
+      (s: Square) => s.getSquareName.toUpperCase() === name.toUpperCase()
+    );
     return sq ? sq.getSquare : null;
   }
 

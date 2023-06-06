@@ -79,17 +79,22 @@ export default class Chess {
       console.log("Game is over");
       return;
     }
+
+    startSquare = startSquare.trim();
+    endSquare = endSquare.trim();
+
     if (startSquare === endSquare) {
       console.log("Same starting and ending square");
-      throw new Error("Didn't move the piece");
+      console.log("Didn't move the piece");
     }
+
     let startSq = this._board.getSquare(startSquare);
     let endSq = this._board.getSquare(endSquare);
+
     if (!startSq || !endSq) {
-      throw new Error(
-        "No starting square or ending square while making a move"
-      );
+      console.log("No starting square or ending square while making a move");
     }
+
     if (!startSq.getPiece) {
       console.log("No piece on the starting square");
       return;
@@ -98,7 +103,6 @@ export default class Chess {
       startSq.getPiece.getColor === "WHITE"
         ? this._board.isWhiteKingInCheck()
         : this._board.isBlackKingInCheck();
-
     if (inCheck) this.checkHelper(startSq, endSq);
     else this.movePiece(startSq, endSq, pieceName);
   }

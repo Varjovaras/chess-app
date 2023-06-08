@@ -8,6 +8,8 @@ export default class Checkmate {
     let moves: MoveSquares[] = [];
     for (const sq of squaresWithPieces) {
       if (!sq.getPiece) continue;
+      if (latestMove.startSquarePiece.getColor === sq.getPiece.getColor)
+        continue;
       moves = moves.concat(sq.getPiece.possibleMoves(board));
     }
 
@@ -33,7 +35,14 @@ export default class Checkmate {
           latestMove
           // pieceName
         );
-        return true;
+        const notInCheck =
+          latestMove.startSquarePiece.getColor === "WHITE"
+            ? !tempBoard.getBoard.isBlackKingInCheck()
+            : !tempBoard.getBoard.isWhiteKingInCheck();
+        if (notInCheck) {
+          console.log("Not checkmate");
+          return false;
+        }
       } catch {
         continue;
       }

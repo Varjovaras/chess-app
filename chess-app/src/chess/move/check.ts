@@ -1,4 +1,4 @@
-import { ColorType, MovePiece } from "../../types/types";
+import { ColorType, MoveDetails } from "../../types/types";
 import { Board } from "../board/board";
 import { Square } from "../board/square";
 import TemporaryBoard from "../board/temporaryBoard";
@@ -6,9 +6,9 @@ import TemporaryBoard from "../board/temporaryBoard";
 export default class Check {
   private _board: Board;
   private _turnColor: ColorType;
-  private _latestMove?: MovePiece;
+  private _latestMove?: MoveDetails;
 
-  constructor(turn: ColorType, board: Board, move?: MovePiece) {
+  constructor(turn: ColorType, board: Board, move?: MoveDetails) {
     this._turnColor = turn;
     this._board = board;
     this._latestMove = move;

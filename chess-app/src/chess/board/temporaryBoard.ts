@@ -1,4 +1,4 @@
-import { ChessPieces, ColorType, MovePiece } from "../../types/types";
+import { ChessPieces, ColorType, MoveDetails } from "../../types/types";
 import MoveHelper from "../move/moveHelpers";
 import { Pawn } from "../pieces/pawn";
 import { Piece } from "../pieces/piece";
@@ -44,7 +44,7 @@ export default class TemporaryBoard {
     startSq: Square,
     endSq: Square,
     turnColor: ColorType,
-    latestMove?: MovePiece,
+    latestMove?: MoveDetails,
     pieceName?: string
   ): void {
     let isLegalMove = false;
@@ -74,24 +74,19 @@ export default class TemporaryBoard {
           this._board,
           pieceName
         );
+        endSq.setPiece(promotedPiece);
+        startSq.setPiece(null);
+        return;
       } else if (move && MoveHelper.enPassantHelper(startSq, endSq, move)) {
         isLegalMove = startSqPiece.move(startSq, endSq, this._board, move);
         this._board.getSquareById(move.endSq.getSquare.getId)?.setPiece(null);
-      } else isLegalMove = startSqPiece.move(startSq, endSq, this._board);
+      } else {
+        isLegalMove = startSqPiece.move(startSq, endSq, this._board);
+      }
     } else isLegalMove = startSqPiece.move(startSq, endSq, this._board);
 
-    if (promotedPiece instanceof Piece) {
-      endSq.setPiece(promotedPiece);
-      endSq.setSquareForPiece(endSq);
-      this.handleTempPieces(startSq, endSq);
-      startSq.setPiece(null);
-      return;
-    }
-
     if (isLegalMove) {
-      console.log(this._board);
       this.handleTempPieces(startSq, endSq);
-      console.log(this._board);
       return;
     }
     throw new Error(" fakemoveError");
@@ -99,7 +94,8 @@ export default class TemporaryBoard {
 
   handleTempPieces(startSq: Square, endSq: Square): void {
     const startSqPiece = startSq.getPiece;
-    endSq.setPiece(startSqPiece!);
+    if (!startSqPiece) return;
+    endSq.setPiece(startSqPiece);
     const endSquareToPiece = endSq;
     endSq.setSquareForPiece(endSquareToPiece);
     startSq.setPiece(null);

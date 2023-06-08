@@ -13,8 +13,8 @@ chess.move("d1", "h5");
 
 const Home: NextPage = () => {
   const [board, setBoard] = useState(chess.getBoard.getBoardToFront);
-  const [startSq, setStartSq] = useState("f7");
-  const [endSq, setEndSq] = useState("f5");
+  const [startSq, setStartSq] = useState("");
+  const [endSq, setEndSq] = useState("");
 
   const handleStartSqChange: React.ChangeEventHandler<HTMLInputElement> = (
     e
@@ -39,6 +39,13 @@ const Home: NextPage = () => {
     setBoard(chess.getBoard.getBoardToFront);
   };
 
+  const handlePieceClick = (sq: string) => {
+    console.log(sq);
+    if (startSq === "") {
+      // setStartSq(e);
+    }
+  };
+
   return (
     <>
       <Head>
@@ -57,7 +64,7 @@ const Home: NextPage = () => {
             <></>
           )}
 
-          <Board board={board} />
+          <Board board={board} handlePieceClick={handlePieceClick} />
 
           <ChessForm
             handleStartSqChange={handleStartSqChange}

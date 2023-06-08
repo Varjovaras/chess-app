@@ -1,6 +1,6 @@
 import { Board } from "../board/board";
 import { Square } from "../board/square";
-import { ColorType, MovePiece, MoveSquares } from "../../types/types";
+import { ColorType, MoveDetails, MoveSquares } from "../../types/types";
 
 export class Piece {
   protected name: string;
@@ -33,7 +33,7 @@ export class Piece {
     _startSq: Square,
     _endSq: Square,
     _board: Board,
-    _move?: MovePiece | undefined
+    _move?: MoveDetails | undefined
   ): boolean {
     return false;
   }
@@ -42,7 +42,11 @@ export class Piece {
     this.square = sq;
   }
 
-  static capturable(startSq: Square, endSq: Square, move?: MovePiece): boolean {
+  static capturable(
+    startSq: Square,
+    endSq: Square,
+    move?: MoveDetails
+  ): boolean {
     // console.log('capturable ' + endSq.getSquareName);
     let startSqPiece = startSq.getPiece;
     let endSqPiece = endSq.getPiece;

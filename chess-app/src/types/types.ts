@@ -27,7 +27,7 @@ export const ChessPieces = {
 
 export type ChessPieceType = ObjectValues<typeof ChessPieces>;
 
-export type MovePiece = {
+export type MoveDetails = {
   startSq: Square;
   endSq: Square;
   startSquarePiece: Piece;

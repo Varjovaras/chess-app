@@ -2,11 +2,22 @@ import React from "react";
 import Piece from "./Piece";
 import { Square as Sq } from "~/chess/board/square";
 
-const Square = ({ sq }: { sq: Sq }) => {
+const Square = ({
+  sq,
+  handlePieceClick,
+}: {
+  sq: Sq;
+  handlePieceClick: (sq: string) => void;
+}) => {
   return (
     <>
       {sq.getPiece ? (
-        <Piece sq={sq} key={sq.getId} piece={pieceHelper(sq)} />
+        <Piece
+          sq={sq}
+          key={sq.getId}
+          piece={pieceHelper(sq)}
+          handlePieceClick={handlePieceClick}
+        />
       ) : (
         <></>
       )}

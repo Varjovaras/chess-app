@@ -9,7 +9,7 @@ import {
   ChessPieces,
   Color,
   ColorType,
-  MovePiece,
+  MoveDetails,
   MoveSquares,
 } from "../../types/types";
 
@@ -27,7 +27,7 @@ export class Pawn extends Piece {
     startSq: Square,
     endSq: Square,
     board: Board,
-    move?: MovePiece
+    move?: MoveDetails
   ): boolean {
     if (this.color === Color.white) {
       let bool = Pawn.moveWhite(startSq, endSq, board, undefined, move);
@@ -65,7 +65,7 @@ export class Pawn extends Piece {
     endSq: Square,
     board: Board,
     pieceToPromote?: string,
-    move?: MovePiece
+    move?: MoveDetails
   ): boolean | Piece {
     if (startSq.getRank === 8) {
       console.log("How is white pawn on rank 8???");
@@ -114,7 +114,7 @@ export class Pawn extends Piece {
     endSq: Square,
     board: Board,
     pieceToPromote?: string,
-    move?: MovePiece
+    move?: MoveDetails
   ): boolean | Piece {
     if (startSq.getRank === 1) {
       console.log("How is black pawn on rank 8???");
@@ -164,7 +164,7 @@ export class Pawn extends Piece {
     startSq: Square,
     endSq: Square,
     pieceToPromote?: string,
-    move?: MovePiece
+    move?: MoveDetails
   ): boolean | Piece {
     if (!Piece.capturable(startSq, endSq)) {
       return false;
@@ -287,7 +287,7 @@ export class Pawn extends Piece {
     }
   }
 
-  static enPassant(move: MovePiece, EpStartSqRank: number): boolean {
+  static enPassant(move: MoveDetails, EpStartSqRank: number): boolean {
     if (
       (EpStartSqRank === 5 &&
         move.startSq.getRank === 7 &&

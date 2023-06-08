@@ -1,6 +1,6 @@
 import { Board } from "../board/board";
 import { Square } from "../board/square";
-import { MovePiece } from "../../types/types";
+import { MoveDetails } from "../../types/types";
 
 export default class MoveHelper {
   static knightMoveHelper = (sq: Square, board: Board): number[] => {
@@ -24,7 +24,7 @@ export default class MoveHelper {
   static enPassantHelper = (
     startSq: Square,
     endSq: Square,
-    move?: MovePiece
+    move?: MoveDetails
   ): boolean => {
     return !!(
       (startSq.getPiece?.getFirstLetter === "p" &&

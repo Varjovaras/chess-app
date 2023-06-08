@@ -1,9 +1,9 @@
-import { MovePiece, MoveSquares } from "../../types/types";
+import { MoveDetails, MoveSquares } from "../../types/types";
 import { Board } from "../board/board";
 import TemporaryBoard from "../board/temporaryBoard";
 
 export default class Checkmate {
-  static isPositionCheckmate(board: Board, latestMove: MovePiece): boolean {
+  static isPositionCheckmate(board: Board, latestMove: MoveDetails): boolean {
     let squaresWithPieces = board.getSquaresWithPieces;
     let moves: MoveSquares[] = [];
     for (const sq of squaresWithPieces) {

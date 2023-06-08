@@ -7,21 +7,21 @@ import { Bishop } from "./pieces/bishop";
 import { King } from "./pieces/king";
 import { Knight } from "./pieces/knight";
 import { Pawn } from "./pieces/pawn";
-import { ChessPieces, Color, ColorType, MovePiece } from "../types/types";
+import { ChessPieces, Color, ColorType, MoveDetails } from "../types/types";
 import MoveHelper from "./move/moveHelpers";
 import Check from "./move/check";
 import Checkmate from "./move/checkmate";
 
 export default class Chess {
   private _board: Board;
-  private _moves: MovePiece[];
+  private _moves: MoveDetails[];
   private _turnNumber: number;
   private _checkmate: boolean;
 
   static STARTING_POSITION =
     "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-  constructor(moves?: MovePiece[]) {
+  constructor(moves?: MoveDetails[]) {
     this._moves = moves ? moves : [];
     this._turnNumber = 0;
     this._board = new Board();
@@ -62,7 +62,7 @@ export default class Chess {
     return this.getTurnNumber % 2 === 0 ? Color.white : Color.black;
   }
 
-  getLatestMove(): MovePiece | undefined {
+  getLatestMove(): MoveDetails | undefined {
     if (this._moves.length > 0) {
       return this._moves[this._moves.length - 1];
     }
@@ -257,7 +257,13 @@ export default class Chess {
     if (this._board.isWhiteKingInCheck() || this._board.isBlackKingInCheck()) {
       const latestMove = this.getLatestMove();
       if (!latestMove) return;
-      this._checkmate = Checkmate.isPositionCheckmate(this._board, latestMove);
+      if (Checkmate.isPositionCheckmate(this._board, latestMove)) {
+        console.log("Game over for" + startSq.getPiece?.getColor);
+        this._checkmate = Checkmate.isPositionCheckmate(
+          this._board,
+          latestMove
+        );
+      }
     }
   }
 

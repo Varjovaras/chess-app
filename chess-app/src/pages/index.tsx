@@ -1,48 +1,58 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
+import { Square as Sq } from "~/chess/board/square";
 import Chess from "~/chess/chess";
 import Board from "~/components/Board";
 import ChessForm from "~/components/ChessForm";
 
 const chess = new Chess();
 chess.startingPosition();
-chess.move("e2", "e4");
-chess.move("b8", "c6");
-chess.move("d1", "h5");
+// chess.move("e2", "e4");
+// chess.move("b8", "c6");
+// chess.move("d1", "h5");
 
 const Home: NextPage = () => {
   const [board, setBoard] = useState(chess.getBoard.getBoardToFront);
   const [startSq, setStartSq] = useState("");
-  const [endSq, setEndSq] = useState("");
+  // const [endSq, setEndSq] = useState("");
 
-  const handleStartSqChange: React.ChangeEventHandler<HTMLInputElement> = (
-    e
-  ) => {
-    setStartSq(e.target.value);
-  };
+  // const handleStartSqChange: React.ChangeEventHandler<HTMLInputElement> = (
+  //   e
+  // ) => {
+  //   setStartSq(e.target.value);
+  // };
 
-  const handleEndSqChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setEndSq(e.target.value);
-  };
+  // const handleEndSqChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+  //   setEndSq(e.target.value);
+  // };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // console.log(e);
-    try {
-      chess.move(startSq, endSq);
-    } catch {
-      console.log("error");
+  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   // console.log(e);
+  //   try {
+  //     chess.move(startSq, endSq);
+  //   } catch {
+  //     console.log("error");
+  //     return;
+  //   }
+  //   setBoard(chess.getBoard.getBoard);
+  //   setBoard(chess.getBoard.getBoardToFront);
+  //   setStartSq("");
+  //   setEndSq("");
+  // };
+
+  const handlePieceClick = (sq: Sq) => {
+    if (startSq === "" && sq.getPiece) {
+      setStartSq(sq.getSquareName);
       return;
-    }
-    setBoard(chess.getBoard.getBoard);
-    setBoard(chess.getBoard.getBoardToFront);
-  };
-
-  const handlePieceClick = (sq: string) => {
-    console.log(sq);
-    if (startSq === "") {
-      // setStartSq(e);
+    } else if (startSq !== "") {
+      try {
+        chess.move(startSq, sq.getSquareName);
+      } catch {
+        console.log("Move unsuccessful");
+      }
+      setStartSq("");
     }
   };
 
@@ -64,13 +74,17 @@ const Home: NextPage = () => {
             <></>
           )}
 
-          <Board board={board} handlePieceClick={handlePieceClick} />
+          <Board
+            board={board}
+            startSq={startSq}
+            handlePieceClick={handlePieceClick}
+          />
 
-          <ChessForm
+          {/* <ChessForm
             handleStartSqChange={handleStartSqChange}
             handleEndSqChange={handleEndSqChange}
             handleSubmit={handleSubmit}
-          />
+          /> */}
           {/* <Link
             className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
             href="https://create.t3.gg/en/introduction"

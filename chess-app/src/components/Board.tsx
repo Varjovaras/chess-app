@@ -4,28 +4,32 @@ import Square from "./Square";
 
 const Board = ({
   board,
+  startSq,
   handlePieceClick,
 }: {
   board: Sq[];
-  handlePieceClick: (sq: string) => void;
+  startSq: string;
+  handlePieceClick: (sq: Sq) => void;
 }) => {
   return (
     <div className="grid grid-cols-8  sm:grid-cols-8">
       {board.map((sq) =>
         sq.getColor === "WHITE" ? (
-          <div
-            className="h-14 w-14 bg-gray-200 text-center hover:text-base"
+          <button
+            className="h-14 w-14 bg-gray-200 text-center hover:bg-cyan-200 hover:text-base"
             key={sq.getId}
+            onClick={() => handlePieceClick(sq)}
           >
-            <Square sq={sq} handlePieceClick={handlePieceClick} />
-          </div>
+            <Square sq={sq} startSq={startSq} />
+          </button>
         ) : (
-          <div
-            className="h-14 w-14 bg-gray-400 text-center hover:text-base"
+          <button
+            className="h-14 w-14 bg-gray-400 text-center hover:bg-cyan-200 hover:text-base"
             key={sq.getId}
+            onClick={() => handlePieceClick(sq)}
           >
-            <Square sq={sq} handlePieceClick={handlePieceClick} />
-          </div>
+            <Square sq={sq} startSq={startSq} />
+          </button>
         )
       )}
     </div>

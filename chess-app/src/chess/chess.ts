@@ -107,7 +107,7 @@ export default class Chess {
     else this.movePiece(startSq, endSq, pieceName);
   }
 
-  checkHelper(startSq: Square, endSq: Square, pieceName?: string) {
+  private checkHelper(startSq: Square, endSq: Square, pieceName?: string) {
     if (!startSq.getPiece || !endSq) return;
     const piece = startSq.getPiece;
     if (piece instanceof King) {
@@ -150,7 +150,7 @@ export default class Chess {
     );
 
     if (areYouInCheckAfterMove) {
-      // console.log("Move puts you into check. Abandoning move");
+      console.log("Move puts you into check. Abandoning move");
       return;
     }
 
@@ -191,9 +191,10 @@ export default class Chess {
       return;
     }
 
-    throw new Error(
+    console.log(
       "Starting square is invalid, no piece to be found or ending square is invalid, inputted invalid move or a piece is on the way"
     );
+    return;
   }
 
   private handleMove(startSq: Square, endSq: Square): void {

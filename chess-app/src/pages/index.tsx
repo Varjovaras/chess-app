@@ -7,15 +7,14 @@ import ChessForm from "~/components/ChessForm";
 
 const chess = new Chess();
 chess.startingPosition();
+chess.move("e2", "e4");
+chess.move("b8", "c6");
+chess.move("d1", "h5");
 
-/**
- *
- * kun piece vaihtuu toiseksi, ei square tai piece päivity
- */
 const Home: NextPage = () => {
   const [board, setBoard] = useState(chess.getBoard.getBoardToFront);
-  const [startSq, setStartSq] = useState("");
-  const [endSq, setEndSq] = useState("");
+  const [startSq, setStartSq] = useState("f7");
+  const [endSq, setEndSq] = useState("f5");
 
   const handleStartSqChange: React.ChangeEventHandler<HTMLInputElement> = (
     e

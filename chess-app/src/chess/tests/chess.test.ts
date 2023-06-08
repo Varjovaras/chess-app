@@ -89,3 +89,38 @@ describe("adding and removing pieces works", () => {
     ).toBeTruthy();
   });
 });
+
+describe("cant move in check", () => {
+  beforeEach(() => {
+    chess.emptyBoard();
+    chess.startingPosition();
+  });
+
+  test("cannot move as white if it puts you into check", () => {
+    chess.move("f2", "f3");
+    chess.move("e7", "e5");
+    chess.move("a2", "a4");
+    chess.move("d8", "a4");
+    try {
+      chess.move("g2", "g4");
+    } catch {}
+
+    expect(
+      chess.getSquareFromBoard("g2").getPiece &&
+        !chess.getSquareFromBoard("g4").getPiece
+    ).toBeTruthy();
+  });
+  test("cannot move as black if it puts you into check", () => {
+    chess.move("e2", "e4");
+    chess.move("b7", "b5");
+    chess.move("f2", "f4");
+    chess.move("a7", "a5");
+    chess.move("d1", "h5");
+    chess.move("f7", "f5");
+
+    expect(
+      chess.getSquareFromBoard("f7").getPiece &&
+        !chess.getSquareFromBoard("f5").getPiece
+    ).toBeTruthy();
+  });
+});

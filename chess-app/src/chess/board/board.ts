@@ -409,12 +409,12 @@ export class Board {
         (testSqPieceName && testSqPieceName === "r") ||
         testSqPieceName === "q"
       ) {
-        // console.log(
-        //   "King is in check from square " +
-        //     testSq.getSquareName +
-        //     " by " +
-        //     testSqPieceName
-        // );
+        console.log(
+          "King is in check from square " +
+            testSq.getSquareName +
+            " by " +
+            testSqPieceName
+        );
         return true;
       }
       if (testSqPiece) {
@@ -433,12 +433,12 @@ export class Board {
         (testSqPieceName && testSqPieceName === "r") ||
         testSqPieceName === "q"
       ) {
-        // console.log(
-        //   "King is in check from square " +
-        //     testSq.getSquareName +
-        //     " by " +
-        //     testSqPieceName
-        // );
+        console.log(
+          "King is in check from square " +
+            testSq.getSquareName +
+            " by " +
+            testSqPieceName
+        );
         return true;
       }
       if (testSqPiece) {
@@ -458,12 +458,12 @@ export class Board {
         (testSqPieceName && testSqPieceName === "b") ||
         testSqPieceName === "q"
       ) {
-        // console.log(
-        //   "King is in check from square " +
-        //     testSq.getSquareName +
-        //     " by " +
-        //     testSqPieceName
-        // );
+        console.log(
+          "King is in check from square " +
+            testSq.getSquareName +
+            " by " +
+            testSqPieceName
+        );
         return true;
       }
       if (testSqPiece) {
@@ -484,12 +484,12 @@ export class Board {
         (testSqPieceName && testSqPieceName === "b") ||
         testSqPieceName === "q"
       ) {
-        // console.log(
-        //   "King is in check from square " +
-        //     testSq.getSquareName +
-        //     " by " +
-        //     testSqPieceName
-        // );
+        console.log(
+          "King is in check from square " +
+            testSq.getSquareName +
+            " by " +
+            testSqPieceName
+        );
         return true;
       }
       if (testSqPiece) {
@@ -509,12 +509,12 @@ export class Board {
         (testSqPieceName && testSqPieceName === "b") ||
         testSqPieceName === "q"
       ) {
-        // console.log(
-        //   "King is in check from square " +
-        //     testSq.getSquareName +
-        //     " by " +
-        //     testSqPieceName
-        // );
+        console.log(
+          "King is in check from square " +
+            testSq.getSquareName +
+            " by " +
+            testSqPieceName
+        );
 
         return true;
       }
@@ -534,16 +534,18 @@ export class Board {
       }
       if (!testSqPiece) continue;
       let testSqPieceName = testSqPiece.getFirstLetter;
+      console.log(testSqPieceName);
+      console.log(testSq);
       if (
         (testSqPieceName && testSqPieceName === "b") ||
         testSqPieceName === "q"
       ) {
-        // console.log(
-        //   "King is in check from square " +
-        //     testSq.getSquareName +
-        //     " by " +
-        //     testSqPieceName
-        // );
+        console.log(
+          "King is in check from square " +
+            testSq.getSquareName +
+            " by " +
+            testSqPieceName
+        );
         return true;
       }
 

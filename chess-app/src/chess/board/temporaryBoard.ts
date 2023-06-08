@@ -6,7 +6,17 @@ import { Board } from "./board";
 import { Square } from "./square";
 
 export default class TemporaryBoard {
-  static makeTemporaryBoard(board: Board): Board {
+  private _board: Board;
+
+  constructor(board: Board) {
+    this._board = this.makeTemporaryBoard(board);
+  }
+
+  get getBoard() {
+    return this._board;
+  }
+
+  makeTemporaryBoard(board: Board): Board {
     const tempBoard: Square[] = [];
 
     for (let i = 0; i < 64; i++) {
@@ -30,10 +40,9 @@ export default class TemporaryBoard {
     return newBoard;
   }
 
-  static movePieceOnTemporaryBoard(
+  movePieceOnTemporaryBoard(
     startSq: Square,
     endSq: Square,
-    board: Board,
     turnColor: ColorType,
     latestMove?: MovePiece,
     pieceName?: string
@@ -59,12 +68,17 @@ export default class TemporaryBoard {
           endSq?.getRank === 1 &&
           startSqPiece.getName === ChessPieces.PAWN_BLACK)
       ) {
-        promotedPiece = startSqPiece.promote(startSq, endSq, board, pieceName);
+        promotedPiece = startSqPiece.promote(
+          startSq,
+          endSq,
+          this._board,
+          pieceName
+        );
       } else if (move && MoveHelper.enPassantHelper(startSq, endSq, move)) {
-        isLegalMove = startSqPiece.move(startSq, endSq, board, move);
-        board.getSquareById(move.endSq.getSquare.getId)?.setPiece(null);
-      } else isLegalMove = startSqPiece.move(startSq, endSq, board);
-    } else isLegalMove = startSqPiece.move(startSq, endSq, board);
+        isLegalMove = startSqPiece.move(startSq, endSq, this._board, move);
+        this._board.getSquareById(move.endSq.getSquare.getId)?.setPiece(null);
+      } else isLegalMove = startSqPiece.move(startSq, endSq, this._board);
+    } else isLegalMove = startSqPiece.move(startSq, endSq, this._board);
 
     if (promotedPiece instanceof Piece) {
       endSq.setPiece(promotedPiece);
@@ -75,13 +89,15 @@ export default class TemporaryBoard {
     }
 
     if (isLegalMove) {
+      console.log(this._board);
       this.handleTempPieces(startSq, endSq);
+      console.log(this._board);
       return;
     }
     throw new Error(" fakemoveError");
   }
 
-  static handleTempPieces(startSq: Square, endSq: Square): void {
+  handleTempPieces(startSq: Square, endSq: Square): void {
     const startSqPiece = startSq.getPiece;
     endSq.setPiece(startSqPiece!);
     const endSquareToPiece = endSq;

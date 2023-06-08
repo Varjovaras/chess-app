@@ -12,9 +12,13 @@ export default class Checkmate {
     }
 
     for (const move of moves) {
-      const tempBoard: Board = TemporaryBoard.makeTemporaryBoard(board);
-      const startSqTempBoard = tempBoard.getSquare(move.startSq.getSquareName);
-      const endSqTempBoard = tempBoard.getSquare(move.endSq.getSquareName);
+      const tempBoard = new TemporaryBoard(board);
+      const startSqTempBoard = tempBoard.getBoard.getSquare(
+        move.startSq.getSquareName
+      );
+      const endSqTempBoard = tempBoard.getBoard.getSquare(
+        move.endSq.getSquareName
+      );
       if (
         !startSqTempBoard ||
         !endSqTempBoard ||
@@ -22,10 +26,9 @@ export default class Checkmate {
       )
         continue;
       try {
-        TemporaryBoard.movePieceOnTemporaryBoard(
+        tempBoard.movePieceOnTemporaryBoard(
           startSqTempBoard,
           endSqTempBoard,
-          tempBoard,
           startSqTempBoard.getPiece.getColor,
           latestMove
           // pieceName

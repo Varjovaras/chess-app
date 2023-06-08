@@ -34,22 +34,29 @@ export default class Check {
     endSq: Square,
     pieceName?: string
   ): boolean {
-    const tempBoard: Board = TemporaryBoard.makeTemporaryBoard(this._board);
-    const startSqTempBoard = tempBoard.getSquare(startSq.getSquareName);
-    const endSqTempBoard = tempBoard.getSquare(endSq.getSquareName);
-    if (!startSqTempBoard || !endSqTempBoard) return false;
+    const color = startSq.getPiece.getColor;
 
-    TemporaryBoard.movePieceOnTemporaryBoard(
-      startSqTempBoard,
-      endSqTempBoard,
-      tempBoard,
-      this.getTurnColor,
-      this.getLatestMove,
-      pieceName
+    const tempBoard = new TemporaryBoard(this._board);
+    const startSqTempBoard = tempBoard.getBoard.getSquare(
+      startSq.getSquareName
     );
+    const endSqTempBoard = tempBoard.getBoard.getSquare(endSq.getSquareName);
+    if (!startSqTempBoard || !endSqTempBoard)
+      throw new Error("No tempSq found for inCheckAfterMove");
 
-    return startSq.getPiece?.getColor === "WHITE"
-      ? !tempBoard.isWhiteKingInCheck()
-      : !tempBoard.isBlackKingInCheck();
+    try {
+      tempBoard.movePieceOnTemporaryBoard(
+        startSqTempBoard,
+        endSqTempBoard,
+        this.getTurnColor,
+        this.getLatestMove,
+        pieceName
+      );
+      return color === "WHITE"
+        ? !tempBoard.getBoard.isWhiteKingInCheck()
+        : !tempBoard.getBoard.isBlackKingInCheck();
+    } catch {
+      return true;
+    }
   }
 }

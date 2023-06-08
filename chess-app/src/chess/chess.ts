@@ -258,7 +258,7 @@ export default class Chess {
       const latestMove = this.getLatestMove();
       if (!latestMove) return;
       if (Checkmate.isPositionCheckmate(this._board, latestMove)) {
-        console.log("Game over for" + startSq.getPiece?.getColor);
+        console.log("Game over. " + endSq.getPiece?.getColor + " won");
         this._checkmate = Checkmate.isPositionCheckmate(
           this._board,
           latestMove

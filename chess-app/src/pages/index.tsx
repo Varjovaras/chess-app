@@ -66,7 +66,7 @@ const Home: NextPage = () => {
       <main className="flex min-h-screen flex-col items-center justify-center bg-gray-900">
         <div className="container flex flex-col items-center justify-center gap-10 px-4 py-16">
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-            <span className="text-cyan-400">Chess app</span>
+            <span className="text-cyan-400">Chess App</span>
           </h1>
           {chess.getCheckmate ? (
             <h1 className="text-red-500">game over</h1>

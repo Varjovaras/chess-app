@@ -42,17 +42,27 @@ const Home: NextPage = () => {
   // };
 
   const handlePieceClick = (sq: Sq) => {
-    if (startSq === "" && sq.getPiece) {
+    const piece = sq.getPiece;
+    console.log(piece);
+    if (startSq === "" && piece) {
       setStartSq(sq.getSquareName);
-    } else if (startSq !== "") {
+      return;
+    }
+    if (startSq !== "") {
       try {
         chess.move(startSq, sq.getSquareName);
       } catch {
-        console.log("Move unsuccessful");
+        if (piece) {
+          setStartSq(sq.getSquareName);
+        } else {
+          setStartSq("");
+        }
       }
       setStartSq("");
     }
   };
+
+  console.log(startSq);
 
   return (
     <>

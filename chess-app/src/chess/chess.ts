@@ -84,15 +84,17 @@ export default class Chess {
     endSquare = endSquare.trim();
 
     if (startSquare === endSquare) {
-      console.log("Same starting and ending square");
       console.log("Didn't move the piece");
+      throw new Error("Same starting and ending square");
     }
 
     let startSq = this._board.getSquare(startSquare);
     let endSq = this._board.getSquare(endSquare);
 
     if (!startSq || !endSq) {
-      console.log("No starting square or ending square while making a move");
+      throw new Error(
+        "No starting square or ending square while making a move"
+      );
     }
 
     if (!startSq?.getPiece) {
@@ -132,8 +134,7 @@ export default class Chess {
     let startSqPiece = startSq.getPiece;
     if (!startSqPiece || !endSq) return;
     if (startSqPiece.getColor !== this.checkTurn()) {
-      console.log("Wrong players turn");
-      return;
+      throw new Error("Wrong players turn");
     }
     let move = this.getLatestMove();
 

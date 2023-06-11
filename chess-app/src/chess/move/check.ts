@@ -34,7 +34,7 @@ export default class Check {
     endSq: Square,
     pieceName?: string
   ): boolean {
-    const color = startSq.getPiece.getColor;
+    const color = startSq?.getPiece?.getColor;
 
     const tempBoard = new TemporaryBoard(this._board);
     const startSqTempBoard = tempBoard.getBoard.getSquare(

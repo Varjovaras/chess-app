@@ -95,7 +95,7 @@ export default class Chess {
       console.log("No starting square or ending square while making a move");
     }
 
-    if (!startSq.getPiece) {
+    if (!startSq?.getPiece) {
       console.log("No piece on the starting square");
       return;
     }
@@ -103,8 +103,8 @@ export default class Chess {
       startSq.getPiece.getColor === "WHITE"
         ? this._board.isWhiteKingInCheck()
         : this._board.isBlackKingInCheck();
-    if (inCheck) this.checkHelper(startSq, endSq);
-    else this.movePiece(startSq, endSq, pieceName);
+    if (inCheck) this.checkHelper(startSq, endSq!);
+    else this.movePiece(startSq, endSq!, pieceName);
   }
 
   private checkHelper(startSq: Square, endSq: Square, pieceName?: string) {

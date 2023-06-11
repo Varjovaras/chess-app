@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Square as Sq } from "~/chess/board/square";
 import Chess from "~/chess/chess";
 import Board from "~/components/Board";
-import ChessForm from "~/components/ChessForm";
 
 const chess = new Chess();
 chess.startingPosition();

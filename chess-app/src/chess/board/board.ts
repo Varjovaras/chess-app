@@ -54,7 +54,10 @@ export class Board {
     let tempBoard: Square[] = [];
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
-        tempBoard.push(fakeBoard[i * 8 + j]);
+        const square = fakeBoard[i * 8 + j];
+        if (square) {
+          tempBoard.push(square);
+        }
       }
       tempBoard.reverse();
       boardToFront = boardToFront.concat(tempBoard);

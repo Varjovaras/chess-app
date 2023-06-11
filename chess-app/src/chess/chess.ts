@@ -194,7 +194,6 @@ export default class Chess {
     console.log(
       "Starting square is invalid, no piece to be found or ending square is invalid, inputted invalid move or a piece is on the way"
     );
-    return;
   }
 
   private handleMove(startSq: Square, endSq: Square): void {

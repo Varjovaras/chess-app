@@ -44,7 +44,6 @@ const Home: NextPage = () => {
   const handlePieceClick = (sq: Sq) => {
     if (startSq === "" && sq.getPiece) {
       setStartSq(sq.getSquareName);
-      return;
     } else if (startSq !== "") {
       try {
         chess.move(startSq, sq.getSquareName);

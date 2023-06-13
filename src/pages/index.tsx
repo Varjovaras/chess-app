@@ -79,11 +79,7 @@ const Home: NextPage = () => {
             <></>
           )}
 
-          <Board
-            board={board}
-            startSq={startSq}
-            handlePieceClick={handlePieceClick}
-          />
+          <Board board={board} handlePieceClick={handlePieceClick} />
 
           <ChessForm
             startSq={startSq}

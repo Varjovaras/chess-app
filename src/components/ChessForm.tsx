@@ -56,12 +56,9 @@ const ChessForm = ({
           </button>
         </div>
       </form>
-      <p className="text-center text-xs text-gray-500">
+      {/* <p className="text-center text-xs text-gray-500">
         &copy;2023 Kristjan Rajaniemi
-      </p>
-      {/* <div>
-        {startSq} {endSq}
-      </div> */}
+      </p> */}
     </div>
   );
 };

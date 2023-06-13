@@ -5,6 +5,7 @@ import { Square as Sq } from "~/chess/board/square";
 import Chess from "~/chess/chess";
 import Board from "~/components/Board";
 import ChessForm from "../components/ChessForm";
+import Image from "next/image";
 
 const chess = new Chess();
 chess.startingPosition();
@@ -96,6 +97,21 @@ const Home: NextPage = () => {
             <h3 className="text-2xl font-bold">About me →</h3>
             <div className="text-lg">Learn more about me</div>
           </Link> */}
+
+          <a
+            href="https://github.com/Varjovaras/chess-app"
+            className="content-center"
+          >
+            <Image
+              src={"./github-mark.svg"}
+              alt="Github link to repository"
+              width={50}
+              height={50}
+            />
+          </a>
+          <p className="w-full max-w-xs text-center text-xs text-gray-500">
+            &copy;2023 Kristjan Rajaniemi
+          </p>
         </div>
       </main>
     </>

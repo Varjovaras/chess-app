@@ -15,7 +15,13 @@ const Piece = (props: Props) => {
   return (
     <div className="content-end hover:scale-105" key={sq.getId}>
       {piece ? (
-        <Image src={piece} width={100} height={100} alt={piece} />
+        <Image
+          src={piece}
+          width={100}
+          height={100}
+          alt={piece}
+          priority={true}
+        />
       ) : (
         <></>
       )}

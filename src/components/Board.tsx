@@ -14,7 +14,7 @@ const Board = ({
       {board.map((sq) =>
         sq.getColor === "WHITE" ? (
           <button
-            className="h-16 w-16 bg-gray-200 text-center hover:bg-cyan-200 hover:text-base focus:bg-teal-500 sm:h-10 sm:w-10"
+            className="h-16 w-16 bg-gray-200 text-center hover:bg-cyan-200 hover:text-base focus:bg-teal-500 sm:h-8 sm:w-8"
             key={sq.getId}
             onClick={() => handlePieceClick(sq)}
           >
@@ -22,7 +22,7 @@ const Board = ({
           </button>
         ) : (
           <button
-            className="h-16 w-16 bg-gray-400 text-center hover:bg-cyan-200 hover:text-base focus:bg-teal-500 sm:h-10 sm:w-10"
+            className="h-16 w-16 bg-gray-400 text-center hover:bg-cyan-200 hover:text-base focus:bg-teal-500 sm:h-8 sm:w-8"
             key={sq.getId}
             onClick={() => handlePieceClick(sq)}
           >

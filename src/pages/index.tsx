@@ -97,16 +97,12 @@ const Home: NextPage = () => {
             <h3 className="text-2xl font-bold">About me →</h3>
             <div className="text-lg">Learn more about me</div>
           </Link> */}
-
-          <a
-            href="https://github.com/Varjovaras/chess-app"
-            className="content-center"
-          >
+          <a href="https://github.com/Varjovaras/chess-app">
             <Image
               src={"./github-mark.svg"}
               alt="Github link to repository"
-              width={50}
-              height={50}
+              width={40}
+              height={40}
             />
           </a>
           <p className="w-full max-w-xs text-center text-xs text-gray-500">

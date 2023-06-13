@@ -101,12 +101,13 @@ export default class Chess {
       console.log("No piece on the starting square");
       return;
     }
+
     const inCheck: boolean =
       startSq.getPiece.getColor === "WHITE"
         ? this._board.isWhiteKingInCheck()
         : this._board.isBlackKingInCheck();
-    if (inCheck) this.checkHelper(startSq, endSq!);
-    else this.movePiece(startSq, endSq!, pieceName);
+    if (inCheck) this.checkHelper(startSq, endSq);
+    else this.movePiece(startSq, endSq, pieceName);
   }
 
   private checkHelper(startSq: Square, endSq: Square, pieceName?: string) {

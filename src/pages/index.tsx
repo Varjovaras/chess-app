@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Square as Sq } from "~/chess/board/square";
 import Chess from "~/chess/chess";
 import Board from "~/components/Board";
+import ChessForm from "../components/ChessForm";
 
 const chess = new Chess();
 chess.startingPosition();
@@ -14,36 +15,34 @@ chess.startingPosition();
 const Home: NextPage = () => {
   const [board, setBoard] = useState(chess.getBoard.getBoardToFront);
   const [startSq, setStartSq] = useState("");
-  // const [endSq, setEndSq] = useState("");
+  const [endSq, setEndSq] = useState("");
 
-  // const handleStartSqChange: React.ChangeEventHandler<HTMLInputElement> = (
-  //   e
-  // ) => {
-  //   setStartSq(e.target.value);
-  // };
+  const handleStartSqChange: React.ChangeEventHandler<HTMLInputElement> = (
+    e
+  ) => {
+    setStartSq(e.target.value);
+  };
 
-  // const handleEndSqChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-  //   setEndSq(e.target.value);
-  // };
+  const handleEndSqChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setEndSq(e.target.value);
+  };
 
-  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   // console.log(e);
-  //   try {
-  //     chess.move(startSq, endSq);
-  //   } catch {
-  //     console.log("error");
-  //     return;
-  //   }
-  //   setBoard(chess.getBoard.getBoard);
-  //   setBoard(chess.getBoard.getBoardToFront);
-  //   setStartSq("");
-  //   setEndSq("");
-  // };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // console.log(e);
+    try {
+      chess.move(startSq, endSq);
+    } catch {
+      console.log("error");
+      return;
+    }
+    setBoard(chess.getBoard.getBoardToFront);
+    setStartSq("");
+    setEndSq("");
+  };
 
   const handlePieceClick = (sq: Sq) => {
     const piece = sq.getPiece;
-    console.log(piece);
     if (startSq === "" && piece) {
       setStartSq(sq.getSquareName);
       return;
@@ -61,8 +60,6 @@ const Home: NextPage = () => {
       setStartSq("");
     }
   };
-
-  console.log(startSq);
 
   return (
     <>
@@ -88,12 +85,14 @@ const Home: NextPage = () => {
             handlePieceClick={handlePieceClick}
           />
 
-          {/* <ChessForm
+          <ChessForm
+            startSq={startSq}
+            endSq={endSq}
             handleStartSqChange={handleStartSqChange}
             handleEndSqChange={handleEndSqChange}
             handleSubmit={handleSubmit}
-          /> */}
-          {/* <Link
+          />
+          {/* {/* <Link
             className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
             href="https://create.t3.gg/en/introduction"
             target="_blank"

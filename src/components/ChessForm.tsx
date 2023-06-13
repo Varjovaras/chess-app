@@ -1,10 +1,14 @@
 interface Props {
+  startSq: string;
+  endSq: string;
   handleStartSqChange: React.ChangeEventHandler<HTMLInputElement>;
   handleEndSqChange: React.ChangeEventHandler<HTMLInputElement>;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
 const ChessForm = ({
+  startSq,
+  endSq,
   handleStartSqChange,
   handleEndSqChange,
   handleSubmit,
@@ -25,6 +29,7 @@ const ChessForm = ({
             name="startSq"
             type="text"
             placeholder="Starting square"
+            value={startSq}
             onChange={handleStartSqChange}
           />
         </div>
@@ -38,6 +43,7 @@ const ChessForm = ({
             id="endSq"
             type="text"
             placeholder="Ending square"
+            value={endSq}
             onChange={handleEndSqChange}
           />
         </div>

@@ -1,7 +1,7 @@
 import MoveHelper from "../move/moveHelpers";
 import { Square } from "./square";
 import { Color, ColorType } from "../../types/types";
-import CheckHelper from "./checkHelper";
+import WhiteCheck from "./whiteCheck";
 
 export class Board {
   private _board: Square[];
@@ -164,166 +164,52 @@ export class Board {
       console.log("No square for white king found");
       return false;
     }
-    let sqId = sq.getId;
-    if (!sqId && sqId !== 0) {
+    let kingSqId = sq.getId;
+    if (!kingSqId && kingSqId !== 0) {
       console.log("No square id for white king found");
       return false;
     }
 
-    if (CheckHelper.whiteCheckUpwards(this, sqId)) return true;
-    if (CheckHelper.whiteCheckDownwards(this, sqId)) return true;
-    // up and right
-    // console.log('up and right');
-    for (let i = 1; i < 8; i++) {
-      let testSq = this.getSquareById(sqId + 9 * i);
-      if (!testSq) break;
-      let testSqPiece = testSq.getPiece;
-      let testSqPieceName = testSqPiece?.getFirstLetter;
-      if (
-        (testSqPieceName && testSqPieceName === "B") ||
-        testSqPieceName === "Q"
-      ) {
-        console.log(
-          "King is in check from square " +
-            testSq.getSquareName +
-            " by " +
-            testSqPieceName
-        );
-        return true;
-      }
-      if (!testSqPiece && testSq.getFile === "h") break;
-      if (testSqPiece) {
-        break;
-      }
-    }
-    // up and left
-    // console.log('up and left');
-    for (let i = 1; i < 8; i++) {
-      let testSq = this.getSquareById(sqId + 7 * i);
-      if (!testSq) break;
-      let testSqPiece = testSq.getPiece;
-      let testSqPieceName = testSqPiece?.getFirstLetter;
-      if (
-        (testSqPieceName && testSqPieceName === "B") ||
-        testSqPieceName === "Q"
-      ) {
-        console.log(
-          "King is in check from square " +
-            testSq.getSquareName +
-            " by " +
-            testSqPieceName
-        );
-        return true;
-      }
-      if (!testSqPiece && testSq.getFile === "a") break;
-      if (testSqPiece) {
-        break;
-      }
-    }
-    // down and left
-    // console.log('down and left');
-    for (let i = 1; i < 8; i++) {
-      let testSq = this.getSquareById(sqId - 9 * i);
-      if (!testSq) break;
-      let testSqPiece = testSq.getPiece;
-      let testSqPieceName = testSqPiece?.getFirstLetter;
-      if (
-        (testSqPieceName && testSqPieceName === "B") ||
-        testSqPieceName === "Q"
-      ) {
-        console.log(
-          "King is in check from square " +
-            testSq.getSquareName +
-            " by " +
-            testSqPieceName
-        );
-
-        return true;
-      }
-      if (testSq.getFile === "a" || testSq.getId < 8) break;
-      if (testSqPiece) {
-        break;
-      }
-    }
-    // down and right
-    // console.log('down and right');
-    for (let i = 1; i < 8; i++) {
-      let testSq = this.getSquareById(sqId - 7 * i);
-      if (!testSq) break;
-      let testSqPiece = testSq.getPiece;
-
-      let testSqPieceName = testSqPiece?.getFirstLetter;
-      if (
-        (testSqPieceName && testSqPieceName === "B") ||
-        testSqPieceName === "Q"
-      ) {
-        // console.log(
-        //   "King is in check from square " +
-        //     testSq.getSquareName +
-        //     " by " +
-        //     testSqPieceName
-        // );
-        return true;
-      }
-      if ((!testSqPiece && testSq.getId < 8) || testSq.getFile === "h") {
-        break;
-      }
-      if (testSqPiece) {
-        break;
-      }
-    }
-
-    //horse things
-    let knightSquares = MoveHelper.knightMoveHelper(sq, this);
-
-    for (let i = 0; i < knightSquares.length; i++) {
-      if (!knightSquares[i]) break;
-      let sq = this.getSquareById(knightSquares[i]!);
-      if (sq?.getPiece?.getFirstLetter === "N") {
-        console.log(
-          "White king is in check from " + sq.getSquareName + " by a knight"
-        );
-        return true;
-      }
-    }
+    const checkHelper = new WhiteCheck(this, sq, kingSqId);
+    return checkHelper.whiteKingInCheck();
 
     //pawn things
     if (sq.getFile === "a") {
-      if (this.getSquareById(sqId + 9)?.getPiece?.getFirstLetter === "P") {
+      if (this.getSquareById(kingSqId + 9)?.getPiece?.getFirstLetter === "P") {
         console.log(
           "King is in check from square " +
-            this.getSquareById(sqId + 9)?.getSquareName +
+            this.getSquareById(kingSqId + 9)?.getSquareName +
             " by " +
-            this.getSquareById(sqId + 9)?.getPiece?.getFirstLetter
+            this.getSquareById(kingSqId + 9)?.getPiece?.getFirstLetter
         );
         return true;
       }
     } else if (sq.getFile === "h") {
-      if (this.getSquareById(sqId + 7)?.getPiece?.getFirstLetter === "P") {
+      if (this.getSquareById(kingSqId + 7)?.getPiece?.getFirstLetter === "P") {
         console.log(
           "King is in check from square " +
-            this.getSquareById(sqId + 7)?.getSquareName +
+            this.getSquareById(kingSqId + 7)?.getSquareName +
             " by " +
-            this.getSquareById(sqId + 7)?.getPiece?.getFirstLetter
+            this.getSquareById(kingSqId + 7)?.getPiece?.getFirstLetter
         );
         return true;
       }
     } else {
-      if (this.getSquareById(sqId + 9)?.getPiece?.getFirstLetter === "P") {
+      if (this.getSquareById(kingSqId + 9)?.getPiece?.getFirstLetter === "P") {
         console.log(
           "King is in check from square " +
-            this.getSquareById(sqId + 9)?.getSquareName +
+            this.getSquareById(kingSqId + 9)?.getSquareName +
             " by " +
-            this.getSquareById(sqId + 9)?.getPiece?.getFirstLetter
+            this.getSquareById(kingSqId + 9)?.getPiece?.getFirstLetter
         );
         return true;
       }
-      if (this.getSquareById(sqId + 7)?.getPiece?.getFirstLetter === "P") {
+      if (this.getSquareById(kingSqId + 7)?.getPiece?.getFirstLetter === "P") {
         console.log(
           "King is in check from square " +
-            this.getSquareById(sqId + 7)?.getSquareName +
+            this.getSquareById(kingSqId + 7)?.getSquareName +
             " by " +
-            this.getSquareById(sqId + 7)?.getPiece!.getFirstLetter
+            this.getSquareById(kingSqId + 7)?.getPiece!.getFirstLetter
         );
         return true;
       }

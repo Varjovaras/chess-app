@@ -18,6 +18,8 @@ const Home: NextPage = () => {
   const [startSq, setStartSq] = useState("");
   const [endSq, setEndSq] = useState("");
 
+  // useEffect(() => {});
+
   const handleStartSqChange: React.ChangeEventHandler<HTMLInputElement> = (
     e
   ) => {

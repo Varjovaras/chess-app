@@ -153,31 +153,6 @@ export class Board {
     return rows.reverse();
   }
 
-  private whiteCheckUpwards(board: Board, sqId: number): boolean {
-    for (let i = 1; i < 8; i++) {
-      let testSq = this.getSquareById(sqId + 8 * i);
-      if (!testSq) break;
-      let testSqPiece = testSq.getPiece;
-      let testSqPieceName = testSqPiece?.getFirstLetter;
-      if (
-        (testSqPieceName && testSqPieceName === "R") ||
-        testSqPieceName === "Q"
-      ) {
-        console.log(
-          "King is in check from square " +
-            testSq.getSquareName +
-            " by " +
-            testSqPieceName
-        );
-        return true;
-      }
-      if (!testSqPiece && testSq.getFile === "h") break;
-      if (testSqPiece) {
-        break;
-      }
-    }
-  }
-
   isWhiteKingInCheck(): boolean {
     let king = this.getWhiteKing();
     if (!king) {

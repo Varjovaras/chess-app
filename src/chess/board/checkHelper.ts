@@ -23,6 +23,8 @@ export default class CheckHelper {
         break;
       }
     }
+
+    return false;
   }
 
   static whiteCheckDownwards(board: Board, sqId: number): boolean {
@@ -50,5 +52,7 @@ export default class CheckHelper {
         break;
       }
     }
+
+    return false;
   }
 }

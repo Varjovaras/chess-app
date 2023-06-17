@@ -1,4 +1,3 @@
-import React from "react";
 import Piece from "./Piece";
 import { Square as Sq } from "~/chess/board/square";
 

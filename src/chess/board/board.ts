@@ -1,6 +1,7 @@
 import MoveHelper from "../move/moveHelpers";
 import { Square } from "./square";
 import { Color, ColorType } from "../../types/types";
+import CheckHelper from "./checkHelper";
 
 export class Board {
   private _board: Square[];
@@ -152,24 +153,7 @@ export class Board {
     return rows.reverse();
   }
 
-  isWhiteKingInCheck(): boolean {
-    let king = this.getWhiteKing();
-    if (!king) {
-      // console.log("No white king found");
-      return false;
-    }
-    let sq = king.getSquare;
-    if (!sq) {
-      console.log("No square for white king found");
-      return false;
-    }
-    let sqId = sq.getId;
-    if (!sqId && sqId !== 0) {
-      console.log("No square id for white king found");
-      return false;
-    }
-
-    // upwards
+  private whiteCheckUpwards(board: Board, sqId: number): boolean {
     for (let i = 1; i < 8; i++) {
       let testSq = this.getSquareById(sqId + 8 * i);
       if (!testSq) break;
@@ -192,31 +176,27 @@ export class Board {
         break;
       }
     }
-    // downwards
-    for (let i = 1; i < 8; i++) {
-      let testSq = this.getSquareById(sqId - 8 * i);
-      if (!testSq) break;
-      let testSqPiece = testSq.getPiece;
-      let testSqPieceName = testSqPiece?.getFirstLetter;
-      if (
-        (testSqPieceName && testSqPieceName === "R") ||
-        testSqPieceName === "Q"
-      ) {
-        console.log(
-          "King is in check from square " +
-            testSq.getSquareName +
-            " by " +
-            testSqPieceName
-        );
-        return true;
-      }
-      if (!testSqPiece && testSq.getRank === 1) {
-        break;
-      }
-      if (testSqPiece) {
-        break;
-      }
+  }
+
+  isWhiteKingInCheck(): boolean {
+    let king = this.getWhiteKing();
+    if (!king) {
+      // console.log("No white king found");
+      return false;
     }
+    let sq = king.getSquare;
+    if (!sq) {
+      console.log("No square for white king found");
+      return false;
+    }
+    let sqId = sq.getId;
+    if (!sqId && sqId !== 0) {
+      console.log("No square id for white king found");
+      return false;
+    }
+
+    if (CheckHelper.whiteCheckUpwards(this, sqId)) return true;
+    if (CheckHelper.whiteCheckDownwards(this, sqId)) return true;
     // up and right
     // console.log('up and right');
     for (let i = 1; i < 8; i++) {

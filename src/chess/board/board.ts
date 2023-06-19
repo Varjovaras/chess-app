@@ -1,7 +1,8 @@
 import MoveHelper from "../move/moveHelpers";
 import { Square } from "./square";
 import { Color, ColorType } from "../../types/types";
-import WhiteCheck from "./whiteCheck";
+import WhiteCheckHelper from "./whiteCheckHelper";
+import BlackCheckHelper from "./blackCheckHelper";
 
 export class Board {
   private _board: Square[];
@@ -156,7 +157,7 @@ export class Board {
   isWhiteKingInCheck(): boolean {
     let king = this.getWhiteKing();
     if (!king) {
-      // console.log("No white king found");
+      console.log("No white king found");
       return false;
     }
     let sq = king.getSquare;
@@ -170,58 +171,14 @@ export class Board {
       return false;
     }
 
-    const checkHelper = new WhiteCheck(this, sq, kingSqId);
+    const checkHelper = new WhiteCheckHelper(this, sq, kingSqId);
     return checkHelper.whiteKingInCheck();
-
-    //pawn things
-    if (sq.getFile === "a") {
-      if (this.getSquareById(kingSqId + 9)?.getPiece?.getFirstLetter === "P") {
-        console.log(
-          "King is in check from square " +
-            this.getSquareById(kingSqId + 9)?.getSquareName +
-            " by " +
-            this.getSquareById(kingSqId + 9)?.getPiece?.getFirstLetter
-        );
-        return true;
-      }
-    } else if (sq.getFile === "h") {
-      if (this.getSquareById(kingSqId + 7)?.getPiece?.getFirstLetter === "P") {
-        console.log(
-          "King is in check from square " +
-            this.getSquareById(kingSqId + 7)?.getSquareName +
-            " by " +
-            this.getSquareById(kingSqId + 7)?.getPiece?.getFirstLetter
-        );
-        return true;
-      }
-    } else {
-      if (this.getSquareById(kingSqId + 9)?.getPiece?.getFirstLetter === "P") {
-        console.log(
-          "King is in check from square " +
-            this.getSquareById(kingSqId + 9)?.getSquareName +
-            " by " +
-            this.getSquareById(kingSqId + 9)?.getPiece?.getFirstLetter
-        );
-        return true;
-      }
-      if (this.getSquareById(kingSqId + 7)?.getPiece?.getFirstLetter === "P") {
-        console.log(
-          "King is in check from square " +
-            this.getSquareById(kingSqId + 7)?.getSquareName +
-            " by " +
-            this.getSquareById(kingSqId + 7)?.getPiece!.getFirstLetter
-        );
-        return true;
-      }
-    }
-    //if no checks found
-    return false;
   }
 
   isBlackKingInCheck(): boolean {
     let king = this.getBlackKing();
     if (!king) {
-      // console.log("No black king found");
+      console.log("No black king found");
       return false;
     }
     let sq = king.getSquare;
@@ -229,216 +186,13 @@ export class Board {
       console.log("No square for black king found");
       return false;
     }
-
-    let sqId = this.getSquareById(sq.getId)?.getId;
-
-    if (!sqId && sqId !== 0) {
+    let kingSqId = sq.getId;
+    if (!kingSqId && kingSqId !== 0) {
       console.log("No square id for black king found");
       return false;
     }
-
-    // upwards
-    for (let i = 1; i < 8; i++) {
-      let testSq = this.getSquareById(sqId + 8 * i);
-      if (!testSq) break;
-      let testSqPiece = testSq.getPiece;
-      let testSqPieceName = testSqPiece?.getFirstLetter;
-      if (
-        (testSqPieceName && testSqPieceName === "r") ||
-        testSqPieceName === "q"
-      ) {
-        console.log(
-          "King is in check from square " +
-            testSq.getSquareName +
-            " by " +
-            testSqPieceName
-        );
-        return true;
-      }
-      if (!testSqPiece && testSq.getRank === 8) break;
-      if (testSqPiece) {
-        break;
-      }
-    }
-    // downwards
-    for (let i = 1; i < 8; i++) {
-      let testSq = this.getSquareById(sqId - 8 * i);
-      if (!testSq) break;
-      let testSqPiece = testSq.getPiece;
-      let testSqPieceName = testSqPiece?.getFirstLetter;
-      if (
-        (testSqPieceName && testSqPieceName === "r") ||
-        testSqPieceName === "q"
-      ) {
-        console.log(
-          "King is in check from square " +
-            testSq.getSquareName +
-            " by " +
-            testSqPieceName
-        );
-        return true;
-      }
-      if (!testSqPiece && testSq.getRank === 1) break;
-      if (testSqPiece) {
-        break;
-      }
-    }
-    // up and right
-    // console.log('up and right');
-    for (let i = 1; i < 8; i++) {
-      let testSq = this.getSquareById(sqId + 9 * i);
-      if (!testSq) break;
-      let testSqPiece = testSq.getPiece;
-      let testSqPieceName = testSqPiece?.getFirstLetter;
-      if (
-        (testSqPieceName && testSqPieceName === "b") ||
-        testSqPieceName === "q"
-      ) {
-        console.log(
-          "King is in check from square " +
-            testSq.getSquareName +
-            " by " +
-            testSqPieceName
-        );
-        return true;
-      }
-      if (!testSqPiece && testSq.getFile === "h") break;
-      if (testSqPiece) {
-        break;
-      }
-    }
-    // up and left
-    // console.log('up and left');
-    for (let i = 1; i < 8; i++) {
-      let testSq = this.getSquareById(sqId + 7 * i);
-      if (!testSq) break;
-      let testSqPiece = testSq.getPiece;
-      let testSqPieceName = testSqPiece?.getFirstLetter;
-      if (
-        (testSqPieceName && testSqPieceName === "b") ||
-        testSqPieceName === "q"
-      ) {
-        console.log(
-          "King is in check from square " +
-            testSq.getSquareName +
-            " by " +
-            testSqPieceName
-        );
-        return true;
-      }
-      if (!testSqPiece && testSq.getFile === "a") break;
-      if (testSqPiece) {
-        break;
-      }
-    }
-    // down and left
-    // console.log('down and left');
-    for (let i = 1; i < 8; i++) {
-      let testSq = this.getSquareById(sqId - 9 * i);
-      if (!testSq) break;
-      let testSqPiece = testSq.getPiece;
-      let testSqPieceName = testSqPiece?.getFirstLetter;
-      if (
-        (testSqPieceName && testSqPieceName === "b") ||
-        testSqPieceName === "q"
-      ) {
-        console.log(
-          "King is in check from square " +
-            testSq.getSquareName +
-            " by " +
-            testSqPieceName
-        );
-        return true;
-      }
-      if ((!testSqPiece && testSq.getFile === "a") || testSq.getId < 8) break;
-
-      if (testSqPiece) {
-        break;
-      }
-    }
-    // down and right
-    // console.log('down and right');
-    for (let i = 1; i < 8; i++) {
-      let testSq = this.getSquareById(sqId - 7 * i);
-      if (!testSq) break;
-      let testSqPiece = testSq.getPiece;
-      let testSqPieceName = testSqPiece?.getFirstLetter;
-      if (
-        (testSqPieceName && testSqPieceName === "b") ||
-        testSqPieceName === "q"
-      ) {
-        console.log(
-          "King is in check from square " +
-            testSq.getSquareName +
-            " by " +
-            testSqPieceName
-        );
-        return true;
-      }
-      if ((!testSqPiece && testSq.getId < 8) || testSq.getFile === "h") {
-        break;
-      }
-      if (testSqPiece) {
-        break;
-      }
-    }
-
-    //horse things
-    let knightSquares = MoveHelper.knightMoveHelper(sq, this);
-    for (let i = 0; i < knightSquares.length; i++) {
-      if (!knightSquares[i]) break;
-      let sq = this.getSquareById(knightSquares[i]!);
-      if (sq?.getPiece?.getFirstLetter === "n") {
-        console.log(
-          "Black king is in check from " + sq.getSquareName + " by a knight"
-        );
-        return true;
-      }
-    }
-
-    //pawn things
-    if (sq.getFile === "a") {
-      if (this.getSquareById(sqId - 7)?.getPiece?.getFirstLetter === "p") {
-        console.log(
-          "King is in check from square " +
-            this.getSquareById(sqId - 7)!.getSquareName +
-            " by " +
-            this.getSquareById(sqId - 7)?.getPiece!.getFirstLetter
-        );
-        return true;
-      }
-    } else if (sq.getFile === "h") {
-      if (this.getSquareById(sqId - 9)?.getPiece?.getFirstLetter === "p") {
-        console.log(
-          "King is in check from square " +
-            this.getSquareById(sqId - 9)!.getSquareName +
-            " by " +
-            this.getSquareById(sqId - 9)?.getPiece!.getFirstLetter
-        );
-        return true;
-      }
-    } else {
-      if (this.getSquareById(sqId - 9)?.getPiece?.getFirstLetter === "p") {
-        console.log(
-          "King is in check from square " +
-            this.getSquareById(sqId - 9)!.getSquareName +
-            " by " +
-            this.getSquareById(sqId - 9)?.getPiece!.getFirstLetter
-        );
-        return true;
-      }
-      if (this.getSquareById(sqId - 7)?.getPiece?.getFirstLetter === "p") {
-        console.log(
-          "King is in check from square " +
-            this.getSquareById(sqId - 7)!.getSquareName +
-            " by " +
-            this.getSquareById(sqId - 7)?.getPiece!.getFirstLetter
-        );
-        return true;
-      }
-    }
-    //if no checks found
-    return false;
+    const checkHelper = new BlackCheckHelper(this, sq, kingSqId);
+    return checkHelper.blackKingInCheck();
   }
 
   isEmpty(): boolean {

@@ -2,7 +2,7 @@ import MoveHelper from "../move/moveHelpers";
 import { Board } from "./board";
 import { Square } from "./square";
 
-export default class WhiteCheck {
+export default class WhiteCheckHelper {
   private _board: Board;
   private _kingSq: Square;
   private _kingSqId: number;
@@ -24,6 +24,11 @@ export default class WhiteCheck {
   get getKingSquareId() {
     return this._kingSqId;
   }
+
+  /**
+   
+   * @returns PAWN CHECK NOT WORKING PROPERLY
+   */
 
   whiteKingInCheck(): boolean {
     if (this.whiteCheckUpwards()) return true;
@@ -155,7 +160,6 @@ export default class WhiteCheck {
   private whiteCheckDownLeft(): boolean {
     const kingSqId = this.getKingSquareId;
 
-    // down and left
     for (let i = 1; i < 8; i++) {
       let testSq = this.getBoard.getSquareById(kingSqId - 9 * i);
       if (!testSq) break;
@@ -233,7 +237,7 @@ export default class WhiteCheck {
     return false;
   }
 
-  whiteCheckWithPawn(): boolean {
+  private whiteCheckWithPawn(): boolean {
     const kingSq = this.getKingSquare;
     const kingSqId = this.getKingSquareId;
     const board = this.getBoard;
@@ -280,49 +284,4 @@ export default class WhiteCheck {
     }
     return false;
   }
-
-  // static whiteCheckDownwards(board: Board, sqId: number): boolean {
-
-  //   return false;
-  // }
-
-  // static whiteCheckDownwards(board: Board, sqId: number): boolean {
-
-  //   return false;
-  // }
-
-  // static whiteCheckDownwards(board: Board, sqId: number): boolean {
-
-  //   return false;
-  // }
-
-  // static whiteCheckDownwards(board: Board, sqId: number): boolean {
-
-  //   return false;
-  // }
-
-  // static whiteCheckDownwards(board: Board, sqId: number): boolean {
-
-  //   return false;
-  // }
-
-  // static whiteCheckDownwards(board: Board, sqId: number): boolean {
-
-  //   return false;
-  // }
-
-  // static whiteCheckDownwards(board: Board, sqId: number): boolean {
-
-  //   return false;
-  // }
-
-  // static whiteCheckDownwards(board: Board, sqId: number): boolean {
-
-  //   return false;
-  // }
-
-  // static whiteCheckDownwards(board: Board, sqId: number): boolean {
-
-  //   return false;
-  // }
 }

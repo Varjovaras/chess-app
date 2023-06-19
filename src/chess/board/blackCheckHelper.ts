@@ -25,11 +25,6 @@ export default class BlackCheckHelper {
     return this._kingSqId;
   }
 
-  /**
-   *
-   * @returns PAWN CHECKING BUGGING CANNOT RECAPTURE PASA ?!?!
-   */
-
   blackKingInCheck(): boolean {
     if (this.blackCheckUpwards()) return true;
     if (this.blackCheckDownwards()) return true;
@@ -39,7 +34,6 @@ export default class BlackCheckHelper {
     if (this.blackCheckDownRight()) return true;
     if (this.blackCheckWithHorse()) return true;
     if (this.blackCheckWithPawn()) return true;
-
     return false;
   }
 

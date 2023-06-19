@@ -26,7 +26,6 @@ export default class WhiteCheckHelper {
   }
 
   /**
-   
    * @returns PAWN CHECK NOT WORKING PROPERLY
    */
 

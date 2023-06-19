@@ -1,11 +1,12 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Square as Sq } from "~/chess/board/square";
 import Chess from "~/chess/chess";
 import Board from "~/components/Board";
 import ChessForm from "../components/ChessForm";
 import Image from "next/image";
+import { ChessPieces } from "~/types/types";
 
 const chess = new Chess();
 chess.startingPosition();
@@ -15,10 +16,25 @@ chess.startingPosition();
 
 const Home: NextPage = () => {
   const [board, setBoard] = useState(chess.getBoard.getBoardToFront);
+  // const [promotePieceForWhite, setPromotePieceForWhite] = useState(
+  //   ChessPieces.QUEEN_WHITE
+  // );
+  // const [promotePieceForBlack, setPromotePieceForBlack] = useState(
+  //   ChessPieces.QUEEN_WHITE
+  // );
+
+  const pieceForWhite = ChessPieces.QUEEN_WHITE;
+  const pieceForBlack = ChessPieces.QUEEN_BLACK;
+
   const [startSq, setStartSq] = useState("");
+  const [turn, setTurn] = useState(chess.getTurnNumber);
   const [endSq, setEndSq] = useState("");
 
-  // useEffect(() => {});
+  useEffect(() => {
+    return () => {
+      setTurn(chess.getTurnNumber);
+    };
+  }, []);
 
   const handleStartSqChange: React.ChangeEventHandler<HTMLInputElement> = (
     e
@@ -34,7 +50,11 @@ const Home: NextPage = () => {
     e.preventDefault();
     // console.log(e);
     try {
-      chess.move(startSq, endSq);
+      if (turn % 2 === 0) {
+        chess.move(startSq, endSq, pieceForWhite);
+      } else {
+        chess.move(startSq, endSq, pieceForBlack);
+      }
     } catch {
       console.log("error");
       return;

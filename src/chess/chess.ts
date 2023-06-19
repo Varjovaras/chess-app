@@ -135,6 +135,7 @@ export default class Chess {
     let startSqPiece = startSq.getPiece;
     if (!startSqPiece || !endSq) return;
     if (startSqPiece.getColor !== this.checkTurn()) {
+      console.log("Wrong players turn");
       throw new Error("Wrong players turn");
     }
     let move = this.getLatestMove();

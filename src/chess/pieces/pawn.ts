@@ -169,37 +169,43 @@ export class Pawn extends Piece {
     if (!Piece.capturable(startSq, endSq)) {
       return false;
     }
+
     //what is the rank you need to start on to be able to promote
-    let secondToLastRank = startSq.getPiece?.getColor === Color.white ? 7 : 2;
-    let promotionRank = startSq.getPiece?.getColor === Color.white ? 8 : 1;
+    const secondToLastRank = startSq.getPiece?.getColor === Color.white ? 7 : 2;
+    const promotionRank = startSq.getPiece?.getColor === Color.white ? 8 : 1;
 
     //what is the rank you need to start and end on to be able to en passant
-    let enPassantStartSqRank =
+    const enPassantStartSqRank =
       startSq.getPiece?.getColor === Color.white ? 5 : 4;
-    let enPassantEndSqRank = startSq.getPiece?.getColor === Color.white ? 6 : 3;
+    const enPassantEndSqRank =
+      startSq.getPiece?.getColor === Color.white ? 6 : 3;
 
-    let color: ColorType | undefined = startSq.getPiece?.getColor;
+    const color: ColorType | undefined = startSq.getPiece?.getColor;
     //is pawn capturing or not
-    let diagonalMove: boolean = Pawn.compareFiles(
+    const diagonalMove: boolean = Pawn.compareFiles(
       startSq.getFile,
       endSq.getFile
     );
+    let lastMoveStartSqRank: number = enPassantStartSqRank === 5 ? 7 : 2;
+    let lastMoveEndSqRank: number = enPassantEndSqRank === 6 ? 5 : 4;
 
     //check if it's en passant
     if (
       startSq.getRank === enPassantStartSqRank &&
       endSq.getRank === enPassantEndSqRank &&
-      diagonalMove
+      diagonalMove &&
+      move.startSq.getRank === lastMoveStartSqRank &&
+      move.endSq.getRank === lastMoveEndSqRank
     ) {
-      if (!move) return false;
+      console.log("?=!=!=?!?!?");
       return this.enPassant(move, enPassantStartSqRank);
     }
 
+    console.log("??!??!#?!?#?!_#!");
     //check if it's your own piece
-    //check if it's a promotion
     //enpassant is checked before this cause endSq.piece is null on enpassant
     if (endSq.getPiece === null) {
-      // console.log("Pawns can't go diagonally without capturing a piece");
+      console.log("Pawns can't go diagonally without capturing a piece");
       return false;
     }
     //check if it's a promotion
@@ -210,14 +216,18 @@ export class Pawn extends Piece {
       pieceToPromote !== undefined &&
       color
     ) {
+      console.log("?=!=!=?!asdasdasd?!?");
       let promotedPiece = Pawn.promotion(endSq, pieceToPromote, color);
       return promotedPiece;
     }
     //normal capture logic
     else if (Math.abs(startSq.getRank - endSq.getRank) === 1 && diagonalMove) {
+      console.log("pasa");
+
       // console.log("Captured a piece with pawn on " + endSq.getSquareName);
       return true;
     }
+    console.log("_!-01?!??!?!");
     console.log("Error capturing with pawn");
     return false;
   }

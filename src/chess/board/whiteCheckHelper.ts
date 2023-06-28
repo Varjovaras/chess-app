@@ -38,7 +38,6 @@ export default class WhiteCheckHelper {
     if (this.whiteCheckDownRight()) return true;
     if (this.whiteCheckWithHorse()) return true;
     if (this.whiteCheckWithPawn()) return true;
-
     return false;
   }
 
@@ -271,12 +270,14 @@ export default class WhiteCheckHelper {
         );
         return true;
       }
-      if (board.getSquareById(kingSqId + 7)?.getPiece?.getFirstLetter === "P") {
+      if (
+        board.getSquareById(kingSqId + 7)?.getPiece?.getFirstLetter! === "P"
+      ) {
         console.log(
           "King is in check from square " +
             board.getSquareById(kingSqId + 7)?.getSquareName +
             " by " +
-            board.getSquareById(kingSqId + 7)?.getPiece!.getFirstLetter
+            board.getSquareById(kingSqId + 7)?.getPiece?.getFirstLetter
         );
         return true;
       }

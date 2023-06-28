@@ -194,8 +194,8 @@ export class Pawn extends Piece {
       startSq.getRank === enPassantStartSqRank &&
       endSq.getRank === enPassantEndSqRank &&
       diagonalMove &&
-      move.startSq.getRank === lastMoveStartSqRank &&
-      move.endSq.getRank === lastMoveEndSqRank
+      move?.startSq.getRank === lastMoveStartSqRank &&
+      move?.endSq.getRank === lastMoveEndSqRank
     ) {
       console.log("?=!=!=?!?!?");
       return this.enPassant(move, enPassantStartSqRank);

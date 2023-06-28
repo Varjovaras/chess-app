@@ -18,7 +18,8 @@
     "js": "cd src && cd backend && cd dist && cd backend && cd chess &&  node index.js",
     "lines": "count-lines-of-code",
     "front": "cd src && cd frontend && npm run dev",
-    "lighthouse": "npx unlighthouse --site https://chess-app-eta.vercel.app"
+    "lighthouse": "npx unlighthouse --site https://chess-app-eta.vercel.app",
+    "esrun": "cd src/chess/ && esrun index.ts"
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.2.2",

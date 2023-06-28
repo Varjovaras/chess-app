@@ -1,7 +1,7 @@
 import { Rook } from "../pieces/rook";
 import { Bishop } from "../pieces/bishop";
 import Chess from "../chess";
-import { ChessPieces, Color } from "../../types/types";
+import { Color } from "../../types/types";
 
 const chess = new Chess();
 

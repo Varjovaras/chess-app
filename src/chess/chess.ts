@@ -320,11 +320,12 @@ export default class Chess {
   private analyzeFen(pieces: string[]) {
     for (let i = 0; i < 8; i++) {
       let str = pieces[i];
-      if (str!.length !== 8) {
+      if (!str) return;
+      if (str.length !== 8) {
         //todo non starting position
       } else if (str !== "8") {
         //if str is 8 it's an empty row
-        this.fenHelper(i, str!);
+        this.fenHelper(i, str);
       }
     }
   }
@@ -386,7 +387,7 @@ export default class Chess {
 
   getSquareFromBoard(s: string): Square {
     let sq = this._board.getSquare(s);
-    if (!sq) throw new Error("Square " + sq + " not found");
+    if (!sq) throw new Error("Square " + " not found");
     return sq;
   }
 

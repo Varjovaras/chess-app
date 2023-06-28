@@ -235,9 +235,9 @@ export default class BlackCheckHelper {
       if (board.getSquareById(kingSqId - 7)?.getPiece?.getFirstLetter === "p") {
         console.log(
           "King is in check from square " +
-            board.getSquareById(kingSqId - 7)!.getSquareName +
+            board.getSquareById(kingSqId - 7)?.getSquareName +
             " by " +
-            board.getSquareById(kingSqId - 7)?.getPiece!.getFirstLetter
+            board.getSquareById(kingSqId - 7)?.getPiece?.getFirstLetter
         );
         return true;
       }

@@ -1,4 +1,3 @@
-import MoveHelper from "../move/moveHelpers";
 import { Square } from "./square";
 import { Color, ColorType } from "../../types/types";
 import WhiteCheckHelper from "./whiteCheckHelper";
